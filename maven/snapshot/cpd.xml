@@ -152,8 +152,8 @@ public class JSHintOptions {
 </codefragment>
 </duplication>
 <duplication lines="29" tokens="204">
-<file line="37" path="/var/lib/jenkins/jobs/Nanoko - coffee-mill-maven-plugin/workspace/coffee-mill-maven-plugin/src/main/java/org/nanoko/coffee/mill/processors/JSHintProcessor.java"/>
-<file line="36" path="/var/lib/jenkins/jobs/Nanoko - coffee-mill-maven-plugin/workspace/coffee-mill-maven-plugin/src/main/java/org/nanoko/coffee/mill/processors/JSLintProcessor.java"/>
+<file line="39" path="/var/lib/jenkins/jobs/Nanoko - coffee-mill-maven-plugin/workspace/coffee-mill-maven-plugin/src/main/java/org/nanoko/coffee/mill/processors/JSHintProcessor.java"/>
+<file line="38" path="/var/lib/jenkins/jobs/Nanoko - coffee-mill-maven-plugin/workspace/coffee-mill-maven-plugin/src/main/java/org/nanoko/coffee/mill/processors/JSLintProcessor.java"/>
 <codefragment>
 <![CDATA[
         getLog().info("Checking sources with JsLint");
