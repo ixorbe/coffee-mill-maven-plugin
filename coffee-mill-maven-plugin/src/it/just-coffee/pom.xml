@@ -25,6 +25,13 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.nanoko</groupId>
+            <artifactId>h-ubu</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+            <type>js</type>
+            
+        </dependency>
     </dependencies>
 
     <build>

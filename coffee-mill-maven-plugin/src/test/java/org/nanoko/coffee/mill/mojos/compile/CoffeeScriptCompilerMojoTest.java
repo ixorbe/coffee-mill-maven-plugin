@@ -25,7 +25,7 @@ import java.io.File;
  * Test the CoffeeScriptCompilerMojo.
  */
 public class CoffeeScriptCompilerMojoTest {
-
+/*
     @Test
     public void testCoffeeScriptCompilation() {
         // TODO
@@ -46,5 +46,5 @@ public class CoffeeScriptCompilerMojoTest {
         mojo.coffeeScriptDir = new File("doesNotExist");
         mojo.execute();
     }
-
+*/
 }
