@@ -34,13 +34,12 @@ import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
  *  */
 
 public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
-    
+	//@Parameter(defaultValue="${project}", readonly=true)
 	 /**
 	 * The Maven Session Object
 	 * @parameter expression="${project}"
 	 * @readonly
 	 */
-	//@Parameter(defaultValue="${project}", readonly=true)
 	 public MavenProject proj;
 	 
 	
