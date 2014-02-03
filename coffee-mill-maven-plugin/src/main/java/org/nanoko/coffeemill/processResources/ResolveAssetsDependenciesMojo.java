@@ -23,7 +23,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
@@ -34,25 +33,16 @@ public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
 
 
     public void execute() throws MojoExecutionException, MojoFailureException {        
-
-    	getLog().info("MERCI toto !");
-    	getLog().info("project="+this.project.getName());
     	Set<Artifact> dependencies = this.project.getArtifacts();
-    	System.out.println("NB dependences ="+dependencies.size());
-    	
         Set<Artifact> keepers = new LinkedHashSet<Artifact>();
         // Only retrieve JS & CSS dependencies
         for(Artifact a : dependencies) {
-            getLog().info("DERIEN tata !");
-        	getLog().info(a.getFile().getAbsolutePath());
         	if(a.getType().equals("js") || a.getType().equals("css"))
         		keepers.add(a);
         	else getLog().warn(a.getFile().getName() + " dependency can't be resolved");
         }
-        
         for( Artifact a : keepers)
         	copyDependencies(a, getWorkDirectory());
-
     }
     
     public void copyDependencies(Artifact a, File destDirectory){
