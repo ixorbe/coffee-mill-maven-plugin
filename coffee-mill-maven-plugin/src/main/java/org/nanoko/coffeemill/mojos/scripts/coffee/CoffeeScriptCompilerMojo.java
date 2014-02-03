@@ -21,7 +21,7 @@ import static org.nanoko.java.NPM.npm;
 /**
  * Compiles coffeescript files.
  */
-@Mojo(name = "compile-coffeescript-new", threadSafe = false,
+@Mojo(name = "compile-coffeescript", threadSafe = false,
         requiresDependencyResolution = ResolutionScope.COMPILE,
         requiresProject = true,
         defaultPhase = LifecyclePhase.COMPILE)
@@ -80,7 +80,7 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     private void invokeCoffeeScriptCompiler(File input, File out) throws MojoExecutionException {
-        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile", "--map", "--output", out.getAbsolutePath(),
+        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(),
                 input.getAbsolutePath());
         getLog().debug("CoffeeScript compilation exits with " + exit + " status");
     }
@@ -96,7 +96,6 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         compile(file);
         return true;
     }
-
 
     public boolean fileDeleted(File file) {
         File theFile = getOutputJSFile(file);
