@@ -23,37 +23,27 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
 
-/**
- * @goal resolve-dependencies
- * @requiresDependencyResolution test
- *  */
-
+@Mojo( name = "resolve-dependencies", requiresDependencyResolution = ResolutionScope.TEST) 
 public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
-	//@Parameter(defaultValue="${project}", readonly=true)
-	 /**
-	 * The Maven Session Object
-	 * @parameter expression="${project}"
-	 * @readonly
-	 */
-	 public MavenProject proj;
-	 
-	
+
+
     public void execute() throws MojoExecutionException, MojoFailureException {        
 
     	getLog().info("MERCI toto !");
-        Set<Artifact> dependencies = proj.getArtifacts();
-        getLog().info("DERIEN tata !");
- 
+    	getLog().info("project="+this.project.getName());
+    	Set<Artifact> dependencies = this.project.getArtifacts();
+    	System.out.println("NB dependences ="+dependencies.size());
+    	
         Set<Artifact> keepers = new LinkedHashSet<Artifact>();
-
-        
         // Only retrieve JS & CSS dependencies
         for(Artifact a : dependencies) {
+            getLog().info("DERIEN tata !");
         	getLog().info(a.getFile().getAbsolutePath());
         	if(a.getType().equals("js") || a.getType().equals("css"))
         		keepers.add(a);

@@ -3,15 +3,13 @@ package org.nanoko.coffeemill.mojos;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.BuildPluginManager;
-import org.apache.maven.plugin.descriptor.PluginDescriptor;
+
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
+
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
-import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
-import org.eclipse.aether.repository.RemoteRepository;
+
 
 import org.nanoko.java.NodeManager;
 
@@ -28,7 +26,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     /**
      * The maven project.
      */
-    @Parameter(defaultValue = "${project}", readonly = true)
+    @Parameter(defaultValue = "${project}", readonly = true, required=true)
     public MavenProject project;
     
     /**

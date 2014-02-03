@@ -36,7 +36,6 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     
     private NPM coffee;
 
-    @Override
     public void execute() throws MojoExecutionException {
     	
     	this.sourcesDir = getCoffeeScriptDir();
@@ -51,7 +50,6 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     }
 
-    @Override
     public boolean accept(File file) {
         return
                 FSUtils.isInDirectory(file, this.sourcesDir) && FSUtils.hasExtension(file, "coffee");
@@ -87,19 +85,19 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         getLog().debug("CoffeeScript compilation exits with " + exit + " status");
     }
 
-    @Override
+
     public boolean fileCreated(File file) throws WatchingException {
         compile(file);
         return true;
     }
 
-    @Override
+
     public boolean fileUpdated(File file) throws WatchingException {
         compile(file);
         return true;
     }
 
-    @Override
+
     public boolean fileDeleted(File file) {
         File theFile = getOutputJSFile(file);
         FileUtils.deleteQuietly(theFile);

@@ -24,7 +24,7 @@
 
     <groupId>org.nanoko.coffee-mill</groupId>
     <artifactId>coffee-mill-project</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>OW2 Nanoko - Coffee Mill ~ Project</name>
 
@@ -52,6 +52,13 @@
             <organization>Dynamis Technologies</organization>
             <properties>
                 <github>cescoffier</github>
+            </properties>
+        </developer>
+        <developer>
+            <email>dev@ubidreams.[NO-SPAM]com</email>
+            <organization>Ubidreams</organization>
+            <properties>
+                <github>ubidreams</github>
             </properties>
         </developer>
     </developers>
