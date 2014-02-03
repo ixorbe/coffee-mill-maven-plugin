@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.nanoko.java.NPM;
 
@@ -31,38 +32,48 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String COFFEE_SCRIPT_NPM_VERSION = "1.6.3";
     public static final String COFFEE_SCRIPT_COMMAND = "coffee";
     
-    private File sourcesDir;
-    private File destinationDir;
-    
+    /**
+     * Where are CoffeeScript files.
+     */
+    @Parameter(defaultValue= "src/main/coffee", required = true, readonly = true)
+    public File coffeeScriptDir;
+
+    /**
+     * Where are CoffeeScript files implementing tests.
+     */
+    @Parameter(defaultValue= "src/test/coffee", required = true, readonly = true)
+    public File coffeeScriptTestDir;
+            
     private NPM coffee;
+    
+    
+    public File getCoffeeScriptDir() {
+        return coffeeScriptDir;
+    }
 
     public void execute() throws MojoExecutionException {
-    	
-    	this.sourcesDir = getCoffeeScriptDir();
-    	this.destinationDir = getWorkDirectory();
-
         coffee = npm(new MavenLoggerWrapper(this.getLog()), COFFEE_SCRIPT_NPM_NAME, COFFEE_SCRIPT_NPM_VERSION);
 
-        if (sourcesDir.isDirectory()) {
-            getLog().info("Compiling CoffeeScript files from " + sourcesDir.getAbsolutePath());
-            invokeCoffeeScriptCompiler(sourcesDir, destinationDir);
+        if (this.coffeeScriptDir.isDirectory()) {
+            getLog().info("Compiling CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
+            invokeCoffeeScriptCompiler(this.coffeeScriptDir, getWorkDirectory());
         }
 
     }
 
     public boolean accept(File file) {
         return
-                FSUtils.isInDirectory(file, this.sourcesDir) && FSUtils.hasExtension(file, "coffee");
+                FSUtils.isInDirectory(file, this.coffeeScriptDir) && FSUtils.hasExtension(file, "coffee");
     }
 
     private File getOutputJSFile(File input) {
 
-        if (!input.getAbsolutePath().startsWith(this.sourcesDir.getAbsolutePath()))
+        if (!input.getAbsolutePath().startsWith(this.coffeeScriptDir.getAbsolutePath()))
         	return null;        
 
         String jsFileName = input.getName().substring(0, input.getName().length() - ".coffee".length()) + ".js";
-        String path = input.getParentFile().getAbsolutePath().substring(this.sourcesDir.getAbsolutePath().length());
-        return new File(this.destinationDir, path + "/" + jsFileName);
+        String path = input.getParentFile().getAbsolutePath().substring(this.coffeeScriptDir.getAbsolutePath().length());
+        return new File(getWorkDirectory(), path + "/" + jsFileName);
     }
 
     private void compile(File file) throws WatchingException {

@@ -72,18 +72,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     @Parameter(defaultValue= "src/test/js", required = true, readonly = true)
     public File javaScriptTestDir;
   
-    /**
-     * Where are CoffeeScript files.
-     */
-    @Parameter(defaultValue= "src/main/coffee", required = true, readonly = true)
-    public File coffeeScriptDir;
-
-    /**
-     * Where are CoffeeScript files implementing tests.
-     */
-    @Parameter(defaultValue= "src/test/coffee", required = true, readonly = true)
-    public File coffeeScriptTestDir;
-
+    
     /**
      * Where are the assets.
      */
@@ -141,10 +130,6 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
 
     public File getJavaScriptDir() {
         return javaScriptDir;
-    }
-    
-    public File getCoffeeScriptDir() {
-        return coffeeScriptDir;
     }
 
     public File getStylesheetsDir() {

@@ -8,9 +8,12 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
+import org.nanoko.coffeemill.mojos.scripts.coffee.CoffeeScriptCompilerMojo;
 import org.nanoko.maven.WatchingException;
 import org.nanoko.maven.pipeline.Pipeline;
 import org.nanoko.maven.pipeline.Pipelines;
+import org.nanoko.maven.pipeline.Watchers;
+import org.nanoko.coffeemill.utils.MavenLoggerWrapper;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -50,12 +53,12 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
 
     public void execute() throws MojoExecutionException {
        
-    	/*try {
+    	try {
             init();
         } catch (WatchingException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
-*/
+
     	
 		if (watchRunServer) {
 	        try {
@@ -77,9 +80,8 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
     
 
     public void init() throws MojoExecutionException, WatchingException {
-        // Expand if needed.      
-
-      //  pipeline = Pipelines.watchers(session, basedir, this).watch();
+        // Expand if needed.
+        pipeline = Pipelines.watchers(session, new MavenLoggerWrapper(getLog()),basedir).watch();
     }
     
     
