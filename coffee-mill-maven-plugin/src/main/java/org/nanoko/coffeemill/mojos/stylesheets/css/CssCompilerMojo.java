@@ -1,4 +1,4 @@
-package org.nanoko.coffeemill.mojos.scripts.js;
+package org.nanoko.coffeemill.mojos.stylesheets.css;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -17,18 +17,20 @@ import java.util.Collection;
 
 
 /**
- * Compiles Js files.
+ * Compiles less files.
  */
-@Mojo(name = "aggregate-javascript", threadSafe = false,
+@Mojo(name = "compile-css", threadSafe = false,
         requiresDependencyResolution = ResolutionScope.TEST,
         requiresProject = true,
         defaultPhase = LifecyclePhase.PACKAGE)
-public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
+public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException {
         try {
             if ( this.stylesheetsDir.isDirectory()) {
-                this.aggregate();
+            	Collection<File> files = FileUtils.listFiles(this.stylesheetsDir, new String[]{"css"}, true);
+                for(File f: files)
+        			copy(f);
             }
         } catch (WatchingException e) {
             throw new MojoExecutionException(e.getMessage(), e);
@@ -37,45 +39,35 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file, this.workDir) && FSUtils.hasExtension(file, "js");
+        return FSUtils.isInDirectory(file, this.workDir) && FSUtils.hasExtension(file, "css");
     }
 
-    public void aggregate() throws WatchingException {
-    	getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
-    	String fileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	File output = new File( this.getWorkDirectory().getAbsolutePath()+File.separator+fileName+".js");
-        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
-        
-        for(File f : files) {
-        	if(f.getAbsolutePath().equalsIgnoreCase(output.getAbsolutePath()))
-        		files.remove(f);
-        }
-        	
-        try {
-			FileAggregation.joinFiles( output, files);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-        if (!output.isFile()) {
-            throw new WatchingException("Error during the Js aggregation check log");
-        }
+    public void copy(File f) throws WatchingException {
+    	getLog().info("Copy css files from " + this.stylesheetsDir.getAbsolutePath());
+    	try {
+			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
+		} catch (IOException e) { e.printStackTrace(); }
     }
 
 
     public boolean fileCreated(File file) throws WatchingException {
-    	this.aggregate();
+    	this.copy(file);
         return true;
     }
 
 
     public boolean fileUpdated(File file) throws WatchingException {
-    	this.aggregate();
-        return true;
+    	if(fileDeleted(file)) {
+    		this.copy(file);
+        	return true;
+    	} else
+    		return false;
     }
 
     public boolean fileDeleted(File file) throws WatchingException {
-    	this.aggregate();
+    	File outFile = new File(this.getWorkDirectory().getAbsolutePath()+File.pathSeparator+file.getName());
+    	if ( FSUtils.isInDirectory(outFile, this.getWorkDirectory()));
+    		FileUtils.deleteQuietly(outFile);
         return true;
     }
 

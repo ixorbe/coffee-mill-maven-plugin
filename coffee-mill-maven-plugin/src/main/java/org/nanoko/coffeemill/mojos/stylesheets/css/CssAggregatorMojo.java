@@ -45,6 +45,12 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	String fileName = this.project.getArtifactId()+"-"+this.project.getVersion();
     	File output = new File( this.getWorkDirectory().getAbsolutePath()+File.separator+fileName+".css");
         Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, true);
+        
+        for(File f : files) {
+        	if(f.getAbsolutePath().equalsIgnoreCase(output.getAbsolutePath()))
+        		files.remove(f);
+        }
+        
         try {
 			FileAggregation.joinFiles( output, files);
 		} catch (IOException e) {

@@ -34,8 +34,8 @@
                     <compile>
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-less,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-sass,
-                        <!--org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-css,
-                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:optimize-png,
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-css,
+                        <!--org.nanoko.coffee-mill:coffee-mill-maven-plugin:optimize-png,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:optimize-jpeg,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compress-html-->
                          org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-javascript,
