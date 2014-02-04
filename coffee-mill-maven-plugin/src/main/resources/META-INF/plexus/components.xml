@@ -34,10 +34,9 @@
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:resolve-dependencies
                     </process-resources>
                     <compile>
-                        <!-- 
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-less,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-sass,
-                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-css,
+                        <!--org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-css,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:optimize-png,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:optimize-jpeg,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compress-html-->
@@ -55,10 +54,10 @@
 <!--                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:jasmine-test -->
                     </test>
                     <package>
-<!--                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:aggregate-javascript, -->
-<!--                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:aggregate-stylesheets, -->
+                             org.nanoko.coffee-mill:coffee-mill-maven-plugin:aggregate-javascript,
+                             org.nanoko.coffee-mill:coffee-mill-maven-plugin:aggregate-stylesheets,
 <!--                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:minify-javascript, -->
-<!--                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:minify-stylesheets, -->
+                             org.nanoko.coffee-mill:coffee-mill-maven-plugin:minify-stylesheets 
 <!--                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:build-zip -->
                     </package>
                     <integration-test>
