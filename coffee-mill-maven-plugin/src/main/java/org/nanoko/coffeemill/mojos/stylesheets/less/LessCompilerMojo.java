@@ -1,0 +1,93 @@
+package org.nanoko.coffeemill.mojos.stylesheets.less;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+
+import org.nanoko.maven.WatchingException;
+import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
+import org.nanoko.coffeemill.utils.FSUtils;
+import org.nanoko.coffeemill.utils.MavenLoggerWrapper;
+import org.nanoko.java.NPM;
+
+
+import java.io.File;
+import java.util.Collection;
+
+import static org.nanoko.java.NPM.npm;
+
+/**
+ * Compiles less files.
+ */
+@Mojo(name = "compile-less", threadSafe = false,
+        requiresDependencyResolution = ResolutionScope.COMPILE,
+        requiresProject = true,
+        defaultPhase = LifecyclePhase.COMPILE)
+public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
+
+    public static final String LESS_NPM_NAME = "less";
+    public static final String LESS_NPM_VERSION = "1.6.2";
+    private NPM less;
+
+
+    public void execute() throws MojoExecutionException {
+
+        less = npm(new MavenLoggerWrapper(this.getLog()), LESS_NPM_NAME, LESS_NPM_VERSION);
+        try {
+            if ( this.stylesheetsDir.isDirectory()) {
+                getLog().info("Compiling less files from " + this.stylesheetsDir.getAbsolutePath());
+                Collection<File> files = FileUtils.listFiles(this.stylesheetsDir, new String[]{"less"}, true);
+                for (File file : files) {
+                    if (file.isFile()) {
+                        compile(file);
+                    }
+                }
+            }
+        } catch (WatchingException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
+        }
+    }
+
+
+    public boolean accept(File file) {
+        return FSUtils.isInDirectory(file, this.stylesheetsDir) && FSUtils.hasExtension(file, "less");
+    }
+
+    private File getOutputCSSFile(File input) {
+        String cssFileName = input.getName().substring(0, input.getName().length() - ".less".length()) + ".css";
+        String path = input.getParentFile().getAbsolutePath().substring(this.stylesheetsDir.getAbsolutePath().length());
+        return new File(this.getWorkDirectory(), path + "/" + cssFileName);
+    }
+
+    public void compile(File file) throws WatchingException {
+        File out = getOutputCSSFile(file);
+        getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
+        int exit = less.execute("lessc", file.getAbsolutePath(), out.getAbsolutePath());
+		getLog().debug("Less execution exiting with " + exit + " status");
+
+        if (!out.isFile()) {
+            throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + " check log");
+        }
+    }
+
+
+    public boolean fileCreated(File file) throws WatchingException {
+        compile(file);
+        return true;
+    }
+
+
+    public boolean fileUpdated(File file) throws WatchingException {
+        compile(file);
+        return true;
+    }
+
+    public boolean fileDeleted(File file) {
+        File theFile = getOutputCSSFile(file);
+        FileUtils.deleteQuietly(theFile);
+        return true;
+    }
+
+}
