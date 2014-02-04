@@ -63,6 +63,13 @@
 		    <artifactId>jetty-server</artifactId>
 		    <version>9.1.1.v20140108</version>
 		</dependency>
+		
+        <!-- JS Compiler -->
+        <dependency>
+            <groupId>com.google.javascript</groupId>
+            <artifactId>closure-compiler</artifactId>
+            <version>v20131014</version>
+        </dependency>
 	    
         <!-- 
 	        *
