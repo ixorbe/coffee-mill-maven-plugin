@@ -27,7 +27,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException {
         try {
-            if ( this.stylesheetsDir.isDirectory()) {
+            if ( this.workDir.isDirectory()) {
                 this.aggregate();
             }
         } catch (WatchingException e) {
@@ -43,13 +43,11 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     public void aggregate() throws WatchingException {
     	getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
     	String fileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	File output = new File( this.getWorkDirectory().getAbsolutePath()+File.separator+fileName+".js");
+    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+".js");
+    	if(output.exists())
+    		FileUtils.deleteQuietly(output);
+    	
         Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
-        
-        for(File f : files) {
-        	if(f.getAbsolutePath().equalsIgnoreCase(output.getAbsolutePath()))
-        		files.remove(f);
-        }
         	
         try {
 			FileAggregation.joinFiles( output, files);

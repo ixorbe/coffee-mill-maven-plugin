@@ -1,6 +1,7 @@
 package org.nanoko.coffeemill.mojos.stylesheets.css;
 
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -45,17 +46,21 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file, this.workDir) && FSUtils.hasExtension(file, "css");
+        return  FSUtils.hasExtension(file, "css");
     }
 
     public void compile() throws WatchingException {
     	
     	String fileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	File input = new File( this.getWorkDirectory().getAbsolutePath()+File.separator+fileName+".css");
+    	File input = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+".css");
     	if(!input.exists())
     		return;
-    	File output = new File( this.getWorkDirectory().getAbsolutePath()+File.separator+fileName+"-min.css");
-        getLog().info("Compiling " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
+    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+"-min.css");
+ 	
+    	if(output.exists())
+    		FileUtils.deleteQuietly(output);
+    	
+        getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
         int exit = cleancss.execute("cleancss", "-o",  output.getAbsolutePath(),input.getAbsolutePath());
 		getLog().debug("Css minification execution exiting with " + exit + " status");
 

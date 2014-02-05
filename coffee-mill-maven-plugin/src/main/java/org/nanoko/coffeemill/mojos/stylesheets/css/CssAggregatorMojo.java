@@ -27,7 +27,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException {
         try {
-            if ( this.stylesheetsDir.isDirectory()) {
+            if ( this.getWorkDirectory().isDirectory()) {
                 this.aggregate();
             }
         } catch (WatchingException e) {
@@ -43,13 +43,12 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     public void aggregate() throws WatchingException {
     	getLog().info("Aggregate css files from " + this.getWorkDirectory().getAbsolutePath());
     	String fileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	File output = new File( this.getWorkDirectory().getAbsolutePath()+File.separator+fileName+".css");
+    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+".css");
+    	
+    	if(output.exists())
+    		FileUtils.deleteQuietly(output);
+    	
         Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, true);
-        
-        for(File f : files) {
-        	if(f.getAbsolutePath().equalsIgnoreCase(output.getAbsolutePath()))
-        		files.remove(f);
-        }
         
         try {
 			FileAggregation.joinFiles( output, files);

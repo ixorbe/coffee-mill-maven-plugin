@@ -86,10 +86,16 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     public File stylesheetsDir;
 
     /**
-     * Where are the OUTPUT files written.
+     * Where are the OUTPUT WIP files written.
+     */
+    @Parameter(defaultValue= "target/tmp", required = true, readonly = true)
+    public File workDir;
+    
+    /**
+     * Where are the OUTPUT BUILD files written.
      */
     @Parameter(defaultValue= "target/www", required = true, readonly = true)
-    public File workDir;
+    public File buildDir;
 
     /**
      * Where are the output test files written.
@@ -117,6 +123,11 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     public File getWorkDirectory() {
         workDir.mkdirs();
         return workDir;
+    }
+    
+    public File getBuildDirectory() {
+        buildDir.mkdirs();
+        return buildDir;
     }
 
     public File getWorkTestDirectory() {
