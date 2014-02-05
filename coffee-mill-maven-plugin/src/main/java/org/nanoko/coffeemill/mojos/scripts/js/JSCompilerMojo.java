@@ -62,8 +62,11 @@ public class JSCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         
         if (this.javaScriptDir.isDirectory()) {
         	try {
-            	getLog().info("Compiling JavaScript files from " + this.javaScriptDir.getAbsolutePath());
-                compile();
+	        	getLog().info("Compiling JavaScript files from " + this.javaScriptDir.getAbsolutePath());
+	        	Collection<File> files = FileUtils.listFiles(this.javaScriptDir, new String[]{"js"}, true);
+	            for(File file : files)
+	            	compile(file);
+                
             } catch (WatchingException e) {
                 throw new MojoExecutionException(e.getMessage(), e);
             }
@@ -77,46 +80,38 @@ public class JSCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
     
 
-    private void compile() throws WatchingException {
-        getLog().info("Compressing JavaScript files from " + this.javaScriptDir.getName() + " using Google Closure");
+    private void compile(File file) throws WatchingException {
+        getLog().info("Compiling JavaScript files from " + this.javaScriptDir.getName() + " using Google Closure");
         
         // Define JS Google Compiler with Options
         PrintStream ps = new PrintStream(System.err, true); // TODO Fix with log.
         com.google.javascript.jscomp.Compiler compiler = new com.google.javascript.jscomp.Compiler(ps);
+        
         CompilerOptions options = newCompilerOptions();
         getLog().info("Compilation Level set to " + googleClosureCompilationLevel);
         googleClosureCompilationLevel.setOptionsForCompilationLevel(options);
-        options.setPrettyPrint(googleClosurePrettyPrint);
-        options.setPrintInputDelimiter(googleClosurePrettyPrint);
         
-        Collection<File> files = FileUtils.listFiles(this.javaScriptDir, new String[]{"js"}, true);
-        List<File> store = new ArrayList<>();
-        List<SourceFile> inputs = new ArrayList<>();
+        File outputFile = new File(this.workDir.getAbsolutePath() + File.separator + file.getName());
         
+        List<SourceFile> inputs = new ArrayList<>();        
         //TODO: Manage externs
         List<SourceFile> externs = new ArrayList<>();
         
-        for (File file : files) {
-            if (file.isFile() ) {
-                store.add(new File(this.workDir.getAbsolutePath() + "/" + file.getName()));
-                inputs.add(SourceFile.fromFile(file));
-            }
-        }
+        if (file.isFile() )        	
+	        inputs.add(SourceFile.fromFile(file));
         
         final Result result = compiler.compile(externs, inputs, options);
-        listErrors(result);
-
+        //listErrors(result);
+        
         if (!result.success) {
             throw new WatchingException("Error while compile JavaScript files, check log for more details");
-        }
+        }        
 
         String[] outputs = compiler.toSourceArray();
-        for (int i = 0; i < store.size(); i++) {
-            try {
-                FileUtils.write(store.get(i), outputs[i]);
-            } catch (IOException e) {
-                throw new WatchingException("Cannot write minified JavaScript file : " + store.get(i), e);
-            }
+        try {
+            FileUtils.write(outputFile, outputs[0]);
+        } catch (IOException e) {
+            throw new WatchingException("Cannot write compiled JavaScript file : " + outputFile, e);
         }
 
     }
@@ -134,6 +129,10 @@ public class JSCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         //set it to warning, otherwise compiler will fail
         options.setWarningLevel(DiagnosticGroups.CHECK_VARIABLES,
                 CheckLevel.WARNING);
+        
+        options.setPrettyPrint(googleClosurePrettyPrint);
+        options.setPrintInputDelimiter(googleClosurePrettyPrint);
+        
         return options;
     }
 
@@ -153,7 +152,7 @@ public class JSCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     
     public boolean fileCreated(File file) throws WatchingException {
         if (FSUtils.isInDirectory(file, this.javaScriptDir))
-            compile();
+            compile(file);
         return true;
     }
 
@@ -162,9 +161,9 @@ public class JSCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileDeleted(File file) {
-        if (file.isFile()){
-        	getLog().info("deleted File : "+file.getName());
-        	File deleted = new File(this.workDir+file.getName());        	
+    	File deleted = new File(this.workDir.getAbsolutePath() + File.separator + file.getName());
+        if (deleted.isFile()){
+        	getLog().info("deleted File : "+file.getName());    	
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;

@@ -39,7 +39,7 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file, this.workDir) && FSUtils.hasExtension(file, "css");
+        return FSUtils.isInDirectory(file, this.stylesheetsDir) && FSUtils.hasExtension(file, "css");
     }
 
     public void copy(File f) throws WatchingException {
@@ -64,10 +64,12 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     		return false;
     }
 
-    public boolean fileDeleted(File file) throws WatchingException {
-    	File outFile = new File(this.getWorkDirectory().getAbsolutePath()+File.pathSeparator+file.getName());
-    	if ( FSUtils.isInDirectory(outFile, this.getWorkDirectory()));
-    		FileUtils.deleteQuietly(outFile);
+    public boolean fileDeleted(File file) throws WatchingException {        
+        File deleted = new File(this.workDir.getAbsolutePath() + File.separator + file.getName());
+        if (deleted.isFile()){
+        	getLog().info("deleted File : "+file.getName());    	
+        	FileUtils.deleteQuietly(deleted); 
+        }
         return true;
     }
 

@@ -37,7 +37,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file, this.workDir) && FSUtils.hasExtension(file, "css");
+        return FSUtils.hasExtension(file, "css");
     }
 
     public void aggregate() throws WatchingException {
