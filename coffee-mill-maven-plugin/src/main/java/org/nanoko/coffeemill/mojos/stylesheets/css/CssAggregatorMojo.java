@@ -49,7 +49,8 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     		FileUtils.deleteQuietly(output);
     	
         Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, true);
-        
+        if(files.size()==0)
+        	return;
         try {
 			FileAggregation.joinFiles( output, files);
 		} catch (IOException e) {

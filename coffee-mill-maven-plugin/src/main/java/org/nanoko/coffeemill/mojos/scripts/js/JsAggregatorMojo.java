@@ -48,7 +48,8 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     		FileUtils.deleteQuietly(output);
     	
         Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
-        	
+        if(files.size()==0)
+        	return;
         try {
 			FileAggregation.joinFiles( output, files);
 		} catch (IOException e) {
