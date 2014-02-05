@@ -67,7 +67,7 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     public boolean fileDeleted(File file) throws WatchingException {        
         File deleted = new File(this.workDir.getAbsolutePath() + File.separator + file.getName());
         if (deleted.isFile()){
-        	getLog().info("deleted File : "+file.getName());    	
+        	getLog().info("deleting File : "+file.getName());    	
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;

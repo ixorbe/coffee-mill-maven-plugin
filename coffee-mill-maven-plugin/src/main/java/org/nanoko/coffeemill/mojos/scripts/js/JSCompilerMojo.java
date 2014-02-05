@@ -36,134 +36,48 @@ import java.util.List;
         requiresProject = true,
         defaultPhase = LifecyclePhase.COMPILE)
 public class JSCompilerMojo extends AbstractCoffeeMillWatcherMojo {
-
-    /**
-     * Selects the compilation level for Google Closure among SIMPLE_OPTIMIZATIONS,
-     * WHITESPACE_ONLY and ADVANCED_OPTIMIZATIONS.
-     * Be aware that ADVANCED_OPTIMIZATIONS modifies the API of your code.
-     */
-    @Parameter(defaultValue = "SIMPLE_OPTIMIZATIONS")
-    public CompilationLevel googleClosureCompilationLevel;
-    
-    @Parameter(defaultValue = "true")
-    public boolean googleClosurePrettyPrint;
-
-    @Parameter(defaultValue = "${skipGoogleClosure}")
-    public boolean skipGoogleClosure;
-
     
     
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        if (skipGoogleClosure) {
-            getLog().debug("Skipping Google Closure Compilation");
-            removeFromWatching();
-            return;
-        }
-        
-        if (this.javaScriptDir.isDirectory()) {
-        	try {
-	        	getLog().info("Compiling JavaScript files from " + this.javaScriptDir.getAbsolutePath());
+    public void execute() throws MojoExecutionException, MojoFailureException {        
+    	try {
+    		if (this.javaScriptDir.isDirectory()) {
 	        	Collection<File> files = FileUtils.listFiles(this.javaScriptDir, new String[]{"js"}, true);
 	            for(File file : files)
-	            	compile(file);
-                
-            } catch (WatchingException e) {
-                throw new MojoExecutionException(e.getMessage(), e);
-            }
-        }
-        
+	            	copy(file);
+    		}
+    	} catch (WatchingException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
+        }        
     }
-
     
     public boolean accept(File file) {
     	return FSUtils.isInDirectory(file.getName(), this.javaScriptDir) && FSUtils.hasExtension(file, "js");
     }
     
 
-    private void compile(File file) throws WatchingException {
-        getLog().info("Compiling JavaScript files from " + this.javaScriptDir.getName() + " using Google Closure");
-        
-        // Define JS Google Compiler with Options
-        PrintStream ps = new PrintStream(System.err, true); // TODO Fix with log.
-        com.google.javascript.jscomp.Compiler compiler = new com.google.javascript.jscomp.Compiler(ps);
-        
-        CompilerOptions options = newCompilerOptions();
-        getLog().info("Compilation Level set to " + googleClosureCompilationLevel);
-        googleClosureCompilationLevel.setOptionsForCompilationLevel(options);
-        
-        File outputFile = new File(this.workDir.getAbsolutePath() + File.separator + file.getName());
-        
-        List<SourceFile> inputs = new ArrayList<>();        
-        //TODO: Manage externs
-        List<SourceFile> externs = new ArrayList<>();
-        
-        if (file.isFile() )        	
-	        inputs.add(SourceFile.fromFile(file));
-        
-        final Result result = compiler.compile(externs, inputs, options);
-        //listErrors(result);
-        
-        if (!result.success) {
-            throw new WatchingException("Error while compile JavaScript files, check log for more details");
-        }        
-
-        String[] outputs = compiler.toSourceArray();
-        try {
-            FileUtils.write(outputFile, outputs[0]);
-        } catch (IOException e) {
-            throw new WatchingException("Cannot write compiled JavaScript file : " + outputFile, e);
-        }
-
+    private void copy(File f) throws WatchingException {
+    	getLog().info("Copy JavaScript files from " + this.javaScriptDir.getAbsolutePath());
+    	try {
+			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
+		} catch (IOException e) { e.printStackTrace(); }
     }
-
-    /**
-     * @return default {@link CompilerOptions} object to be used by compressor.
-     */
-    protected CompilerOptions newCompilerOptions() {
-        final CompilerOptions options = new CompilerOptions();
-        
-         // According to John Lenz from the Closure Compiler project, if you are using the Compiler API directly, you
-         // should specify a CodingConvention. {@link http://code.google.com/p/wro4j/issues/detail?id=155}
-        
-        options.setCodingConvention(new ClosureCodingConvention());
-        //set it to warning, otherwise compiler will fail
-        options.setWarningLevel(DiagnosticGroups.CHECK_VARIABLES,
-                CheckLevel.WARNING);
-        
-        options.setPrettyPrint(googleClosurePrettyPrint);
-        options.setPrintInputDelimiter(googleClosurePrettyPrint);
-        
-        return options;
-    }
-
-    /**
-     * List the errors that google is providing from the compiler output.
-     *
-     * @param result the results from the compiler
-     */
-    private void listErrors(final Result result) {
-        for (JSError warning : result.warnings)
-            getLog().warn(warning.toString());
-
-        for (JSError error : result.errors)
-            getLog().error(error.toString());
-    }
-    
     
     public boolean fileCreated(File file) throws WatchingException {
-        if (FSUtils.isInDirectory(file.getName(), this.javaScriptDir))
-            compile(file);
+    	this.copy(file);
         return true;
     }
 
     public boolean fileUpdated(File file) throws WatchingException {
-        return fileCreated(file);
+    	if(fileDeleted(file)) {
+    		return this.fileCreated(file);
+    	} else
+    		return false;
     }
 
     public boolean fileDeleted(File file) {
     	File deleted = new File(this.workDir.getAbsolutePath() + File.separator + file.getName());
         if (deleted.isFile()){
-        	getLog().info("deleted File : "+file.getName());    	
+        	getLog().info("Deleting File : "+file.getName());    	
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;
