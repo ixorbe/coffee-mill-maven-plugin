@@ -52,7 +52,7 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file, this.stylesheetsDir) && FSUtils.hasExtension(file, "scss");
+        return FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "scss");
     }
 
     private File getOutputCSSFile(File input) {

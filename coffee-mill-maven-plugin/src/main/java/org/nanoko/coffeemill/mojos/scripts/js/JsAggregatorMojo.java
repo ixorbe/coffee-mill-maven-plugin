@@ -37,6 +37,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
+		getLog().info("JS AGGRE : ACCEPT : " +file.getName() + " : " +FSUtils.hasExtension(file, scriptExtensions));
         return FSUtils.hasExtension(file, scriptExtensions);
     }
 

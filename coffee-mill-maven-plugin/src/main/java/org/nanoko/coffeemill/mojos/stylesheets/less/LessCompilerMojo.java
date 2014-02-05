@@ -52,7 +52,7 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file, this.stylesheetsDir) && FSUtils.hasExtension(file, "less");
+        return FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "less");
     }
 
     private File getOutputCSSFile(File input) {

@@ -76,7 +76,7 @@ public class JSCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     
     public boolean accept(File file) {
-    	return FSUtils.isInDirectory(file, this.javaScriptDir) && FSUtils.hasExtension(file, "js");
+    	return FSUtils.isInDirectory(file.getName(), this.javaScriptDir) && FSUtils.hasExtension(file, "js");
     }
     
 
@@ -151,7 +151,7 @@ public class JSCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     
     
     public boolean fileCreated(File file) throws WatchingException {
-        if (FSUtils.isInDirectory(file, this.javaScriptDir))
+        if (FSUtils.isInDirectory(file.getName(), this.javaScriptDir))
             compile(file);
         return true;
     }

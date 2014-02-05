@@ -39,7 +39,7 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file, this.stylesheetsDir) && FSUtils.hasExtension(file, "css");
+        return FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "css");
     }
 
     public void copy(File f) throws WatchingException {

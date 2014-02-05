@@ -2,6 +2,7 @@ package org.nanoko.coffeemill.mojos.scripts.coffee;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -15,6 +16,7 @@ import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
 import org.nanoko.maven.WatchingException;
 
 import java.io.File;
+import java.util.Collection;
 
 
 import static org.nanoko.java.NPM.npm;
@@ -51,40 +53,31 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         return coffeeScriptDir;
     }
 
-    public void execute() throws MojoExecutionException {
+    public void execute() throws MojoExecutionException, MojoFailureException {
         coffee = npm(new MavenLoggerWrapper(this.getLog()), COFFEE_SCRIPT_NPM_NAME, COFFEE_SCRIPT_NPM_VERSION);
 
-        if (this.coffeeScriptDir.isDirectory()) {
+        if (this.coffeeScriptDir.isDirectory()) {            
             getLog().info("Compiling CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
-            invokeCoffeeScriptCompiler(this.coffeeScriptDir, getWorkDirectory());
+			Collection<File> files = FileUtils.listFiles(this.coffeeScriptDir, new String[]{"coffee"}, true);
+			for(File file : files)
+				invokeCoffeeScriptCompiler(file, getWorkDirectory());
         }
-
     }
 
     public boolean accept(File file) {
         return
-                FSUtils.isInDirectory(file, this.coffeeScriptDir) && FSUtils.hasExtension(file, "coffee");
-    }
-
-    private File getOutputJSFile(File input) {
-
-        if (!input.getAbsolutePath().startsWith(this.coffeeScriptDir.getAbsolutePath()))
-        	return null;        
-
-        String jsFileName = input.getName().substring(0, input.getName().length() - ".coffee".length()) + ".js";
-        String path = input.getParentFile().getAbsolutePath().substring(this.coffeeScriptDir.getAbsolutePath().length());
-        return new File(getWorkDirectory(), path + "/" + jsFileName);
+                FSUtils.isInDirectory(file.getName(), this.coffeeScriptDir) && FSUtils.hasExtension(file, "coffee");
     }
 
     private void compile(File file) throws WatchingException {
         if (file == null) {
             return;
         }
-        File out = getOutputJSFile(file);
-        getLog().info("Compiling CoffeeScript " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
+        //File out = new File(getWorkDirectory(), file.getName());
+        getLog().info("Compiling CoffeeScript " + file.getAbsolutePath() + " to " + getWorkDirectory().getAbsolutePath());
 
         try {
-            invokeCoffeeScriptCompiler(file, out.getParentFile());
+            invokeCoffeeScriptCompiler(file, getWorkDirectory());
         } catch (MojoExecutionException e) { //NOSONAR
             throw new WatchingException("Error during the compilation of " + file.getName() + " : " + e.getMessage());
         }
@@ -108,9 +101,12 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         return true;
     }
 
-    public boolean fileDeleted(File file) {
-        File theFile = getOutputJSFile(file);
-        FileUtils.deleteQuietly(theFile);
+    public boolean fileDeleted(File file) {    	
+    	File deleted = new File(this.workDir.getAbsolutePath(), file.getName());
+        if (deleted.isFile()){
+        	getLog().info("deleted File : "+file.getName());    	
+        	FileUtils.deleteQuietly(deleted); 
+        }
         return true;
     }
 
