@@ -35,12 +35,11 @@ public class JsOptimizerMojo extends AbstractCoffeeMillWatcherMojo {
     
     private NPM lint;
 
-
     public void execute() throws MojoExecutionException {
 
     	lint = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
-        	Collection<File> files = FileUtils.listFiles(this.workDir, new String[]{"js"}, true);
+        	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
             for(File file : files)
             	compile(file);
 
