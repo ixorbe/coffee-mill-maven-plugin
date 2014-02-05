@@ -109,6 +109,16 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     @Parameter(defaultValue= "target/libs", required = true, readonly = true)
     public File libDir;
     
+    /**
+     * Default extensions authorized for script files
+     */
+    public String[] scriptExtensions = {"js","coffee"};
+    
+    /**
+     * Default extensions autorized for stylesheets files
+     */
+    public String[] stylesheetsExtensions = {"css","less","scss"};
+    
     
     // NODE
     public NodeManager node =  NodeManager.getInstance();

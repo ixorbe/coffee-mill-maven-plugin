@@ -37,7 +37,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.hasExtension(file, "js");
+        return FSUtils.hasExtension(file, scriptExtensions);
     }
 
     public void aggregate() throws WatchingException {

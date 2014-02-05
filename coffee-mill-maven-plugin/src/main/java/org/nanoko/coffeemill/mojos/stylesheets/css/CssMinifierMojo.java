@@ -46,7 +46,7 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return  FSUtils.hasExtension(file, "css");
+        return  FSUtils.hasExtension(file, stylesheetsExtensions);
     }
 
     public void compile() throws WatchingException {

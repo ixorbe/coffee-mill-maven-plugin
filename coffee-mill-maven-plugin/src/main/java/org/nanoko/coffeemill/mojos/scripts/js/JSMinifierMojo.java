@@ -76,7 +76,7 @@ public class JSMinifierMojo extends AbstractCoffeeMillWatcherMojo{
     }
 
     public boolean accept(File file) {
-    	getLog().info("JS MINI : ACCEPT " + FSUtils.hasExtension(file, "js"));
+    	getLog().info("JS MINI : ACCEPT " + FSUtils.hasExtension(file, scriptExtensions));
         return FSUtils.hasExtension(file, "js");
     }
 	
