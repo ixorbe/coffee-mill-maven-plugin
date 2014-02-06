@@ -15,36 +15,50 @@
 
 package org.nanoko.coffee.mill.mojos.compile;
 
+import java.io.File;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Test;
-
-import java.io.File;
+import org.nanoko.coffeemill.mojos.scripts.coffee.CoffeeScriptCompilerMojo;
 
 /**
  * Test the CoffeeScriptCompilerMojo.
  */
 public class CoffeeScriptCompilerMojoTest {
-/*
+
+	private final static String basedir = "target/test/CoffeeScriptCompilerMojoTest";
+	private final static String coffeeScriptTestDir = "src/test/resources/coffee";
+	
     @Test
-    public void testCoffeeScriptCompilation() {
-        // TODO
+    public void testCoffeeScriptCompilation() throws MojoExecutionException, MojoFailureException {  	
+    	CoffeeScriptCompilerMojo mojo = new CoffeeScriptCompilerMojo();
+    	mojo.coffeeScriptDir = new File(coffeeScriptTestDir);
+    	
+    	mojo.workDir = new File(basedir + "/compilation/www");
+        mojo.workDir.mkdirs();
+        
+    	mojo.execute();
+    }
+    
+    
+    @Test
+    public void testSkippedCoffeeScriptCompilationBecauseOfMissingFolder() throws MojoExecutionException, MojoFailureException {    	
+    	CoffeeScriptCompilerMojo mojo = new CoffeeScriptCompilerMojo();
+    	mojo.coffeeScriptDir = new File("coffeeScriptDirDoesNotExist");
+        
+    	mojo.execute();
+    }
+    
+    @Test
+    public void testSkippedCoffeeScriptCompilationBecauseOfEmptyFolder() throws MojoExecutionException, MojoFailureException {    	
+    	CoffeeScriptCompilerMojo mojo = new CoffeeScriptCompilerMojo();
+    	mojo.coffeeScriptDir = new File(coffeeScriptTestDir + "/empty");
+        
+    	mojo.workDir = new File(basedir + "/empty/www");
+        mojo.workDir.mkdirs();
+        
+    	mojo.execute();
     }
 
-    @Test
-    public void testSkippedCoffeeScriptCompilation() throws MojoExecutionException, MojoFailureException {
-        CoffeeScriptCompilerMojo mojo = new CoffeeScriptCompilerMojo();
-        mojo.skipCoffeeScriptCompilation = true;
-        mojo.execute();
-    }
-
-    @Test
-    public void testSkippedCoffeeScriptCompilationBecauseOfMissingFolder() throws MojoExecutionException,
-            MojoFailureException {
-        CoffeeScriptCompilerMojo mojo = new CoffeeScriptCompilerMojo();
-        mojo.skipCoffeeScriptCompilation = false;
-        mojo.coffeeScriptDir = new File("doesNotExist");
-        mojo.execute();
-    }
-*/
 }

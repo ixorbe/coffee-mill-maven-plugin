@@ -59,9 +59,16 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         if (this.coffeeScriptDir.isDirectory()) {            
             getLog().info("Compiling CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
 			Collection<File> files = FileUtils.listFiles(this.coffeeScriptDir, new String[]{"coffee"}, true);
-			for(File file : files)
-				invokeCoffeeScriptCompiler(file, getWorkDirectory());
+			if(!files.isEmpty())				
+				for(File file : files)
+					invokeCoffeeScriptCompiler(file, getWorkDirectory());
+			else
+				getLog().warn("CoffeeScript sources directory "+this.coffeeScriptDir.getAbsolutePath()+" is empty !");
+		
         }
+        else
+        	getLog().warn("CoffeeScript compilation skipped - " + coffeeScriptDir.getAbsolutePath() + " does not exist !");
+
     }
 
     public boolean accept(File file) {
