@@ -24,7 +24,10 @@ import java.util.Collection;
         requiresProject = true,
         defaultPhase = LifecyclePhase.PACKAGE)
 public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
-
+	
+	
+	public String outputFileName = null;
+	
     public void execute() throws MojoExecutionException {
         try {
             if ( this.getWorkDirectory().isDirectory()) {
@@ -42,8 +45,9 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void aggregate() throws WatchingException {
     	getLog().info("Aggregate css files from " + this.getWorkDirectory().getAbsolutePath());
-    	String fileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+".css");
+    	if(this.outputFileName == null)
+    		this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+this.outputFileName+".css");
     	
     	if(output.exists())
     		FileUtils.deleteQuietly(output);
