@@ -33,7 +33,8 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String CLEANCSS_NPM_VERSION = "2.0.7";
     
     private NPM cleancss;
-
+    
+    public String inputFilename = null;
 
     public void execute() throws MojoExecutionException {
 
@@ -49,13 +50,16 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         return  FSUtils.hasExtension(file, stylesheetsExtensions);
     }
 
-    public void compile() throws WatchingException {
+    public int compile() throws WatchingException {
     	
-    	String fileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	File input = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+".css");
+    	if(this.inputFilename == null)
+    		this.inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
+
+    	File input = new File( this.getBuildDirectory(), inputFilename+".css");
     	if(!input.exists())
-    		return;
-    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+"-min.css");
+    		return -1;
+    	
+    	File output = new File( this.getBuildDirectory(), inputFilename+"-min.css");
  	
     	if(output.exists())
     		FileUtils.deleteQuietly(output);
@@ -67,6 +71,7 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
         }
+        return 0;
     }
 
 
