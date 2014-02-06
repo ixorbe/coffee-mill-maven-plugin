@@ -91,7 +91,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         resource_handler.setDirectoriesListed(true);
         resource_handler.setWelcomeFiles(new String[]{ "index.html" });
         try {
-			resource_handler.setResourceBase(this.getWorkDirectory().getCanonicalPath());
+			resource_handler.setResourceBase(this.getBuildDirectory().getCanonicalPath());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
