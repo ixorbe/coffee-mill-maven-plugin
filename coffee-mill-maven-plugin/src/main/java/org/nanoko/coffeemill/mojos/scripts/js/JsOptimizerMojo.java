@@ -54,12 +54,12 @@ public class JsOptimizerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void compile(File f) throws WatchingException {
     	String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".js";
-    	File input = new File( this.getBuildDirectory().getAbsolutePath(),name);
+    	File input = new File( this.getWorkDirectory().getAbsolutePath(), name);
     	if(!input.exists())
     		return;
 
         getLog().info("Linting " + input.getAbsolutePath());
-        int exit = lint.execute("jslint",input.getAbsolutePath());
+        int exit = lint.execute("jslint", input.getAbsolutePath());
 
     }
 
