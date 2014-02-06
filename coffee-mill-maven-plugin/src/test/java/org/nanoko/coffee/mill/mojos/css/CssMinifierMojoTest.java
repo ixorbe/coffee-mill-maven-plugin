@@ -19,21 +19,20 @@ import static org.junit.Assert.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.nanoko.coffeemill.mojos.stylesheets.css.CssAggregatorMojo;
-import org.nanoko.coffeemill.mojos.stylesheets.css.CssCompilerMojo;
-import org.nanoko.coffeemill.mojos.stylesheets.css.CssMinifierMojo;
-import org.nanoko.coffeemill.utils.FSUtils;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
+
+import org.nanoko.coffeemill.mojos.stylesheets.css.CssMinifierMojo;
+
+
+
 
 /**
- * Test the CoffeeScriptCompilerMojo.
+ * Test the CssMinifierMojo.
  */
 public class CssMinifierMojoTest {
 	private final File srcStyleFile = new File("src/test/resources/stylesheets/stuff.css");
@@ -52,7 +51,7 @@ public class CssMinifierMojoTest {
 		}
     }
 	
-	@Ignore
+	
     @Test
     public void testCssMinification() {
         System.out.println("It should minify the CSS");

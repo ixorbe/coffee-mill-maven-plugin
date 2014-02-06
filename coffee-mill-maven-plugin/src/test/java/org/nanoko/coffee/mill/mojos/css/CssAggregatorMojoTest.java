@@ -19,20 +19,18 @@ import static org.junit.Assert.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.stylesheets.css.CssAggregatorMojo;
-import org.nanoko.coffeemill.mojos.stylesheets.css.CssCompilerMojo;
-import org.nanoko.coffeemill.utils.FSUtils;
+
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
 /**
- * Test the CoffeeScriptCompilerMojo.
+ * Test the CssAggregatorMojo.
  */
 public class CssAggregatorMojoTest {
 	
@@ -40,7 +38,7 @@ public class CssAggregatorMojoTest {
 	private final File srcStyleDir = new File("src/test/resources/stylesheets/");
 	private final File testBuildDir = new File("target/test/css/aggregation/www/");
 	
-	@Ignore
+	
 	@Before 
 	public void cleanWorkDirectory()  {
         //clean output
@@ -61,7 +59,7 @@ public class CssAggregatorMojoTest {
         }
     }
 	
-	@Ignore
+	
     @Test
     public void testCssCompilation() {
         System.out.println("It should aggregate");

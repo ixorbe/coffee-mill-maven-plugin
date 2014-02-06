@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -29,25 +28,27 @@ import java.io.File;
 import java.util.Collection;
 
 /**
- * Test the CoffeeScriptCompilerMojo.
+ * Test the CssCompilerMojo.
  */
 public class CssCompilerMojoTest {
 	
+	private final File workDir = new File("target/test/css/compilation/tmp/");
+	private final File stylesDir = new File("src/test/resources/stylesheets");
+	
 	@Before 
 	public void cleanWorkDirectory() {
-        File out = new File("target/test/css/compilation/tmp/");
-        if (out.exists())
-        	FileUtils.deleteQuietly(out);
+        if (workDir.exists())
+        	FileUtils.deleteQuietly(workDir);
     }
 	
-	@Ignore
+	
     @Test
     public void testCssCompilation() {
         System.out.println("Should compile two css files");
-        String basedir = "target/test/css/compilation/";
+
         CssCompilerMojo mojo = new CssCompilerMojo();
-        mojo.stylesheetsDir = new File("src/test/resources/stylesheets");
-        mojo.workDir = new File(basedir+"tmp/");
+        mojo.stylesheetsDir = stylesDir;
+        mojo.workDir = workDir;
         mojo.workDir.mkdirs();
         try {
 			mojo.execute();
@@ -59,14 +60,14 @@ public class CssCompilerMojoTest {
         assertTrue(files.size()==2);
     }
     
-	@Ignore
+	
     @Test
     public void testCssCompilationNoSources() {
         System.out.println("Should compile nothing");
-        String basedir = "target/test/css/compilation/";
+
         CssCompilerMojo mojo = new CssCompilerMojo();
-        mojo.stylesheetsDir = new File("src/test/resources/js");
-        mojo.workDir = new File(basedir+"tmp/");
+        mojo.stylesheetsDir = new File("nowhere");
+        mojo.workDir = workDir;
         mojo.workDir.mkdirs();
         try {
 			mojo.execute();

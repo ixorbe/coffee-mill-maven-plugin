@@ -20,20 +20,19 @@ import static org.junit.Assert.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import org.nanoko.coffeemill.mojos.stylesheets.less.LessCompilerMojo;
+import org.nanoko.coffeemill.mojos.stylesheets.sass.SassCompilerMojo;
 
 import java.io.File;
 import java.util.Collection;
 
 /**
- * Test the LessCompilerMojo.
+ * Test the SassCompilerMojo.
  */
-public class LessCompilerMojoTest {
+public class SassCompilerMojoTest {
 	
-	private final File workDir = new File("target/test/less/compilation/tmp/");
+	private final File workDir = new File("target/test/sass/compilation/tmp/");
 	private final File stylesDir = new File("src/test/resources/stylesheets");
 	
 	@Before 
@@ -45,9 +44,9 @@ public class LessCompilerMojoTest {
 	
     @Test
     public void testLessCompilation() {
-        System.out.println("Should compile three less files");
+        System.out.println("Should compile 1 Sass file");
 
-        LessCompilerMojo mojo = new LessCompilerMojo();
+        SassCompilerMojo mojo = new SassCompilerMojo();
         mojo.stylesheetsDir = stylesDir;
         mojo.workDir = workDir;
         mojo.workDir.mkdirs();
@@ -58,7 +57,7 @@ public class LessCompilerMojoTest {
 			e.printStackTrace();
 		}
         Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
-        assertTrue(files.size()==3);
+        assertTrue(files.size()==1);
     }
     
 	
@@ -66,7 +65,7 @@ public class LessCompilerMojoTest {
     public void testLessCompilationNoSources() {
         System.out.println("Should compile nothing");
 
-        LessCompilerMojo mojo = new LessCompilerMojo();
+        SassCompilerMojo mojo = new SassCompilerMojo();
         mojo.stylesheetsDir = new File("nowhere");
         mojo.workDir = workDir;
         mojo.workDir.mkdirs();
