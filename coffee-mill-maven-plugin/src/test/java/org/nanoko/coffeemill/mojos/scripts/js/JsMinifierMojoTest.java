@@ -43,10 +43,12 @@ public class JsMinifierMojoTest {
     	assertTrue(new File(this.mojo.getBuildDirectory(), "h-ubu-min.js").exists());
     }
 	
-	/*@After
+	@After
 	public void cleanTestDirectory() {
 		if(this.mojo.getWorkDirectory().exists())
 			FileUtils.deleteQuietly(this.mojo.getWorkDirectory());
-	}*/
+			if(this.mojo.getBuildDirectory().exists())
+			FileUtils.deleteQuietly(this.mojo.getBuildDirectory());
+	}
 	
 }
