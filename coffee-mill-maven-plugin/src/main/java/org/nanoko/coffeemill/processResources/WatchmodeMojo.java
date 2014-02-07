@@ -34,19 +34,8 @@ import java.io.IOException;
 @Execute(phase = LifecyclePhase.PACKAGE)
 public class WatchmodeMojo extends AbstractCoffeeMillMojo {
 
-    private Pipeline pipeline;
+    private Pipeline pipeline;    
     
-    /**
-	 * 
-	 */
-    @Parameter(defaultValue="true")
-    protected boolean watchCoffeeScript;
-    
-    @Parameter(defaultValue="true")
-    protected boolean watchRunServer;
-    
-    @Parameter(defaultValue="8234")
-    protected int watchJettyServerPort;
    
     //The Jetty Server
     protected Server server;

@@ -28,12 +28,18 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 	@Parameter(defaultValue="false")
 	protected boolean skipAssetsCopy;
 	
+	private File defaultTargetAssetsDir;
+	
     public void execute() throws MojoExecutionException {
     	if(isSkipped())
     		return;
         try {
-            if ( this.assetsDir.isDirectory()) {
-            	FileUtils.copyDirectory(this.assetsDir, new File(this.getBuildDirectory(),"assets"));
+            if ( this.getAssetsDir().isDirectory()) {
+            	if(watchRunServer)
+            		this.defaultTargetAssetsDir = this.getWorkDirectory();
+            	else
+            		this.defaultTargetAssetsDir = this.getBuildDirectory();
+            	FileUtils.copyDirectory(this.getAssetsDir(), this.defaultTargetAssetsDir);
             }
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
@@ -42,17 +48,18 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.assetsDir);
+        return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.getAssetsDir());
     }
 
     public void copy(File f) throws WatchingException {
-    	
+    	getLog().info("Copy Asset file "+f.getName()+" to "+this.defaultTargetAssetsDir.getAbsolutePath());
     	try {
-    		String baseUrl = f.getAbsolutePath().substring(0, this.assetsDir.getAbsolutePath().length());
-    		baseUrl = baseUrl.substring(0, - f.getName().length());
+    		String baseUrl = f.getAbsolutePath().substring(0, this.getAssetsDir().getAbsolutePath().length());
+    		getLog().info("baseUrl : "+baseUrl);
+    		baseUrl = baseUrl.substring(0, f.getName().length());
     		System.out.println("***************************************");
     		System.out.println(baseUrl);
-			FileUtils.copyFileToDirectory(f, new File(this.getBuildDirectory(),"assets/"+baseUrl));
+			FileUtils.copyFileToDirectory(f, new File(this.getBuildDirectory(), "assets/"+baseUrl));
 		} catch (IOException e) { e.printStackTrace(); }
     }
 

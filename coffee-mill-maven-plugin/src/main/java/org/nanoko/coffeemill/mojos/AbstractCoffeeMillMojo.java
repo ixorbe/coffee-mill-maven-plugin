@@ -75,13 +75,12 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      */
     @Parameter(defaultValue= "src/test/js", required = true, readonly = true)
     private File javaScriptTestDir;
-  
-    
+      
     /**
      * Where are the assets.
      */
     @Parameter(defaultValue= "src/main/www", required = true, readonly = true)
-    public File assetsDir;
+    private File assetsDir;
     
     /**
      * Where are LESS, CSS and SASS/SCSS files.
@@ -124,6 +123,15 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     public String[] stylesheetsExtensions = {"css","less","scss"};
     
     
+    // WATCHER
+    @Parameter(defaultValue="true")
+    protected boolean watchCoffeeScript;
+    
+    @Parameter(defaultValue="true")
+    protected boolean watchRunServer;
+    
+    @Parameter(defaultValue="8234")
+    protected int watchJettyServerPort;
     
 
     
@@ -176,27 +184,11 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     public File getTarget() {
         return new File(project.getBuild().getDirectory());
     }
-
-    // WORK-DIR
-    public File getWorkDirectory() {
-        this.workDir.mkdirs();
-        return this.workDir;
-    }
     
-    public void setWorkDirectory(File workDir){
-    	this.workDir = workDir;
-    	this.workDir.mkdirs();
-    }
+    public NodeManager getNodeManager() {
+        return this.node;
+    } 
     
-    // BUILD-DIR
-    public File getBuildDirectory() {
-    	this.buildDir.mkdirs();
-        return this.buildDir;
-    }
-    
-    public void setBuildDirectory(File buildDir){
-    	this.buildDir = buildDir;
-    }
     
     // TARGET-DIR
     public File getTargetDirectory() {
@@ -206,12 +198,33 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     public void setTargetDirectory(File target){
     	this.targetDirectory = target;
-    }
+    }    
 
+    // WORK-DIR
+    public File getWorkDirectory() {
+        this.workDir.mkdirs();
+        return this.workDir;
+    }
+    
+    public void setWorkDirectory(File work){
+    	this.workDir = work;
+    	this.workDir.mkdirs();
+    }
+    
     // WORK-TEST-DIR
     public File getWorkTestDirectory() {
     	this.workTestDir.mkdirs();
         return this.workTestDir;
+    }
+    
+    // BUILD-DIR
+    public File getBuildDirectory() {
+    	this.buildDir.mkdirs();
+        return this.buildDir;
+    }
+    
+    public void setBuildDirectory(File build){
+    	this.buildDir = build;
     }
     
     // JS-DIR
@@ -220,8 +233,8 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
         return this.javaScriptDir;
     }
     
-    public void setJavaScriptDir(File javascriptDir){
-    	this.javaScriptDir = javascriptDir;
+    public void setJavaScriptDir(File javascript){
+    	this.javaScriptDir = javascript;
     }
     
     // JS-TEST-DIR
@@ -234,19 +247,30 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     	this.javaScriptTestDir = jsTestDir;
     	this.javaScriptTestDir.mkdirs();
     }*/
+    
+    // STYLESHEETS-DIR
+    public File getStylesheetsDir() {
+        return this.stylesheetsDir;
+    }
+    
+    
 
     // LIB-DIR
     public File getLibDirectory() {
         return this.libDir;
     }
     
-    // STYLESHEETS-DIR
-    public File getStylesheetsDir() {
-        return this.stylesheetsDir;
-    }    
+    
+    // ASSETS-DIR
+    public File getAssetsDir(){
+    	this.assetsDir.mkdirs();
+    	return this.assetsDir;
+    }
+    
+    public void setAssetsDir(File assets){
+    	this.assetsDir = assets;
+    }
    
-    public NodeManager getNodeManager() {
-        return this.node;
-    }    
+       
     
 }

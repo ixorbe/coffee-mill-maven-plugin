@@ -29,7 +29,8 @@
                     </clean>
                     <process-resources>
                         org.apache.maven.plugins:maven-resources-plugin:resources,
-                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:resolve-dependencies
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:resolve-dependencies,
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:copy-assets
                     </process-resources>
                     <compile>
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-less,
