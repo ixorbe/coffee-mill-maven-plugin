@@ -58,7 +58,7 @@ public class JsDocMojo extends AbstractCoffeeMillWatcherMojo {
     	File input = new File( this.getBuildDirectory(), inputFilename+".js");
     	if(!input.exists())
     		return;
-    	File output = new File( this.buildDirectory,"jsdoc-report" );
+    	File output = new File( this.getTargetDirectory(),"jsdoc-report" );
  	
     	if(output.exists())
     		FileUtils.deleteQuietly(output);
