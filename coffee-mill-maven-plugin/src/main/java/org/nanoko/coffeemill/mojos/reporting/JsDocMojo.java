@@ -11,7 +11,7 @@ import org.nanoko.java.NPM;
 
 import org.nanoko.coffeemill.utils.FSUtils;
 import org.nanoko.coffeemill.utils.MavenLoggerWrapper;
-import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
+import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
 
 import org.nanoko.maven.WatchingException;
 
@@ -27,7 +27,7 @@ import static org.nanoko.java.NPM.npm;
         requiresDependencyResolution = ResolutionScope.TEST,
         requiresProject = true,
         defaultPhase = LifecyclePhase.PACKAGE)
-public class JsDocMojo extends AbstractCoffeeMillWatcherMojo {
+public class JsDocMojo extends AbstractCoffeeMillMojo {
 
     public static final String PKG_NPM_NAME = "jsdoc";
     public static final String PKG_NPM_VERSION = "3.3.0-alpha4";
@@ -67,23 +67,6 @@ public class JsDocMojo extends AbstractCoffeeMillWatcherMojo {
         int exit = jsdoc.execute("jsdoc", input.getAbsolutePath(), "-d",  output.getAbsolutePath() );
 		getLog().debug("Js Doc generation execution exiting with " + exit + " status");
 
-    }
-
-
-    public boolean fileCreated(File file) throws WatchingException {
-        compile();
-        return true;
-    }
-
-
-    public boolean fileUpdated(File file) throws WatchingException {
-        compile();
-        return true;
-    }
-
-    public boolean fileDeleted(File file) throws WatchingException{
-    	compile();
-        return true;
     }
 
 }
