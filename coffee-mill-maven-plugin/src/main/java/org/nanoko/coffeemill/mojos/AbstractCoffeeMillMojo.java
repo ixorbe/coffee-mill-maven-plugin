@@ -39,13 +39,17 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      * The current build session instance.
      */
     @Component
-    public MavenSession session;
+    public MavenSession session;    
+    
+    // NODE
+    public NodeManager node =  NodeManager.getInstance();
     
     /**
      * The plugin dependencies.
      */
     @Parameter(defaultValue = "${plugin.artifacts}")
     public List<Artifact> pluginDependencies;
+    
     
     // DIRECTORY
     /**
@@ -120,9 +124,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     public String[] stylesheetsExtensions = {"css","less","scss"};
     
     
-    // NODE
-    public NodeManager node =  NodeManager.getInstance();
-
+    
 
     
     // SKIP BOOLEAN
@@ -145,26 +147,32 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
 	protected boolean skipJsMinification;
 	
 	/**
-     * Enables / disables JsCompilation
+     * Enables / disables CssCompilation
      */
 	@Parameter(defaultValue="false")
 	protected boolean skipCssCompilation;
 	
 	/**
-     * Enables / disables JsAggregation
+     * Enables / disables CssAggregation
      */
 	@Parameter(defaultValue="false")
 	protected boolean skipCssAggregation;
 	
 	/**
-     * Enables / disables JsMinification
+     * Enables / disables CssMinification
      */
 	@Parameter(defaultValue="false")
 	protected boolean skipCssMinification;
+	
+	/**
+     * Enables / disables JsLint Optimizer
+     */
+	@Parameter(defaultValue="false")
+	protected boolean skipJsLint;
     
     
     
-    // METHODS
+    // ACCESSORS
     public File getTarget() {
         return new File(project.getBuild().getDirectory());
     }
@@ -188,7 +196,6 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     public void setBuildDirectory(File buildDir){
     	this.buildDir = buildDir;
-    	//this.buildDir.mkdirs();
     }
     
     // TARGET-DIR
@@ -199,7 +206,6 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     public void setTargetDirectory(File target){
     	this.targetDirectory = target;
-    	//this.targetDirectory.mkdirs();
     }
 
     // WORK-TEST-DIR
@@ -216,7 +222,6 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     public void setJavaScriptDir(File javascriptDir){
     	this.javaScriptDir = javascriptDir;
-    	//this.javaScriptDir.mkdirs();
     }
     
     // JS-TEST-DIR

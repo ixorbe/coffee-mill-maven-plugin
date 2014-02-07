@@ -36,7 +36,9 @@ public class JsOptimizerMojo extends AbstractCoffeeMillWatcherMojo {
     private NPM lint;
 
     public void execute() throws MojoExecutionException {
-
+		if(isSkipped())
+    		return;
+		
     	lint = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
         	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
@@ -49,7 +51,7 @@ public class JsOptimizerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return  FSUtils.hasExtension(file, scriptExtensions);
+        return  !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
 
     public void compile(File f) throws WatchingException {
@@ -60,7 +62,6 @@ public class JsOptimizerMojo extends AbstractCoffeeMillWatcherMojo {
 
         getLog().info("Linting " + input.getAbsolutePath());
         int exit = lint.execute("jslint", input.getAbsolutePath());
-
     }
 
 
@@ -77,6 +78,14 @@ public class JsOptimizerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public boolean fileDeleted(File file) throws WatchingException{
         return true;
+    }
+    
+    private boolean isSkipped() {
+    	if (skipJsLint || skipJsCompilation) {
+            getLog().info("\033[31m JS Lint Optimizer skipped \033[37m");
+            return true;
+        }
+    	else return false;   	
     }
 
 }
