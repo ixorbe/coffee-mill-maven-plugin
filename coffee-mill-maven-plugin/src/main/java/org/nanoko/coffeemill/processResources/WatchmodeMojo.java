@@ -37,19 +37,19 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
     private Pipeline pipeline;
     
     /**
-     * 
-     */
+	 * 
+	 */
     @Parameter(defaultValue="true")
     protected boolean watchCoffeeScript;
     
     @Parameter(defaultValue="true")
-   protected boolean watchRunServer;
+    protected boolean watchRunServer;
     
-   @Parameter(defaultValue="${watch.port}")
-   protected int watchJettyServerPort=8234;
+    @Parameter(defaultValue="8234")
+    protected int watchJettyServerPort;
    
-   //The Jetty Server
-   protected Server server;
+    //The Jetty Server
+    protected Server server;
 
     public void execute() throws MojoExecutionException {
        
@@ -58,7 +58,6 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         } catch (WatchingException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
-
     	
 		if (watchRunServer) {
 	        try {
