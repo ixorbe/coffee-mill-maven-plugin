@@ -4,6 +4,7 @@ package org.nanoko.coffeemill.mojos.packaging;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.archiver.zip.ZipArchiver;
 
@@ -28,7 +29,12 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
 	
     public String outputFileName = "./release.zip";
     
+    @Parameter(defaultValue="false")
+	protected boolean skipZipPackaging;
+    
     public void execute() throws MojoExecutionException {
+    	if(isSkipped())
+    		return;
         try {
             createApplicationDistribution();
         } catch (Exception e) {
@@ -50,6 +56,14 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
         archiver.createArchive();
         this.getLog().info("getDirectory="+getBuildDirectory());
         projectHelper.attachArtifact(project, "zip", distFile);
+    }
+    
+    private boolean isSkipped(){
+    	if ( skipZipPackaging ) {
+            getLog().info("\033[31m Project zip packaging skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }
