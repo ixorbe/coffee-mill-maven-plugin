@@ -65,8 +65,8 @@ public class CssAggregatorMojoTest {
         System.out.println("It should aggregate");
         
         CssAggregatorMojo mojo = new CssAggregatorMojo();
-        mojo.workDir = testWorkDir;
-        mojo.buildDir = testBuildDir;
+        mojo.setWorkDirectory( testWorkDir );
+        mojo.setBuildDirectory( testBuildDir );
         mojo.outputFileName = "test.aggregate";
         try {
 			mojo.execute();

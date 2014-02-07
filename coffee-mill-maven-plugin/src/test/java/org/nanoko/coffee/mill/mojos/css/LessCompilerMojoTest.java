@@ -49,8 +49,7 @@ public class LessCompilerMojoTest {
 
         LessCompilerMojo mojo = new LessCompilerMojo();
         mojo.stylesheetsDir = stylesDir;
-        mojo.workDir = workDir;
-        mojo.workDir.mkdirs();
+        mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
 		} catch (MojoExecutionException e) {
@@ -68,8 +67,7 @@ public class LessCompilerMojoTest {
 
         LessCompilerMojo mojo = new LessCompilerMojo();
         mojo.stylesheetsDir = new File("nowhere");
-        mojo.workDir = workDir;
-        mojo.workDir.mkdirs();
+        mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
 		} catch (MojoExecutionException e) {

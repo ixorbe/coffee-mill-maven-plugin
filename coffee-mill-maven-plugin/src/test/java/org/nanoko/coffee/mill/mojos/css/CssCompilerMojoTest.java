@@ -48,8 +48,7 @@ public class CssCompilerMojoTest {
 
         CssCompilerMojo mojo = new CssCompilerMojo();
         mojo.stylesheetsDir = stylesDir;
-        mojo.workDir = workDir;
-        mojo.workDir.mkdirs();
+        mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
 		} catch (MojoExecutionException e) {
@@ -67,8 +66,7 @@ public class CssCompilerMojoTest {
 
         CssCompilerMojo mojo = new CssCompilerMojo();
         mojo.stylesheetsDir = new File("nowhere");
-        mojo.workDir = workDir;
-        mojo.workDir.mkdirs();
+        mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
 		} catch (MojoExecutionException e) {

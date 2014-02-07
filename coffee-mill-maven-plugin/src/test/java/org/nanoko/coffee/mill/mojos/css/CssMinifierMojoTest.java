@@ -57,7 +57,7 @@ public class CssMinifierMojoTest {
         System.out.println("It should minify the CSS");
 
         CssMinifierMojo mojo = new CssMinifierMojo();
-        mojo.buildDir = testBuildDir;
+        mojo.setBuildDirectory(testBuildDir);
         mojo.inputFilename = "stuff";
         try {
 			mojo.execute();
@@ -73,7 +73,7 @@ public class CssMinifierMojoTest {
         System.out.println("It should abort the CSS minification");
 
         CssMinifierMojo mojo = new CssMinifierMojo();
-        mojo.buildDir = testBuildDir;
+        mojo.setBuildDirectory(testBuildDir);
         mojo.inputFilename = "nofile";
         try {
 			mojo.execute();
