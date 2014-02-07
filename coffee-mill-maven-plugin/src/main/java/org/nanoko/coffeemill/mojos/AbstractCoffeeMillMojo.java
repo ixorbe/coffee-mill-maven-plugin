@@ -64,13 +64,13 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      * Where are JavaScript files. 
      */
     @Parameter(defaultValue= "src/main/js", required = true, readonly = true)
-    public File javaScriptDir;
+    private File javaScriptDir;
     
     /**
      * Where are JavaScript files implementing tests.
      */
     @Parameter(defaultValue= "src/test/js", required = true, readonly = true)
-    public File javaScriptTestDir;
+    private File javaScriptTestDir;
   
     
     /**
@@ -89,13 +89,13 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      * Where are the OUTPUT WIP files written.
      */
     @Parameter(defaultValue= "target/tmp", required = true, readonly = true)
-    public File workDir;
+    private File workDir;
     
     /**
      * Where are the OUTPUT BUILD files written.
      */
     @Parameter(defaultValue= "target/www", required = true, readonly = true)
-    public File buildDir;
+    private File buildDir;
 
     /**
      * Where are the output test files written.
@@ -130,35 +130,68 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
         return new File(project.getBuild().getDirectory());
     }
 
+    // WORK-DIR
     public File getWorkDirectory() {
-        workDir.mkdirs();
-        return workDir;
+        this.workDir.mkdirs();
+        return this.workDir;
     }
     
+    public void setWorkDirectory(File workDir){
+    	this.workDir = workDir;
+    	this.workDir.mkdirs();
+    }
+    
+    // BUILD-DIR
     public File getBuildDirectory() {
-        buildDir.mkdirs();
-        return buildDir;
+    	this.buildDir.mkdirs();
+        return this.buildDir;
+    }
+    
+    public void setBuildDirectory(File buildDir){
+    	this.buildDir = buildDir;
+    	this.buildDir.mkdirs();
     }
 
+    // WORK-TEST-DIR
     public File getWorkTestDirectory() {
-        workTestDir.mkdirs();
-        return workTestDir;
+    	this.workTestDir.mkdirs();
+        return this.workTestDir;
     }
-
-    public File getLibDirectory() {
-        return libDir;
-    }
-
+    
+    // JS-DIR
     public File getJavaScriptDir() {
-        return javaScriptDir;
+    	this.javaScriptDir.mkdirs();
+        return this.javaScriptDir;
     }
+    
+    public void setJavaScriptDir(File javascriptDir){
+    	this.javaScriptDir = javascriptDir;
+    	this.javaScriptDir.mkdirs();
+    }
+    
+    // JS-TEST-DIR
+    /*public File getJavaScriptTestDirectory(){
+    	this.javaScriptTestDir.mkdirs();
+    	return this.javaScriptTestDir;
+    }
+    
+    public void setJavascriptTestDirectory(File jsTestDir){
+    	this.javaScriptTestDir = jsTestDir;
+    	this.javaScriptTestDir.mkdirs();
+    }*/
 
+    // LIB-DIR
+    public File getLibDirectory() {
+        return this.libDir;
+    }
+    
+    // STYLESHEETS-DIR
     public File getStylesheetsDir() {
-        return stylesheetsDir;
+        return this.stylesheetsDir;
     }    
    
     public NodeManager getNodeManager() {
-        return node;
+        return this.node;
     }    
     
 }
