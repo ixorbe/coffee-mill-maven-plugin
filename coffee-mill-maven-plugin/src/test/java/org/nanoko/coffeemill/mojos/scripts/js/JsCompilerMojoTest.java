@@ -29,16 +29,16 @@ import org.junit.Test;
 /**
  * Test the JavaScriptCompilerMojo.
  */
-public class TMPERRORMojoD {
+public class JsCompilerMojoTest {
 	
 	private final File jsSourceTestDir = new File("src/test/resources/js");
 	private final String testDir = "target/test/JSCompilerMojoTest/";
 	private final File workDir = new File(testDir + "/tmp");
-	private TMPERRORMojoA mojo;
+	private JsCompilerMojo mojo;
 	
 	@Before
 	public void prepareTestDirectory(){  	
-    	this.mojo = new TMPERRORMojoA();        
+    	this.mojo = new JsCompilerMojo();        
     	this.mojo.setWorkDirectory(this.workDir);
     	this.mojo.setJavaScriptDir(jsSourceTestDir);
     }
