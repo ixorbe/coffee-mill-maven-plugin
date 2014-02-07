@@ -31,7 +31,7 @@ import org.junit.Test;
 /**
  * Test the CoffeeScriptCompilerMojo.
  */
-public class JsAggregatorMojoTest {
+public class TMPERRORMojoC {
 
 	private final File jsSourceTestDir = new File("src/test/resources/js");
 	private final String testDir = "target/test/JsAggregatorMojoTest/";

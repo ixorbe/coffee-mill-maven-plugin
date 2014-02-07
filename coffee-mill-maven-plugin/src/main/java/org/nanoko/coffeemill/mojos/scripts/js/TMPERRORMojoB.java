@@ -28,7 +28,7 @@ import static org.nanoko.java.NPM.npm;
         requiresDependencyResolution = ResolutionScope.COMPILE,
         requiresProject = true,
         defaultPhase = LifecyclePhase.PACKAGE)
-public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
+public class TMPERRORMojoB extends AbstractCoffeeMillWatcherMojo {
 
     public static final String PKG_NPM_NAME = "uglify-js";
     public static final String PKG_NPM_VERSION = "2.4.12";
