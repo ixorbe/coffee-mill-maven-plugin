@@ -1,4 +1,4 @@
-package org.nanoko.coffeemill.mojos.stylesheets.css;
+package org.nanoko.coffeemill.mojos.reporting;
 
 
 import org.apache.commons.io.FileUtils;
@@ -21,24 +21,25 @@ import java.io.File;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Minifying Css files.
+ * Minifying Js files.
  */
-@Mojo(name = "minify-stylesheets", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.COMPILE,
+@Mojo(name = "documentation-javascript", threadSafe = false,
+        requiresDependencyResolution = ResolutionScope.TEST,
         requiresProject = true,
         defaultPhase = LifecyclePhase.PACKAGE)
-public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
+public class JsDocMojo extends AbstractCoffeeMillWatcherMojo {
 
-    public static final String CLEANCSS_NPM_NAME = "clean-css";
-    public static final String CLEANCSS_NPM_VERSION = "2.0.7";
+    public static final String PKG_NPM_NAME = "jsdoc";
+    public static final String PKG_NPM_VERSION = "3.3.0-alpha4";
     
-    private NPM cleancss;
+    private NPM jsdoc;
     
     public String inputFilename = null;
+    public String outputDir = null;
 
     public void execute() throws MojoExecutionException {
 
-        cleancss = npm(new MavenLoggerWrapper(this.getLog()), CLEANCSS_NPM_NAME, CLEANCSS_NPM_VERSION);
+    	jsdoc = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
         	compile();
         } catch (WatchingException e) {
@@ -47,31 +48,25 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return  FSUtils.hasExtension(file, stylesheetsExtensions);
+        return  FSUtils.hasExtension(file, scriptExtensions);
     }
 
-    public int compile() throws WatchingException {
+    public void compile() throws WatchingException {
+    	if(inputFilename == null)
+    		inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
     	
-    	if(this.inputFilename == null)
-    		this.inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
-
-    	File input = new File( this.getBuildDirectory(), inputFilename+".css");
+    	File input = new File( this.getBuildDirectory(), inputFilename+".js");
     	if(!input.exists())
-    		return -1;
-    	
-    	File output = new File( this.getBuildDirectory(), inputFilename+"-min.css");
+    		return;
+    	File output = new File( this.buildDirectory,"jsdoc-report" );
  	
     	if(output.exists())
     		FileUtils.deleteQuietly(output);
     	
-        getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
-        int exit = cleancss.execute("cleancss", "-o",  output.getAbsolutePath(),input.getAbsolutePath());
-		getLog().debug("Css minification execution exiting with " + exit + " status");
+        getLog().info("Make Js Doc for " + input.getAbsolutePath() );
+        int exit = jsdoc.execute("jsdoc", input.getAbsolutePath(), "-d",  output.getAbsolutePath() );
+		getLog().debug("Js Doc generation execution exiting with " + exit + " status");
 
-        if (!output.isFile()) {
-            throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
-        }
-        return 0;
     }
 
 
