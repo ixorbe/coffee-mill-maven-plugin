@@ -29,6 +29,8 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 	public String outputFileName = null;
 	
     public void execute() throws MojoExecutionException {
+    	if(isSkipped())
+    		return;
         try {
             if ( this.getWorkDirectory().isDirectory()) {
                 this.aggregate();
@@ -40,7 +42,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.hasExtension(file, stylesheetsExtensions);
+        return !isSkipped() && FSUtils.hasExtension(file, stylesheetsExtensions);
     }
 
     public void aggregate() throws WatchingException {
@@ -81,6 +83,14 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     public boolean fileDeleted(File file) throws WatchingException {
     	this.aggregate();
         return true;
+    }
+    
+    private boolean isSkipped(){
+    	if (skipCssAggregation || skipCssCompilation) {
+            getLog().info("\033[31m CSS Aggregation skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }

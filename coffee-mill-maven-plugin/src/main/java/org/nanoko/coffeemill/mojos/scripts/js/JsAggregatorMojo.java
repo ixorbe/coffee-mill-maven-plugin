@@ -30,6 +30,9 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
     	try {
+    		if(isSkipped())
+        		return;
+    		
     		if (!this.getWorkDirectory().isDirectory()){
             	getLog().warn("JavaScript aggregation skipped - " + this.getWorkDirectory() + " does not exist !");
             	return;
@@ -44,8 +47,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-		getLog().info("JS AGGRE : ACCEPT : " +file.getName() + " : " +FSUtils.hasExtension(file, scriptExtensions));
-        return FSUtils.hasExtension(file, scriptExtensions);
+    	return !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
 
     public void aggregate() throws WatchingException {
@@ -91,5 +93,14 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	this.aggregate();
         return true;
     }
+    
+    private boolean isSkipped(){
+    	if (skipJsAggregation || skipJsCompilation) {
+            getLog().info("\033[31m JS Aggregation skipped \033[37m");
+            return true;
+        }
+    	else return false;
+    }
+
 
 }

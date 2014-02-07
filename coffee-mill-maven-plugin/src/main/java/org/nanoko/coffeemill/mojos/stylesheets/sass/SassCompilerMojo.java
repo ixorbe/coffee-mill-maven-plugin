@@ -33,7 +33,9 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public void execute() throws MojoExecutionException {
-
+    	if(isSkipped())
+    		return;
+    	
     	sass = npm(new MavenLoggerWrapper(this.getLog()), SASS_NPM_NAME, SASS_NPM_VERSION);
         try {
             if ( this.stylesheetsDir.isDirectory()) {
@@ -52,7 +54,7 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "scss");
+        return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "scss");
     }
 
     private File getOutputCSSFile(File input) {
@@ -88,6 +90,14 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         File theFile = getOutputCSSFile(file);
         FileUtils.deleteQuietly(theFile);
         return true;
+    }
+    
+    private boolean isSkipped(){
+    	if (skipCssCompilation) {
+            getLog().info("\033[31m Sass Compilation skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }

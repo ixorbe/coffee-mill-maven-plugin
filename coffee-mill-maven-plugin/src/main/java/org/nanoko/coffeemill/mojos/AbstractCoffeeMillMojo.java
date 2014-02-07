@@ -125,6 +125,45 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
 
 
     
+    // SKIP BOOLEAN
+    /**
+     * Enables / disables JsCompilation
+     */
+	@Parameter(defaultValue="false")
+	protected boolean skipJsCompilation;
+	
+	/**
+     * Enables / disables JsAggregation
+     */
+	@Parameter(defaultValue="false")
+	protected boolean skipJsAggregation;
+	
+	/**
+     * Enables / disables JsMinification
+     */
+	@Parameter(defaultValue="false")
+	protected boolean skipJsMinification;
+	
+	/**
+     * Enables / disables JsCompilation
+     */
+	@Parameter(defaultValue="false")
+	protected boolean skipCssCompilation;
+	
+	/**
+     * Enables / disables JsAggregation
+     */
+	@Parameter(defaultValue="false")
+	protected boolean skipCssAggregation;
+	
+	/**
+     * Enables / disables JsMinification
+     */
+	@Parameter(defaultValue="false")
+	protected boolean skipCssMinification;
+    
+    
+    
     // METHODS
     public File getTarget() {
         return new File(project.getBuild().getDirectory());
@@ -152,7 +191,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     	//this.buildDir.mkdirs();
     }
     
- // TARGET-DIR
+    // TARGET-DIR
     public File getTargetDirectory() {
     	this.targetDirectory.mkdirs();
         return this.targetDirectory;

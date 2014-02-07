@@ -60,13 +60,16 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        coffee = npm(new MavenLoggerWrapper(this.getLog()), COFFEE_SCRIPT_NPM_NAME, COFFEE_SCRIPT_NPM_VERSION);
-
-        if (!this.coffeeScriptDir.isDirectory()){
+    	if(isSkipped())
+    		return;
+    	
+    	if (!this.coffeeScriptDir.isDirectory()){
         	getLog().warn("/!\\ CoffeeScript compilation skipped - " + coffeeScriptDir.getAbsolutePath() + " does not exist !");
         	return;
         }
-        
+    	
+    	coffee = npm(new MavenLoggerWrapper(this.getLog()), COFFEE_SCRIPT_NPM_NAME, COFFEE_SCRIPT_NPM_VERSION);
+
         getLog().info("Get CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
 		Collection<File> files = FileUtils.listFiles(this.coffeeScriptDir, new String[]{"coffee"}, true);
 		
@@ -81,8 +84,9 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return
-                FSUtils.isInDirectory(file.getName(), this.coffeeScriptDir) && FSUtils.hasExtension(file, "coffee");
+        return !isSkipped() 
+        	&& FSUtils.isInDirectory(file.getName(), this.coffeeScriptDir) 
+        	&& FSUtils.hasExtension(file, "coffee");
     }
 
     private void compile(File file) throws WatchingException {
@@ -124,6 +128,14 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;
+    }
+    
+    private boolean isSkipped(){
+    	if (skipJsCompilation) {
+            getLog().info("\033[31m CoffeeScript Compilation skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }

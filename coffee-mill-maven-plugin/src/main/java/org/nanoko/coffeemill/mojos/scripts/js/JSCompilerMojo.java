@@ -5,6 +5,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
 import org.nanoko.coffeemill.utils.FSUtils;
@@ -30,10 +31,13 @@ import java.util.Collection;
         requiresProject = true,
         defaultPhase = LifecyclePhase.COMPILE)
 public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
-    
-    
+	
+	
     public void execute() throws MojoExecutionException, MojoFailureException {        
     	try {
+    		if(isSkipped())
+        		return;
+    		
     		if (!this.getJavaScriptDir().isDirectory()) {
     			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptDir().getAbsolutePath() + " does not exist !");
             	return;
@@ -48,8 +52,7 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     		}
         	
             for(File file : files)
-            	copy(file);
-    		
+            	copy(file);    		
             
     	} catch (WatchingException e) {
             throw new MojoExecutionException(e.getMessage(), e);
@@ -57,7 +60,7 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
     
     public boolean accept(File file) {
-    	return FSUtils.isInDirectory(file.getName(), this.getJavaScriptDir()) && FSUtils.hasExtension(file, "js");
+    	return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.getJavaScriptDir()) && FSUtils.hasExtension(file, "js");
     }
     
 
@@ -87,6 +90,14 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;
+    }
+    
+    private boolean isSkipped(){
+    	if (skipJsCompilation) {
+            getLog().info("\033[31m JS Compilation skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }

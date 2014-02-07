@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.nanoko.java.NPM;
@@ -35,9 +36,11 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     private NPM ugly;
     
     public String inputFileName;
-
+    
 
     public void execute() throws MojoExecutionException {
+    	if(isSkipped())
+    		return;    				
 
     	ugly = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
@@ -48,15 +51,17 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return  FSUtils.hasExtension(file, scriptExtensions);
+        return  !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
 
     public void compile() throws WatchingException {
+    	getLog().info("JS MINI COMPIL");
+		
     	
     	if(this.inputFileName == null)
     		this.inputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
     	
-    	File input = new File( this.getWorkDirectory().getAbsolutePath()+File.separator+this.inputFileName+".js");
+    	File input = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+this.inputFileName+".js");
     	if(!input.exists())
     		return;
     	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+this.inputFileName+"-min.js");
@@ -88,6 +93,14 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public boolean fileDeleted(File file) throws WatchingException{
     	compile();
         return true;
+    }
+    
+    private boolean isSkipped(){
+    	if (skipJsMinification || skipJsAggregation || skipJsCompilation) {
+            getLog().info("\033[31m JS Minification skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }

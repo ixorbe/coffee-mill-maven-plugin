@@ -33,7 +33,9 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public void execute() throws MojoExecutionException {
-
+    	if(isSkipped())
+    		return;
+    	
         less = npm(new MavenLoggerWrapper(this.getLog()), LESS_NPM_NAME, LESS_NPM_VERSION);
         try {
             if ( this.stylesheetsDir.isDirectory()) {
@@ -52,7 +54,7 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "less");
+        return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "less");
     }
 
     private File getOutputCSSFile(File input) {
@@ -88,6 +90,14 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         File theFile = getOutputCSSFile(file);
         FileUtils.deleteQuietly(theFile);
         return true;
+    }
+    
+    private boolean isSkipped(){
+    	if (skipCssCompilation) {
+            getLog().info("\033[31m LESS Compilation skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }

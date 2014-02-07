@@ -26,6 +26,8 @@ import java.util.Collection;
 public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException {
+    	if(isSkipped())
+    		return;
         try {
             if ( this.stylesheetsDir.isDirectory()) {
             	Collection<File> files = FileUtils.listFiles(this.stylesheetsDir, new String[]{"css"}, true);
@@ -39,7 +41,7 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "css");
+        return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "css");
     }
 
     public void copy(File f) throws WatchingException {
@@ -71,6 +73,14 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;
+    }
+    
+    private boolean isSkipped(){
+    	if (skipCssCompilation) {
+            getLog().info("\033[31m CSS Compilation skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }

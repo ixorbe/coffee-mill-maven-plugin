@@ -37,7 +37,9 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public String inputFilename = null;
 
     public void execute() throws MojoExecutionException {
-
+    	if(isSkipped())
+    		return;
+    	
         cleancss = npm(new MavenLoggerWrapper(this.getLog()), CLEANCSS_NPM_NAME, CLEANCSS_NPM_VERSION);
         try {
         	compile();
@@ -47,7 +49,7 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return  FSUtils.hasExtension(file, stylesheetsExtensions);
+        return  !isSkipped() && FSUtils.hasExtension(file, stylesheetsExtensions);
     }
 
     public int compile() throws WatchingException {
@@ -89,6 +91,14 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public boolean fileDeleted(File file) throws WatchingException{
     	compile();
         return true;
+    }
+    
+    private boolean isSkipped(){
+    	if (skipCssMinification || skipCssAggregation || skipCssCompilation) {
+            getLog().info("\033[31m CSS Minification skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }
