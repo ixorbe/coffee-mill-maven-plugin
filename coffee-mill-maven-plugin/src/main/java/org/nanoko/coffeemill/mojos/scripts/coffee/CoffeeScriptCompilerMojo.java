@@ -50,24 +50,33 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     
     
     public File getCoffeeScriptDir() {
-        return coffeeScriptDir;
+    	this.coffeeScriptDir.mkdirs();
+        return this.coffeeScriptDir;
+    }
+    
+    public void setCoffeeScriptDir(File coffeescriptDir){
+    	this.coffeeScriptDir = coffeescriptDir;
+    	this.coffeeScriptDir.mkdirs();
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         coffee = npm(new MavenLoggerWrapper(this.getLog()), COFFEE_SCRIPT_NPM_NAME, COFFEE_SCRIPT_NPM_VERSION);
 
-        if (this.coffeeScriptDir.isDirectory()) {            
-            getLog().info("Compiling CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
-			Collection<File> files = FileUtils.listFiles(this.coffeeScriptDir, new String[]{"coffee"}, true);
-			if(!files.isEmpty())				
-				for(File file : files)
-					invokeCoffeeScriptCompiler(file, getWorkDirectory());
-			else
-				getLog().warn("CoffeeScript sources directory "+this.coffeeScriptDir.getAbsolutePath()+" is empty !");
-		
+        if (!this.coffeeScriptDir.isDirectory()){
+        	getLog().warn("/!\\ CoffeeScript compilation skipped - " + coffeeScriptDir.getAbsolutePath() + " does not exist !");
+        	return;
         }
-        else
-        	getLog().warn("CoffeeScript compilation skipped - " + coffeeScriptDir.getAbsolutePath() + " does not exist !");
+        
+        getLog().info("Get CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
+		Collection<File> files = FileUtils.listFiles(this.coffeeScriptDir, new String[]{"coffee"}, true);
+		
+		if(files.isEmpty()){
+			getLog().warn("/!\\ CoffeeScript sources directory " + this.coffeeScriptDir.getAbsolutePath() + " is empty !");
+			return;
+		}
+			
+		for(File file : files)
+			invokeCoffeeScriptCompiler(file, getWorkDirectory());      	
 
     }
 
@@ -109,7 +118,7 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileDeleted(File file) {    	
-    	File deleted = new File(this.workDir.getAbsolutePath(), file.getName());
+    	File deleted = new File(this.getWorkDirectory().getAbsolutePath(), file.getName());
         if (deleted.isFile()){
         	getLog().info("deleted File : "+file.getName());    	
         	FileUtils.deleteQuietly(deleted); 

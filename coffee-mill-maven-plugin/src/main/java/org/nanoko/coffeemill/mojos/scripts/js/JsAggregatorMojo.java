@@ -2,6 +2,7 @@ package org.nanoko.coffeemill.mojos.scripts.js;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -24,12 +25,18 @@ import java.util.Collection;
         requiresProject = true,
         defaultPhase = LifecyclePhase.PACKAGE)
 public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
+	
+	public String inputFileName;
 
-    public void execute() throws MojoExecutionException {
-        try {
-            if ( this.workDir.isDirectory()) {
-                this.aggregate();
-            }
+    public void execute() throws MojoExecutionException, MojoFailureException {
+    	try {
+    		if (!this.getWorkDirectory().isDirectory()){
+            	getLog().warn("JavaScript aggregation skipped - " + this.getWorkDirectory() + " does not exist !");
+            	return;
+            }    		
+    		
+            this.aggregate();
+            
         } catch (WatchingException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
@@ -42,15 +49,21 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public void aggregate() throws WatchingException {
-    	getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
-    	String fileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+".js");
-    	if(output.exists())
-    		FileUtils.deleteQuietly(output);
-    	
-        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
-        if(files.size()==0)
+    	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
+        if(files.isEmpty()){
+        	getLog().warn("JavaScript work directory "+this.getWorkDirectory().getAbsolutePath()+" is empty !");
         	return;
+        }
+        
+    	getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
+    	
+    	if(this.inputFileName == null)
+    		this.inputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	
+    	File output = new File( this.getBuildDirectory().getAbsolutePath() + File.separator + this.inputFileName + ".js");
+    	if(output.exists())
+    		FileUtils.deleteQuietly(output);    	
+        
         try {
 			FileAggregation.joinFiles( output, files);
 		} catch (IOException e) {
