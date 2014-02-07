@@ -31,7 +31,7 @@ import org.junit.Test;
 /**
  * Test the CoffeeScriptCompilerMojo.
  */
-public class JSAggregatorMojoTest {
+public class JsAggregatorMojoTest {
 
 	private final File jsSourceTestDir = new File("src/test/resources/js");
 	private final String testDir = "target/test/JsAggregatorMojoTest/";
@@ -47,7 +47,7 @@ public class JSAggregatorMojoTest {
     	this.mojo.setJavaScriptDir( this.jsSourceTestDir );
     	this.mojo.setWorkDirectory(this.workDir);
     	this.mojo.setBuildDirectory(this.buildDir);
-    	this.mojo.inputFileName = "test-js-aggregator";
+    	this.mojo.inputFileName = "test-js-aggregation";
         
         Collection<File> files = FileUtils.listFiles(this.mojo.getJavaScriptDir(), new String[]{"js"}, true);    	
         for(File file : files)
@@ -64,7 +64,7 @@ public class JSAggregatorMojoTest {
     	this.mojo.execute();    	
     	assertTrue(new File(this.mojo.getWorkDirectory(), "test.js").exists());
     	assertTrue(new File(this.mojo.getWorkDirectory(), "test2.js").exists());
-    	assertTrue(new File(this.mojo.getBuildDirectory(), "test-js-aggregator.js").exists());
+    	assertTrue(new File(this.mojo.getBuildDirectory(), "test-js-aggregation.js").exists());
     }
     
     

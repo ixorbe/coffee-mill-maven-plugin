@@ -27,7 +27,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.scripts.coffee.CoffeeScriptCompilerMojo;
-import org.nanoko.coffeemill.mojos.scripts.js.JSCompilerMojo;
+import org.nanoko.coffeemill.mojos.scripts.js.JsCompilerMojo;
 
 /**
  * Test the CoffeeScriptCompilerMojo.

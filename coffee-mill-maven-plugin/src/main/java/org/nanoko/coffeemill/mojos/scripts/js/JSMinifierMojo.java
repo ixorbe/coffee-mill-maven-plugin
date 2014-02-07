@@ -33,6 +33,8 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String PKG_NPM_VERSION = "2.4.12";
     
     private NPM ugly;
+    
+    public String inputFileName;
 
 
     public void execute() throws MojoExecutionException {
@@ -51,11 +53,13 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void compile() throws WatchingException {
     	
-    	String fileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	File input = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+".js");
+    	if(this.inputFileName == null)
+    		this.inputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	
+    	File input = new File( this.getWorkDirectory().getAbsolutePath()+File.separator+this.inputFileName+".js");
     	if(!input.exists())
     		return;
-    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+fileName+"-min.js");
+    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+this.inputFileName+"-min.js");
  	
     	if(output.exists())
     		FileUtils.deleteQuietly(output);

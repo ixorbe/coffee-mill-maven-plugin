@@ -29,7 +29,7 @@ import java.util.Collection;
         requiresDependencyResolution = ResolutionScope.COMPILE,
         requiresProject = true,
         defaultPhase = LifecyclePhase.COMPILE)
-public class JSCompilerMojo extends AbstractCoffeeMillWatcherMojo {
+public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     
     
     public void execute() throws MojoExecutionException, MojoFailureException {        
