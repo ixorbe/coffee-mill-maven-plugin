@@ -57,8 +57,8 @@
                              org.nanoko.coffee-mill:coffee-mill-maven-plugin:aggregate-stylesheets,
 	                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:minify-javascript, 
                              org.nanoko.coffee-mill:coffee-mill-maven-plugin:minify-stylesheets,
-                             org.nanoko.coffee-mill:coffee-mill-maven-plugin:documentation-javascript
-<!--                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:build-zip -->
+                             org.nanoko.coffee-mill:coffee-mill-maven-plugin:documentation-javascript,
+                             org.nanoko.coffee-mill:coffee-mill-maven-plugin:build-zip
                     </package>
                     <integration-test>
 <!--                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:jasmine-it-test -->
