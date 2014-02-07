@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.nanoko.java.NPM;
@@ -32,13 +33,17 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     public static final String PKG_NPM_NAME = "jsdoc";
     public static final String PKG_NPM_VERSION = "3.3.0-alpha4";
     
+    @Parameter(defaultValue="false")
+	protected boolean skipJsDocumentation;
+    
     private NPM jsdoc;
     
     public String inputFilename = null;
     public String outputDir = null;
-
+    
     public void execute() throws MojoExecutionException {
-
+    	if(isSkipped())
+    		return;   
     	jsdoc = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
         	compile();
@@ -48,7 +53,7 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     }
 
     public boolean accept(File file) {
-        return  FSUtils.hasExtension(file, scriptExtensions);
+        return  !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
 
     public void compile() throws WatchingException {
@@ -67,6 +72,14 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
         int exit = jsdoc.execute("jsdoc", input.getAbsolutePath(), "-d",  output.getAbsolutePath() );
 		getLog().debug("Js Doc generation execution exiting with " + exit + " status");
 
+    }
+    
+    private boolean isSkipped(){
+    	if ( skipJsDocumentation || skipJsCompilation) {
+            getLog().info("\033[31m JS Documentation skipped \033[37m");
+            return true;
+        }
+    	else return false;
     }
 
 }
