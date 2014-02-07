@@ -52,7 +52,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      * The target directory of the compiler if fork is true.
      */
     @Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
-    public File buildDirectory;
+    public File targetDirectory = new File("./target");
     
     /**
      * The directory to run the compiler from if fork is true.
@@ -149,7 +149,18 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     public void setBuildDirectory(File buildDir){
     	this.buildDir = buildDir;
-    	this.buildDir.mkdirs();
+    	//this.buildDir.mkdirs();
+    }
+    
+ // TARGET-DIR
+    public File getTargetDirectory() {
+    	this.targetDirectory.mkdirs();
+        return this.targetDirectory;
+    }
+    
+    public void setTargetDirectory(File target){
+    	this.targetDirectory = target;
+    	//this.targetDirectory.mkdirs();
     }
 
     // WORK-TEST-DIR
@@ -166,7 +177,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     public void setJavaScriptDir(File javascriptDir){
     	this.javaScriptDir = javascriptDir;
-    	this.javaScriptDir.mkdirs();
+    	//this.javaScriptDir.mkdirs();
     }
     
     // JS-TEST-DIR
