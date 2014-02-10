@@ -48,18 +48,22 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.getAssetsDir());
+        return !isSkipped() && file.getParent().contains( getAssetsDir().getAbsolutePath() );
     }
 
     public void copy(File f) throws WatchingException {
     	getLog().info("Copy Asset file "+f.getName()+" to "+this.defaultTargetAssetsDir.getAbsolutePath());
     	try {
-    		String baseUrl = f.getAbsolutePath().substring(0, this.getAssetsDir().getAbsolutePath().length());
-    		getLog().info("baseUrl : "+baseUrl);
-    		baseUrl = baseUrl.substring(0, f.getName().length());
-    		System.out.println("***************************************");
-    		System.out.println(baseUrl);
-			FileUtils.copyFileToDirectory(f, new File(this.getBuildDirectory(), "assets/"+baseUrl));
+    		
+    		File relativeFile = computeRelativeFile(f, getAssetsDir(), this.defaultTargetAssetsDir);
+    		
+    		if (relativeFile.getParentFile() != null) {
+    			relativeFile.getParentFile().mkdirs();
+                FileUtils.copyFileToDirectory(f, relativeFile.getParentFile());
+            } else {
+                getLog().error("Cannot copy file - parent directory not accessible for " + f.getAbsolutePath());
+            }
+			
 		} catch (IOException e) { e.printStackTrace(); }
     }
 
@@ -78,8 +82,8 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     		return false;
     }
 
-    public boolean fileDeleted(File file) throws WatchingException {        
-        File deleted = new File(this.getWorkDirectory().getAbsolutePath() + File.separator + file.getName());
+    public boolean fileDeleted(File file) throws WatchingException {
+        File deleted = computeRelativeFile(file, getAssetsDir(), this.defaultTargetAssetsDir);
         if (deleted.isFile()){
         	getLog().info("deleting File : "+file.getName());    	
         	FileUtils.deleteQuietly(deleted); 
@@ -93,6 +97,20 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
             return true;
         }
     	else return false;
+    }
+    
+    /**
+     * Gets a File object representing a File in the directory <tt>dir</tt> which has the same path as the file
+     * <tt>file</tt> from the directory <tt>rel</tt>.
+     * @param file
+     * @param rel
+     * @param dir
+     * @return
+     */
+    public static File computeRelativeFile(File file, File rel, File dir) {
+        String path = file.getAbsolutePath();
+        String relativePath = path.substring(rel.getAbsolutePath().length());
+        return new File(dir, relativePath);
     }
 
 }
