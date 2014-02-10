@@ -47,7 +47,7 @@ public class CssCompilerMojoTest {
         System.out.println("Should compile two css files");
 
         CssCompilerMojo mojo = new CssCompilerMojo();
-        mojo.stylesheetsDir = stylesDir;
+        mojo.setStylesheetsDir(stylesDir);
         mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
@@ -65,7 +65,7 @@ public class CssCompilerMojoTest {
         System.out.println("Should compile nothing");
 
         CssCompilerMojo mojo = new CssCompilerMojo();
-        mojo.stylesheetsDir = new File("nowhere");
+        mojo.setStylesheetsDir(new File("nowhere"));
         mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();

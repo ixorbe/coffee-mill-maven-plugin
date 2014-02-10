@@ -86,7 +86,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      * Where are LESS, CSS and SASS/SCSS files.
      */
     @Parameter(defaultValue= "src/main/stylesheets", required = true, readonly = true)
-    public File stylesheetsDir;
+    private File stylesheetsDir;
 
     /**
      * Where are the OUTPUT WIP files written.
@@ -250,7 +250,12 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     // STYLESHEETS-DIR
     public File getStylesheetsDir() {
+    	this.stylesheetsDir.mkdirs();
         return this.stylesheetsDir;
+    }
+    
+    public void setStylesheetsDir(File stylesheetsDir){
+    	this.stylesheetsDir = stylesheetsDir;
     }
     
     

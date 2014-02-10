@@ -47,7 +47,7 @@ public class SassCompilerMojoTest {
         System.out.println("Should compile 1 Sass file");
 
         SassCompilerMojo mojo = new SassCompilerMojo();
-        mojo.stylesheetsDir = stylesDir;
+        mojo.setStylesheetsDir(stylesDir);
         mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
@@ -65,7 +65,7 @@ public class SassCompilerMojoTest {
         System.out.println("Should compile nothing");
 
         SassCompilerMojo mojo = new SassCompilerMojo();
-        mojo.stylesheetsDir = new File("nowhere");
+        mojo.setStylesheetsDir(new File("nowhere"));
         mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();

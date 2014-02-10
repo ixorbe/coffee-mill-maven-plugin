@@ -48,7 +48,7 @@ public class LessCompilerMojoTest {
         System.out.println("Should compile three less files");
 
         LessCompilerMojo mojo = new LessCompilerMojo();
-        mojo.stylesheetsDir = stylesDir;
+        mojo.setStylesheetsDir(stylesDir);
         mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
@@ -66,7 +66,7 @@ public class LessCompilerMojoTest {
         System.out.println("Should compile nothing");
 
         LessCompilerMojo mojo = new LessCompilerMojo();
-        mojo.stylesheetsDir = new File("nowhere");
+        mojo.setStylesheetsDir(new File("nowhere"));
         mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
