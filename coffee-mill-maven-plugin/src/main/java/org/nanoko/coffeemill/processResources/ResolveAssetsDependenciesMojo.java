@@ -32,7 +32,11 @@ import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
 public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
 
 
-    public void execute() throws MojoExecutionException, MojoFailureException {        
+	File outputDirectory=null;
+    public void execute() throws MojoExecutionException, MojoFailureException {   
+    	if(outputDirectory  == null)
+    		outputDirectory = new File( getWorkDirectory(),"libs");
+    	
     	Set<Artifact> dependencies = this.project.getArtifacts();
         Set<Artifact> keepers = new LinkedHashSet<Artifact>();
         // Only retrieve JS & CSS dependencies
@@ -41,16 +45,21 @@ public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
         		keepers.add(a);
         	else getLog().warn(a.getFile().getName() + " dependency can't be resolved");
         }
-        for( Artifact a : keepers)
-        	copyDependencies(a, getWorkDirectory());
+        if(keepers.size()>0)
+        	copyDependencies(keepers);
     }
     
-    public void copyDependencies(Artifact a, File destDirectory){
-    	try {
-			File f = a.getFile();
-    		getLog().info("	Copy " + f.getAbsolutePath() + " to " + destDirectory);
-			FileUtils.copyFileToDirectory(f, destDirectory);
-    	} catch (IOException e) {}
+    public void copyDependencies(Set<Artifact> artifacts){
+    	if(!outputDirectory.exists())
+    		outputDirectory.mkdirs();
+    	
+    	for( Artifact a : artifacts) {
+	    	try {
+				File f = a.getFile();
+	    		getLog().info("	Copy " + f.getAbsolutePath() + " to " + outputDirectory);
+				FileUtils.copyFileToDirectory(f, outputDirectory);
+	    	} catch (IOException e) {}
+    	}
     }
    
 }
