@@ -38,9 +38,9 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	
     	sass = npm(new MavenLoggerWrapper(this.getLog()), SASS_NPM_NAME, SASS_NPM_VERSION);
         try {
-            if ( this.stylesheetsDir.isDirectory()) {
-                getLog().info("Compiling sass files from " + this.stylesheetsDir.getAbsolutePath());
-                Collection<File> files = FileUtils.listFiles(this.stylesheetsDir, new String[]{"scss"}, true);
+            if ( getStylesheetsDir().isDirectory()) {
+                getLog().info("Compiling sass files from " + getStylesheetsDir().getAbsolutePath());
+                Collection<File> files = FileUtils.listFiles(getStylesheetsDir(), new String[]{"scss"}, true);
                 for (File file : files) {
                     if (file.isFile()) {
                         compile(file);
@@ -54,12 +54,15 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "scss");
+        return !isSkipped() 
+        	//&& FSUtils.isInDirectory(file.getName(), getStylesheetsDir())
+        	&& file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
+        	&& FSUtils.hasExtension(file, "scss");
     }
 
     private File getOutputCSSFile(File input) {
         String cssFileName = input.getName().substring(0, input.getName().length() - ".scss".length()) + ".css";
-        String path = input.getParentFile().getAbsolutePath().substring(this.stylesheetsDir.getAbsolutePath().length());
+        String path = input.getParentFile().getAbsolutePath().substring(getStylesheetsDir().getAbsolutePath().length());
         return new File(this.getWorkDirectory(), path + "/" + cssFileName);
     }
 

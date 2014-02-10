@@ -1,6 +1,7 @@
 package org.nanoko.coffeemill.mojos.scripts.coffee;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -85,7 +86,8 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public boolean accept(File file) {
         return !isSkipped() 
-        	&& FSUtils.isInDirectory(file.getName(), this.coffeeScriptDir) 
+        	//&& FSUtils.isInDirectory(file.getName(), this.coffeeScriptDir) 
+        	&& file.getParent().contains( this.coffeeScriptDir.getAbsolutePath() )
         	&& FSUtils.hasExtension(file, "coffee");
     }
 
@@ -121,10 +123,10 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         return true;
     }
 
-    public boolean fileDeleted(File file) {    	
-    	File deleted = new File(this.getWorkDirectory().getAbsolutePath(), file.getName());
+    public boolean fileDeleted(File file) {
+    	File deleted = new File(this.getWorkDirectory().getAbsolutePath(), FilenameUtils.getBaseName(file.getName()) + ".js");
         if (deleted.isFile()){
-        	getLog().info("deleted File : "+file.getName());    	
+        	getLog().info("deleted File : "+deleted.getName());    	
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;

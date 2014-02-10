@@ -29,8 +29,8 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	if(isSkipped())
     		return;
         try {
-            if ( this.stylesheetsDir.isDirectory()) {
-            	Collection<File> files = FileUtils.listFiles(this.stylesheetsDir, new String[]{"css"}, true);
+            if ( getStylesheetsDir().isDirectory()) {
+            	Collection<File> files = FileUtils.listFiles(getStylesheetsDir(), new String[]{"css"}, true);
                 for(File f: files)
         			copy(f);
             }
@@ -41,11 +41,14 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.stylesheetsDir) && FSUtils.hasExtension(file, "css");
+        return !isSkipped() 
+        	//&& FSUtils.isInDirectory(file.getName(), this.stylesheetsDir)
+        	&& file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
+        	&& FSUtils.hasExtension(file, "css");
     }
 
     public void copy(File f) throws WatchingException {
-    	getLog().info("Copy css files from " + this.stylesheetsDir.getAbsolutePath());
+    	getLog().info("Copy css files from " + getStylesheetsDir().getAbsolutePath());
     	try {
 			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
 		} catch (IOException e) { e.printStackTrace(); }

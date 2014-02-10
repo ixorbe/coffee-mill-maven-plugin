@@ -59,7 +59,10 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
     
     public boolean accept(File file) {
-    	return !isSkipped() && FSUtils.isInDirectory(file.getName(), this.getJavaScriptDir()) && FSUtils.hasExtension(file, "js");
+    	return !isSkipped() 
+    		//&& FSUtils.isInDirectory(file.getName(), this.getJavaScriptDir()) 
+    		&& file.getParent().contains( getJavaScriptDir().getAbsolutePath() )
+    		&& FSUtils.hasExtension(file, "js");
     }
     
 
