@@ -124,16 +124,9 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     
     // WATCHER
-    @Parameter(defaultValue="true")
-    protected boolean watchCoffeeScript;
+    protected static boolean isWatchMode = false;
     
-    @Parameter(defaultValue="true")
-    protected boolean watchRunServer;
-    
-    @Parameter(defaultValue="8234")
-    protected int watchJettyServerPort;
-    
-
+   
     
     // SKIP BOOLEAN
     /**

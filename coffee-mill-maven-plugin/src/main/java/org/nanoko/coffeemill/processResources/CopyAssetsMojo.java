@@ -35,7 +35,7 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     		return;
         try {
             if ( this.getAssetsDir().isDirectory()) {
-            	if(watchRunServer)
+            	if(isWatchMode)
             		this.defaultTargetAssetsDir = this.getWorkDirectory();
             	else
             		this.defaultTargetAssetsDir = this.getBuildDirectory();
