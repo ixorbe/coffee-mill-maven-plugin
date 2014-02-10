@@ -46,17 +46,32 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public void aggregate() throws WatchingException {
-    	getLog().info("Aggregate css files from " + this.getWorkDirectory().getAbsolutePath());
     	if(this.outputFileName == null)
     		this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+this.outputFileName+".css");
     	
+    	File output = new File( this.getBuildDirectory(), this.outputFileName + ".css");
     	if(output.exists())
-    		FileUtils.deleteQuietly(output);
+    		FileUtils.deleteQuietly(output);   
     	
-        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, true);
-        if(files.size()==0)
-        	return;
+    	if(aggregateAppOnly(output)) {
+    		try {
+				aggregateAppWithLibs(output);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    }
+
+    private boolean aggregateAppOnly(File output) throws WatchingException {
+    	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
+        if(files.isEmpty()){
+        	getLog().warn("JavaScript work directory "+this.getWorkDirectory().getAbsolutePath()+" is empty !");
+        	return false;
+        }
+    	getLog().info("Aggregate Css files from " + this.getWorkDirectory().getAbsolutePath());
+    	
         try {
 			FileAggregation.joinFiles( output, files);
 		} catch (IOException e) {
@@ -64,7 +79,35 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 		}
 
         if (!output.isFile()) {
-            throw new WatchingException("Error during the CSS aggregation check log");
+            throw new WatchingException("Error during the Css aggregation check log");
+        }
+        return true;
+    }
+    
+    private void aggregateAppWithLibs(File in) throws WatchingException, IOException {
+    	File output = new File(this.getBuildDirectory(),  this.outputFileName+"-all.css");
+    	if(output.exists())
+    		FileUtils.deleteQuietly(output);    
+    	
+    	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"css"}, false);
+
+        if(files.isEmpty()){
+        	getLog().warn("JavaScript External libraries directory "+this.getLibDirectory().getAbsolutePath()+" is empty !");
+        	FileUtils.copyFile(in, output);
+        	return;
+        }
+        
+        files.add(in);
+    	getLog().info("Aggregate Css files from " + this.getLibDirectory().getAbsolutePath());
+    	  
+        try {
+			FileAggregation.joinFiles( output, files);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+        if (!output.isFile()) {
+            throw new WatchingException("Error during the Css aggregation check log");
         }
     }
 
