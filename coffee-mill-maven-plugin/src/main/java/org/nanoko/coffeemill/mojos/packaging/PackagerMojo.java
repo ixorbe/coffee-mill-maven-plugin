@@ -27,7 +27,7 @@ import java.io.IOException;
         defaultPhase = LifecyclePhase.PACKAGE)
 public class PackagerMojo extends AbstractCoffeeMillMojo  {
 	
-    public String outputFileName = "./release.zip";
+    public String outputFileName = "release.zip";
     
     @Parameter(defaultValue="false")
 	protected boolean skipZipPackaging;
@@ -46,8 +46,7 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
     	this.getLog().info("createApplicationDistribution");
     	if( this.project != null )
     		this.outputFileName =  this.project.getArtifactId() + "-" + this.project.getVersion() + ".zip";
-    	this.getLog().info("outputFileName="+outputFileName);
-    	this.getLog().info("buildDirectory="+getTargetDirectory());
+
     	File distFile = new File(this.getTargetDirectory(), this.outputFileName);
         ZipArchiver archiver = new ZipArchiver();
         archiver.enableLogging(new PlexusLoggerWrapper(new MavenLoggerWrapper(this.getLog())));
@@ -55,7 +54,8 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
         archiver.setDestFile(distFile);
         archiver.createArchive();
         this.getLog().info("getDirectory="+getBuildDirectory());
-        projectHelper.attachArtifact(project, "zip", distFile);
+        if(projectHelper != null )
+        	projectHelper.attachArtifact(project, "zip", distFile);
     }
     
     private boolean isSkipped(){
