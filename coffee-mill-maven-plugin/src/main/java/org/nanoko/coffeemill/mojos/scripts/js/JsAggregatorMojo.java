@@ -1,6 +1,7 @@
 package org.nanoko.coffeemill.mojos.scripts.js;
 
 import org.apache.commons.io.FileUtils;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -26,7 +27,7 @@ import java.util.Collection;
         defaultPhase = LifecyclePhase.PACKAGE)
 public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 	
-	public String inputFileName;
+	public String outputFileName;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
     	try {
@@ -51,21 +52,60 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public void aggregate() throws WatchingException {
-    	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
+    	if(this.outputFileName == null)
+    		this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	
+    	File output = new File( this.getBuildDirectory(), this.outputFileName + ".js");
+    	if(output.exists())
+    		FileUtils.deleteQuietly(output);   
+    	
+    	if(aggregateAppOnly(output)) {
+    		try {
+				aggregateAppWithLibs(output);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    }
+
+    private boolean aggregateAppOnly(File output) throws WatchingException {
+    	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
         if(files.isEmpty()){
         	getLog().warn("JavaScript work directory "+this.getWorkDirectory().getAbsolutePath()+" is empty !");
+        	return false;
+        }
+    	getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
+    	
+        try {
+			FileAggregation.joinFiles( output, files);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+        if (!output.isFile()) {
+            throw new WatchingException("Error during the Js aggregation check log");
+        }
+        return true;
+    }
+    
+    private void aggregateAppWithLibs(File in) throws WatchingException, IOException {
+    	File output = new File(this.getBuildDirectory(),  this.outputFileName+"-all.js");
+    	if(output.exists())
+    		FileUtils.deleteQuietly(output);    
+    	
+    	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"js"}, false);
+
+        if(files.isEmpty()){
+        	getLog().warn("JavaScript External libraries directory "+this.getLibDirectory().getAbsolutePath()+" is empty !");
+        	FileUtils.copyFile(in, output);
         	return;
         }
         
-    	getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
-    	
-    	if(this.inputFileName == null)
-    		this.inputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	
-    	File output = new File( this.getBuildDirectory().getAbsolutePath() + File.separator + this.inputFileName + ".js");
-    	if(output.exists())
-    		FileUtils.deleteQuietly(output);    	
-        
+        files.add(in);
+    	getLog().info("Aggregate Js files from " + this.getLibDirectory().getAbsolutePath());
+    	  
         try {
 			FileAggregation.joinFiles( output, files);
 		} catch (IOException e) {
@@ -76,8 +116,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
             throw new WatchingException("Error during the Js aggregation check log");
         }
     }
-
-
+    
     public boolean fileCreated(File file) throws WatchingException {
     	this.aggregate();
         return true;
