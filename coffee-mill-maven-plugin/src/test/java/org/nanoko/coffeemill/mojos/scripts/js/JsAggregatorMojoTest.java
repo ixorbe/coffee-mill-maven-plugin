@@ -37,6 +37,7 @@ public class JsAggregatorMojoTest {
 	private final String testDir = "target/test/JsAggregatorMojoTest/";
 	private final File workDir = new File(testDir + "/tmp");
 	private final File buildDir = new File(testDir + "/www");
+	private final File libDir = new File(workDir , "libs");
 	
 	private JsAggregatorMojo mojo;
 	
@@ -47,7 +48,8 @@ public class JsAggregatorMojoTest {
     	this.mojo.setJavaScriptDir( this.jsSourceTestDir );
     	this.mojo.setWorkDirectory(this.workDir);
     	this.mojo.setBuildDirectory(this.buildDir);
-    	this.mojo.inputFileName = "test-js-aggregation";
+    	this.mojo.setLibDirectory(this.libDir);
+    	this.mojo.outputFileName = "test-js-aggregation";
         
         Collection<File> files = FileUtils.listFiles(this.mojo.getJavaScriptDir(), new String[]{"js"}, true);    	
         for(File file : files)
