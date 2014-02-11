@@ -35,7 +35,7 @@ public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
 	File outputDirectory=null;
     public void execute() throws MojoExecutionException, MojoFailureException {   
     	if(outputDirectory  == null)
-    		outputDirectory = new File( getWorkDirectory(),"libs");
+    		outputDirectory = this.getLibDirectory();
     	
     	Set<Artifact> dependencies = this.project.getArtifacts();
         Set<Artifact> keepers = new LinkedHashSet<Artifact>();

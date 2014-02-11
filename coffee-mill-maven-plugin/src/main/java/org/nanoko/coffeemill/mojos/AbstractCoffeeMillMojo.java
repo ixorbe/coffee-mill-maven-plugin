@@ -109,8 +109,8 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     /**
      * Where are the dependencies copies.
      */
-    @Parameter(defaultValue= "target/libs", required = true, readonly = true)
-    public File libDir;
+    @Parameter(defaultValue= "target/tmp/libs", required = true, readonly = true)
+    private File libDir;
     
     /**
      * Default extensions authorized for script files
@@ -255,9 +255,12 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
 
     // LIB-DIR
     public File getLibDirectory() {
+    	this.libDir.mkdirs();
         return this.libDir;
     }
-    
+    public void setLibDirectory(File libs) {
+    	this.libDir = libs;
+    }
     
     // ASSETS-DIR
     public File getAssetsDir(){

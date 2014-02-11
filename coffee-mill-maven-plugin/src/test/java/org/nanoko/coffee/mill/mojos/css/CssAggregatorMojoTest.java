@@ -37,6 +37,7 @@ public class CssAggregatorMojoTest {
 	private final File testWorkDir = new File("target/test/css/aggregation/tmp/");
 	private final File srcStyleDir = new File("src/test/resources/stylesheets/");
 	private final File testBuildDir = new File("target/test/css/aggregation/www/");
+	private final File libDir = new File(testWorkDir , "libs");
 	
 	
 	@Before 
@@ -67,6 +68,8 @@ public class CssAggregatorMojoTest {
         CssAggregatorMojo mojo = new CssAggregatorMojo();
         mojo.setWorkDirectory( testWorkDir );
         mojo.setBuildDirectory( testBuildDir );
+        mojo.setLibDirectory(this.libDir);
+        
         mojo.outputFileName = "test.aggregate";
         try {
 			mojo.execute();
