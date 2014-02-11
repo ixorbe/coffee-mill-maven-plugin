@@ -71,7 +71,7 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     		if(!input.exists())
     			return false;
     	// if output exist, delete it
-    	File output = new File( this.getBuildDirectory(),baseName+"-min.js");
+    	File output = new File( this.getBuildDirectory(), baseName+"-min.js");
         if(output.exists())
         	FileUtils.deleteQuietly(output);
         

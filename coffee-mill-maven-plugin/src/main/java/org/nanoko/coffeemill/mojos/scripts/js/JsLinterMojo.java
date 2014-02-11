@@ -56,7 +56,7 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void compile(File f) throws WatchingException {
     	String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".js";
-    	File input = new File( this.getWorkDirectory().getAbsolutePath(), name);
+    	File input = new File( this.getWorkDirectory(), name);
     	if(!input.exists())
     		return;
 
