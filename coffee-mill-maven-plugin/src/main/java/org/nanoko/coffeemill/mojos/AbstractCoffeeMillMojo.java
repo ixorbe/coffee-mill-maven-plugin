@@ -91,13 +91,13 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     /**
      * Where are the OUTPUT WIP files written.
      */
-    @Parameter(defaultValue= "target/tmp", required = true, readonly = true)
+    @Parameter(defaultValue= "target/www", required = true, readonly = true)
     private File workDir;
     
     /**
      * Where are the OUTPUT BUILD files written.
      */
-    @Parameter(defaultValue= "target/www", required = true, readonly = true)
+    @Parameter(defaultValue= "target/www-release", required = true, readonly = true)
     private File buildDir;
 
     /**
@@ -109,7 +109,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     /**
      * Where are the dependencies copies.
      */
-    @Parameter(defaultValue= "target/tmp/libs", required = true, readonly = true)
+    @Parameter(defaultValue= "target/www/libs", required = true, readonly = true)
     private File libDir;
     
     /**
@@ -121,10 +121,6 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      * Default extensions autorized for stylesheets files
      */
     public String[] stylesheetsExtensions = {"css","less","scss"};
-    
-    
-    // WATCHER
-    protected static boolean isWatchMode = false;
     
    
     

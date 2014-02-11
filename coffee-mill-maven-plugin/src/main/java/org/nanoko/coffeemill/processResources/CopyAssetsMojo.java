@@ -10,7 +10,6 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import org.nanoko.maven.WatchingException;
 import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
-import org.nanoko.coffeemill.utils.FSUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,20 +26,18 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 	
 	@Parameter(defaultValue="false")
 	protected boolean skipAssetsCopy;
-	
-	private File defaultTargetAssetsDir;
-	
+		
     public void execute() throws MojoExecutionException {
     	if(isSkipped())
     		return;
-        try {
-            if ( this.getAssetsDir().isDirectory()) {
-            	if(isWatchMode)
-            		this.defaultTargetAssetsDir = this.getWorkDirectory();
-            	else
-            		this.defaultTargetAssetsDir = this.getBuildDirectory();
-            	FileUtils.copyDirectory(this.getAssetsDir(), this.defaultTargetAssetsDir);
-            }
+    	if (!this.getAssetsDir().isDirectory()){
+        	getLog().warn("/!\\ Copy assets skipped - " + this.getAssetsDir().getAbsolutePath() + " does not exist !");
+        	return;
+        }
+    	
+        try {   
+        	FileUtils.copyDirectory(this.getAssetsDir(), this.getWorkDirectory());
+        	FileUtils.copyDirectory(this.getAssetsDir(), this.getBuildDirectory());
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
@@ -52,19 +49,31 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public void copy(File f) throws WatchingException {
-    	getLog().info("Copy Asset file "+f.getName()+" to "+this.defaultTargetAssetsDir.getAbsolutePath());
+    	getLog().info("Copy Asset file "+f.getName()
+    			+" to "+this.getWorkDirectory().getAbsolutePath()
+    			+" and to "+this.getBuildDirectory().getAbsolutePath() );
     	try {
     		
-    		File relativeFile = computeRelativeFile(f, getAssetsDir(), this.defaultTargetAssetsDir);
+    		File relativeWorkFile = computeRelativeFile(f, getAssetsDir(), this.getWorkDirectory());
+    		File relativeBuildFile = computeRelativeFile(f, getAssetsDir(), this.getBuildDirectory());
+    		getLog().info("relativeWorkFile : "+relativeWorkFile);
+    		getLog().info("relativeBuildFile : "+relativeBuildFile);  		
     		
-    		if (relativeFile.getParentFile() != null) {
-    			relativeFile.getParentFile().mkdirs();
-                FileUtils.copyFileToDirectory(f, relativeFile.getParentFile());
-            } else {
-                getLog().error("Cannot copy file - parent directory not accessible for " + f.getAbsolutePath());
-            }
+    		if (relativeWorkFile.getParentFile() != null) {
+    			relativeWorkFile.getParentFile().mkdirs();
+                FileUtils.copyFileToDirectory(f, relativeWorkFile.getParentFile());
+            } else 
+                getLog().error("Cannot copy file - parent directory not accessible for " + relativeWorkFile);
+            
+    		if (relativeBuildFile.getParentFile() != null) {
+    			relativeBuildFile.getParentFile().mkdirs();
+                FileUtils.copyFileToDirectory(f, relativeBuildFile.getParentFile());
+            } else 
+                getLog().error("Cannot copy file - parent directory not accessible for " + relativeBuildFile);
+            
 			
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (IOException e) {
+			throw new WatchingException(e.getMessage(), e); }
     }
 
 
@@ -83,10 +92,15 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileDeleted(File file) throws WatchingException {
-        File deleted = computeRelativeFile(file, getAssetsDir(), this.defaultTargetAssetsDir);
-        if (deleted.isFile()){
-        	getLog().info("deleting File : "+file.getName());    	
-        	FileUtils.deleteQuietly(deleted); 
+        File deletedFromWork = computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        if (deletedFromWork.isFile()){
+        	getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
+        	FileUtils.deleteQuietly(deletedFromWork); 
+        }
+        File deletedFromBuild = computeRelativeFile(file, getAssetsDir(), this.getBuildDirectory());
+        if (deletedFromBuild.isFile()){
+        	getLog().info("deleting File : "+file.getName()+" from "+this.getBuildDirectory());    	
+        	FileUtils.deleteQuietly(deletedFromBuild); 
         }
         return true;
     }

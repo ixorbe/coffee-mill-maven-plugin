@@ -75,7 +75,6 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
 
     public void init() throws MojoExecutionException, WatchingException {
         // Expand if needed.
-    	isWatchMode = true;
         pipeline = Pipelines.watchers(session, new MavenLoggerWrapper(getLog()),basedir).watch();
     }
     
