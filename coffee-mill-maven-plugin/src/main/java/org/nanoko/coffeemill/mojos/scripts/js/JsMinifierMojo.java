@@ -54,21 +54,27 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         return  !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
 
-    public void compile() throws WatchingException {
-    	getLog().info("JS MINI COMPIL");
+    public boolean compile() throws WatchingException {
+    	getLog().info("Js Minification Compilation");
 		
-    	
     	if(this.inputFileName == null)
     		this.inputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
     	
-    	File input = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+this.inputFileName+".js");
-    	if(!input.exists())
-    		return;
-    	File output = new File( this.getBuildDirectory().getAbsolutePath()+File.separator+this.inputFileName+"-min.js");
- 	
-    	if(output.exists())
-    		FileUtils.deleteQuietly(output);
-    	
+    	boolean res = minify(this.inputFileName+"-all");
+    	boolean res2 = minify(this.inputFileName);
+    	return res || res2;
+    }
+    
+    private boolean minify( String baseName) throws WatchingException {
+    	// check if input is valid
+    	File input = new File( this.getBuildDirectory(), baseName+".js");
+    		if(!input.exists())
+    			return false;
+    	// if output exist, delete it
+    	File output = new File( this.getBuildDirectory(),baseName+"-min.js");
+        if(output.exists())
+        	FileUtils.deleteQuietly(output);
+        
         getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
         int exit = ugly.execute("uglifyjs",input.getAbsolutePath(), "-o",  output.getAbsolutePath(),"-c");
 		getLog().debug("Js minification execution exiting with " + exit + " status");
@@ -76,6 +82,7 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
         }
+        return true;
     }
 
 

@@ -63,7 +63,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	}
     	
     }
-
+    
     private boolean aggregateAppOnly(File output) throws WatchingException {
     	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
         if(files.isEmpty()){
@@ -109,6 +109,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         if (!output.isFile()) {
             throw new WatchingException("Error during the Css aggregation check log");
         }
+        
     }
 
 
