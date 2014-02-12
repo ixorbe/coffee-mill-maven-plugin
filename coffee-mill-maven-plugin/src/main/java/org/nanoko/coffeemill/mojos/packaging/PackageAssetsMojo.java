@@ -16,9 +16,11 @@
 package org.nanoko.coffeemill.mojos.packaging;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -51,8 +53,18 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
         	return;
         }
     	
+    	File AssetsResourcesWorkDirectory = new File(this.getWorkDirectory(), "resources");
+    	File AssetsResourcesBuildDirectory = new File(this.getBuildDirectory(), "resources");
+    	FileFilter htmlFilter = FileFilterUtils.suffixFileFilter(".html");
+    	
+    	if(!AssetsResourcesWorkDirectory.exists())
+    		return;
+    	
     	try {   
-        	FileUtils.copyDirectory(this.getWorkDirectory(), this.getBuildDirectory());
+    		// Copy assets resources to build directory
+        	FileUtils.copyDirectory(AssetsResourcesWorkDirectory, AssetsResourcesBuildDirectory);
+        	// Copy all html files to build directory (using filter)
+        	FileUtils.copyDirectory(this.getWorkDirectory(), this.getBuildDirectory(), htmlFilter);
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
