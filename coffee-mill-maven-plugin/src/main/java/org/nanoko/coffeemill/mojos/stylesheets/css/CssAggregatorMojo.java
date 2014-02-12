@@ -63,7 +63,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	}
     	
     }
-
+    
     private boolean aggregateAppOnly(File output) throws WatchingException {
     	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
         if(files.isEmpty()){
@@ -89,7 +89,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	if(output.exists())
     		FileUtils.deleteQuietly(output);    
     	
-    	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"css"}, false);
+    	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"css"}, true);
 
         if(files.isEmpty()){
         	getLog().warn("JavaScript External libraries directory "+this.getLibDirectory().getAbsolutePath()+" is empty !");
@@ -109,6 +109,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         if (!output.isFile()) {
             throw new WatchingException("Error during the Css aggregation check log");
         }
+        
     }
 
 

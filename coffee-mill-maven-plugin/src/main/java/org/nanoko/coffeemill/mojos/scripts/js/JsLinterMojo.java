@@ -24,11 +24,11 @@ import static org.nanoko.java.NPM.npm;
 /**
  * Optimize Js files.
  */
-@Mojo(name = "optimize-javascript", threadSafe = false,
+@Mojo(name = "lint-javascript", threadSafe = false,
         requiresDependencyResolution = ResolutionScope.COMPILE,
         requiresProject = true,
         defaultPhase = LifecyclePhase.PACKAGE)
-public class JsOptimizerMojo extends AbstractCoffeeMillWatcherMojo {
+public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String PKG_NPM_NAME = "jslint";
     public static final String PKG_NPM_VERSION = "0.2.10";
@@ -41,7 +41,7 @@ public class JsOptimizerMojo extends AbstractCoffeeMillWatcherMojo {
 		
     	lint = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
-        	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
+        	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
             for(File file : files)
             	compile(file);
 
@@ -56,7 +56,7 @@ public class JsOptimizerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void compile(File f) throws WatchingException {
     	String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".js";
-    	File input = new File( this.getWorkDirectory().getAbsolutePath(), name);
+    	File input = new File( this.getWorkDirectory(), name);
     	if(!input.exists())
     		return;
 

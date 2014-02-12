@@ -52,30 +52,35 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         return  !isSkipped() && FSUtils.hasExtension(file, stylesheetsExtensions);
     }
 
-    public int compile() throws WatchingException {
-    	
+    public boolean compile() throws WatchingException {
+ 
     	if(this.inputFilename == null)
     		this.inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
-
-    	File input = new File( this.getBuildDirectory(), inputFilename+".css");
-    	if(!input.exists())
-    		return -1;
     	
-    	File output = new File( this.getBuildDirectory(), inputFilename+"-min.css");
- 	
-    	if(output.exists())
-    		FileUtils.deleteQuietly(output);
-    	
+    	boolean res = minify(this.inputFilename+"-all");
+    	boolean res2 = minify(this.inputFilename);
+    	return res || res2;
+    }
+    
+    private boolean minify( String baseName) throws WatchingException {
+    	// check if input is valid
+    	File input = new File( this.getBuildDirectory(), baseName+".css");
+    		if(!input.exists())
+    			return false;
+    	// if output exist, delete it
+    	File output = new File( this.getBuildDirectory(),baseName+"-min.css");
+        if(output.exists())
+        	FileUtils.deleteQuietly(output);
+        
         getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
         int exit = cleancss.execute("cleancss", "-o",  output.getAbsolutePath(),input.getAbsolutePath());
-		getLog().debug("Css minification execution exiting with " + exit + " status");
+		getLog().debug("Js minification execution exiting with " + exit + " status");
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
         }
-        return 0;
+        return true;
     }
-
 
     public boolean fileCreated(File file) throws WatchingException {
         compile();

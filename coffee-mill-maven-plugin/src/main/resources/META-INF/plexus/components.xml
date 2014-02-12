@@ -43,7 +43,8 @@
                         
                          org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-coffeescript,
                          org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-javascript,
-                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:optimize-javascript      
+                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:lint-javascript,
+                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:lint-css        
                     </compile>
                     <process-test-resources>
 <!--                         org.apache.maven.plugins:maven-resources-plugin:testResources -->

@@ -86,7 +86,7 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileDeleted(File file) {
-    	File deleted = new File(this.getWorkDirectory().getAbsolutePath() + File.separator + file.getName());
+    	File deleted = new File(this.getWorkDirectory(), file.getName());
         if (deleted.isFile()){
         	getLog().info("Deleting File : "+file.getName());    	
         	FileUtils.deleteQuietly(deleted); 

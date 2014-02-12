@@ -95,7 +95,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	if(output.exists())
     		FileUtils.deleteQuietly(output);    
     	
-    	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"js"}, false);
+    	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"js"}, true);
 
         if(files.isEmpty()){
         	getLog().warn("JavaScript External libraries directory "+this.getLibDirectory().getAbsolutePath()+" is empty !");
