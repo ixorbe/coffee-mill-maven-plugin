@@ -21,29 +21,27 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
 import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
 import org.nanoko.coffeemill.utils.FSUtils;
 import org.nanoko.maven.WatchingException;
-//import org.nanoko.coffeemill.utils.ExecUtils;
-//import org.nanoko.coffeemill.utils.OptionsHelper;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * A processor optimizing JPEG files using JpegTran.
  * JpegTran must be installed on the system and available from the path.
  * -> to install : http://saralinux.blogspot.fr/2013/12/installing-jpegtran-on-mac-or-unixlinux.html
+ * -> with brew : brew install jpegtran
  */
 @Mojo(name = "optimize-jpeg", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,
 requiresProject = true,
 defaultPhase = LifecyclePhase.COMPILE)
-public class JpegOptiMojo extends AbstractCoffeeMillWatcherMojo {
+public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
 
     /**
      * The JpegTran executable file name without extension.
@@ -59,6 +57,7 @@ public class JpegOptiMojo extends AbstractCoffeeMillWatcherMojo {
     /**
      * Enables verbose mode.
      */
+    @Parameter(defaultValue="false")
     private boolean verbose;
 
     public void execute() throws MojoExecutionException {
