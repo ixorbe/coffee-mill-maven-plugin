@@ -68,16 +68,20 @@ public class JpegOptiMojo extends AbstractCoffeeMillWatcherMojo {
         if (jpegTranExec == null) {
             getLog().error("Cannot optimize JPEG files - jpegtran not installed.");
             return;
-        } else {
-            getLog().info("Invoking jpegtran : " + jpegTranExec.getAbsolutePath());
+        } 
+        if(!new File(getWorkDirectory().getAbsoluteFile(), "resources").exists())
+        	return;
+        
+        getLog().info("Invoking jpegtran : " + jpegTranExec.getAbsolutePath());
+        Iterator<File> files = FileUtils.iterateFiles(new File(getWorkDirectory().getAbsoluteFile(), "resources"), new String[]{"jpg", "jpeg"}, true);
+        while (files.hasNext()) {
+            File file = files.next();
             try {
-				processAll();
+				optimize(file);
 			} catch (WatchingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         }
-
         //OptionsHelper.getBoolean(options, "verbose", false);
     }
     
@@ -86,34 +90,6 @@ public class JpegOptiMojo extends AbstractCoffeeMillWatcherMojo {
                 && FSUtils.isInDirectory(file.getName(), getWorkDirectory())
                 && (file.getName().endsWith(".jpg") || file.getName().endsWith(".jpeg"));
     }
-    
-
-    /**
-     * Iterates over project resources and optimize all JPEG files.
-     * @throws WatchingException 
-     *
-     * @throws org.nanoko.coffee.mill.processors.Processor.ProcessorException
-     */
-    public void processAll() throws MojoExecutionException, WatchingException {
-        if (jpegTranExec == null) {
-            return;
-        }
-        if(!new File(getBuildDirectory().getAbsoluteFile(), "resources").exists())
-        	return;
-        
-        Iterator<File> files = FileUtils.iterateFiles(new File(getBuildDirectory().getAbsoluteFile(), "resources"), new String[]{"jpg", "jpeg"}, true);
-        while (files.hasNext()) {
-            File file = files.next();
-            try {
-				optimize(file);
-			} catch (WatchingException e) {
-				throw new WatchingException("error during Jpeg optimization of " + file.getName() + " : " + e.getMessage());
-			}
-        }
-    }
-
-    
-
     
 
     private void optimize(File file) throws WatchingException {
@@ -146,6 +122,8 @@ public class JpegOptiMojo extends AbstractCoffeeMillWatcherMojo {
 
             // Overwrite the original file
             File out = new File(dir, "__out.jpeg");
+            
+            getLog().info("output jpeg file : "+out.getAbsolutePath());
             if (out.exists()) {
                 FileUtils.copyFile(out, file);
                 FileUtils.deleteQuietly(out);
@@ -161,17 +139,21 @@ public class JpegOptiMojo extends AbstractCoffeeMillWatcherMojo {
     
     
     public boolean fileCreated(File file) throws WatchingException {
-        optimize(file);
-        return true;
+        return fileUpdated(file);
     }
 
     public boolean fileUpdated(File file) throws WatchingException {
-        optimize(file);
-        return true;
+		File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        optimize(relativeWorkFile);
+    	return true;
     }
     
     public boolean fileDeleted(File file) throws WatchingException {
-
+    	File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        if (deletedFromWork.isFile()){
+        	getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
+        	FileUtils.deleteQuietly(deletedFromWork); 
+        }
         return true;
-    }
+    }    
 }

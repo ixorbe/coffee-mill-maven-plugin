@@ -10,6 +10,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import org.nanoko.maven.WatchingException;
 import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
+import org.nanoko.coffeemill.utils.FSUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +38,6 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     	
         try {   
         	FileUtils.copyDirectory(this.getAssetsDir(), this.getWorkDirectory());
-        	FileUtils.copyDirectory(this.getAssetsDir(), this.getBuildDirectory());
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
@@ -50,27 +50,16 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void copy(File f) throws WatchingException {
     	getLog().info("Copy Asset file "+f.getName()
-    			+" to "+this.getWorkDirectory().getAbsolutePath()
-    			+" and to "+this.getBuildDirectory().getAbsolutePath() );
+    			+" to "+this.getWorkDirectory().getAbsolutePath()  );
     	try {
     		
-    		File relativeWorkFile = computeRelativeFile(f, getAssetsDir(), this.getWorkDirectory());
-    		File relativeBuildFile = computeRelativeFile(f, getAssetsDir(), this.getBuildDirectory());
-    		getLog().info("relativeWorkFile : "+relativeWorkFile);
-    		getLog().info("relativeBuildFile : "+relativeBuildFile);  		
+    		File relativeWorkFile = FSUtils.computeRelativeFile(f, getAssetsDir(), this.getWorkDirectory());	
     		
     		if (relativeWorkFile.getParentFile() != null) {
     			relativeWorkFile.getParentFile().mkdirs();
                 FileUtils.copyFileToDirectory(f, relativeWorkFile.getParentFile());
             } else 
                 getLog().error("Cannot copy file - parent directory not accessible for " + relativeWorkFile);
-            
-    		if (relativeBuildFile.getParentFile() != null) {
-    			relativeBuildFile.getParentFile().mkdirs();
-                FileUtils.copyFileToDirectory(f, relativeBuildFile.getParentFile());
-            } else 
-                getLog().error("Cannot copy file - parent directory not accessible for " + relativeBuildFile);
-            
 			
 		} catch (IOException e) {
 			throw new WatchingException(e.getMessage(), e); }
@@ -92,15 +81,10 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileDeleted(File file) throws WatchingException {
-        File deletedFromWork = computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
         if (deletedFromWork.isFile()){
         	getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
         	FileUtils.deleteQuietly(deletedFromWork); 
-        }
-        File deletedFromBuild = computeRelativeFile(file, getAssetsDir(), this.getBuildDirectory());
-        if (deletedFromBuild.isFile()){
-        	getLog().info("deleting File : "+file.getName()+" from "+this.getBuildDirectory());    	
-        	FileUtils.deleteQuietly(deletedFromBuild); 
         }
         return true;
     }
@@ -111,20 +95,6 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
             return true;
         }
     	else return false;
-    }
-    
-    /**
-     * Gets a File object representing a File in the directory <tt>dir</tt> which has the same path as the file
-     * <tt>file</tt> from the directory <tt>rel</tt>.
-     * @param file
-     * @param rel
-     * @param dir
-     * @return
-     */
-    public static File computeRelativeFile(File file, File rel, File dir) {
-        String path = file.getAbsolutePath();
-        String relativePath = path.substring(rel.getAbsolutePath().length());
-        return new File(dir, relativePath);
     }
 
 }

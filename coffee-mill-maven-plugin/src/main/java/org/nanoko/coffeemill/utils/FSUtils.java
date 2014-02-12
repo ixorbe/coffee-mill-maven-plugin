@@ -89,4 +89,23 @@ public class FSUtils {
     }
     
     
+    
+    /**
+     * Gets a File object representing a File in the directory <tt>dir</tt> which has the same path as the file
+     * <tt>file</tt> from the directory <tt>rel</tt>.
+     * @param file
+     * @param rel
+     * @param dir
+     * @return
+     */
+    public static File computeRelativeFile(File file, File rel, File dir) {
+        String path = file.getAbsolutePath();
+        System.out.println("PATH : "+path);
+        String relativePath = path.substring(rel.getAbsolutePath().length());
+        System.out.println("relativePath : "+relativePath);
+        System.out.println("dir : "+dir.getAbsolutePath());
+        return new File(dir, relativePath);
+    }
+    
+    
 }
