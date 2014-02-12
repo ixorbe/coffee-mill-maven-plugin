@@ -68,6 +68,8 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
     private int level = 2;
 
     public void execute() throws MojoExecutionException {
+    	if(isSkipped())
+    		return;
 
     	optiPNGExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
@@ -93,7 +95,8 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
     }
     
     public boolean accept(File file) {
-        return optiPNGExec != null
+        return !isSkipped() 
+        		&& optiPNGExec != null
                 && FSUtils.isInDirectory(file.getName(), getWorkDirectory())
                 && (file.getName().endsWith(".png") );
     }
@@ -144,4 +147,12 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
         }
         return true;
     }    
+    
+    private boolean isSkipped(){
+    	if (skipPicturesOptimization) {
+            getLog().info("\033[31m PNG Optimization skipped \033[37m");
+            return true;
+        }
+    	else return false;
+    }
 }

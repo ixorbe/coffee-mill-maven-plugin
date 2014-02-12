@@ -166,6 +166,12 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      */
 	@Parameter(defaultValue="false")
 	protected boolean skipJsLint;
+	
+	/**
+     * Enables / disables Pictures Optimizer
+     */
+	@Parameter(defaultValue="false")
+	protected boolean skipPicturesOptimization;
     
     
     

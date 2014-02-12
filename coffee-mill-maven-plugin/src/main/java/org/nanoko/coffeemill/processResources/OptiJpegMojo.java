@@ -61,6 +61,8 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
     private boolean verbose;
 
     public void execute() throws MojoExecutionException {
+    	if(isSkipped())
+    		return;
 
         jpegTranExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
@@ -85,7 +87,8 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
     }
     
     public boolean accept(File file) {
-        return jpegTranExec != null
+        return !isSkipped() 
+        		&& jpegTranExec != null
                 && FSUtils.isInDirectory(file.getName(), getWorkDirectory())
                 && (file.getName().endsWith(".jpg") || file.getName().endsWith(".jpeg"));
     }
@@ -154,5 +157,13 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
         	FileUtils.deleteQuietly(deletedFromWork); 
         }
         return true;
-    }    
+    }  
+    
+    private boolean isSkipped(){
+    	if (skipPicturesOptimization) {
+            getLog().info("\033[31m JPEG Optimization skipped \033[37m");
+            return true;
+        }
+    	else return false;
+    }
 }
