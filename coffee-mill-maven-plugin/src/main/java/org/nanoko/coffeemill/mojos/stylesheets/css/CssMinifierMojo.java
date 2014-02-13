@@ -73,7 +73,7 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         	FileUtils.deleteQuietly(output);
         
         getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
-        int exit = cleancss.execute("cleancss", "-o",  output.getAbsolutePath().replaceAll(" ","\\ "),input.getAbsolutePath().replaceAll(" ","\\ "));
+        int exit = cleancss.execute("cleancss", "-o",  output.getAbsolutePath(),input.getAbsolutePath());
 		getLog().debug("Js minification execution exiting with " + exit + " status");
 
         if (!output.isFile()) {

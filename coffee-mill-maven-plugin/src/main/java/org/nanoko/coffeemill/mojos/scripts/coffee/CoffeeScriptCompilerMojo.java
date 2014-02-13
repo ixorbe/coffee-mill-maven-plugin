@@ -106,7 +106,7 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     private void invokeCoffeeScriptCompiler(File input, File out) throws MojoExecutionException {
-        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath().replaceAll(" ","\\ "),
+        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(),
                 input.getAbsolutePath());
         getLog().debug("CoffeeScript compilation exits with " + exit + " status");
     }

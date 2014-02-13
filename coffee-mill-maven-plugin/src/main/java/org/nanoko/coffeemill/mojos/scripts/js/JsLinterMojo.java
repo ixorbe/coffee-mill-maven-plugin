@@ -61,7 +61,7 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
     		return;
 
         getLog().info("Linting " + input.getAbsolutePath());
-        int exit = lint.execute("jslint", input.getAbsolutePath().replaceAll(" ","\\ "));
+        int exit = lint.execute("jslint", input.getAbsolutePath());
     }
 
 

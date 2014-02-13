@@ -1,7 +1,6 @@
 package org.nanoko.coffeemill.mojos.stylesheets.less;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -64,14 +63,13 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     private File getOutputCSSFile(File input) {
         String cssFileName = input.getName().substring(0, input.getName().length() - ".less".length()) + ".css";
         String path = input.getParentFile().getAbsolutePath().substring(getStylesheetsDir().getAbsolutePath().length());
-        return new File(this.getWorkDirectory(), path + File.separator + cssFileName);
+        return new File(this.getWorkDirectory(), path + "/" + cssFileName);
     }
 
     public void compile(File file) throws WatchingException {
         File out = getOutputCSSFile(file);
         getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
-        
-        int exit = less.execute("lessc",file.getAbsolutePath().replaceAll(" ","\\ "), out.getAbsolutePath().replaceAll(" ","\\ "));
+        int exit = less.execute("lessc", file.getAbsolutePath(), out.getAbsolutePath());
 		getLog().debug("Less execution exiting with " + exit + " status");
 
         if (!out.isFile()) {
