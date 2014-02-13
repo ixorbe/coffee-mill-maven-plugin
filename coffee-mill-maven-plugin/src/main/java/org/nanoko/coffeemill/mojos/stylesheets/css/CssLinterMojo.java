@@ -61,7 +61,7 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
     		return;
 
         getLog().info("Linting " + input.getAbsolutePath());
-        int exit = lint.execute("csslint", "--format=compact", input.getAbsolutePath());
+        int exit = lint.execute("csslint", "--format=compact", input.getAbsolutePath().replaceAll(" ","\\ "));
     }
 
 

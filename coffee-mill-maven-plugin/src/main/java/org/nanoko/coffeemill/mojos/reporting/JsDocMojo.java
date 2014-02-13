@@ -69,7 +69,7 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     		FileUtils.deleteQuietly(output);
     	
         getLog().info("Make Js Doc for " + input.getAbsolutePath() );
-        int exit = jsdoc.execute("jsdoc", input.getAbsolutePath(), "-d",  output.getAbsolutePath() );
+        int exit = jsdoc.execute("jsdoc", input.getAbsolutePath().replaceAll(" ","\\ "), "-d",  output.getAbsolutePath().replaceAll(" ","\\ ") );
 		getLog().debug("Js Doc generation execution exiting with " + exit + " status");
 
     }
