@@ -100,10 +100,7 @@ public class FSUtils {
      */
     public static File computeRelativeFile(File file, File rel, File dir) {
         String path = file.getAbsolutePath();
-        System.out.println("PATH : "+path);
         String relativePath = path.substring(rel.getAbsolutePath().length());
-        System.out.println("relativePath : "+relativePath);
-        System.out.println("dir : "+dir.getAbsolutePath());
         return new File(dir, relativePath);
     }
     
