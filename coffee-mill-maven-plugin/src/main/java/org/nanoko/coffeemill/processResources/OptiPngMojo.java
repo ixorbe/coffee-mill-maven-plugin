@@ -77,11 +77,11 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
             getLog().error("Cannot optimize PNG files - optipng not installed.");
             return;
         } 
-        if(!new File(getWorkDirectory().getAbsoluteFile(), "resources").exists())
+        if(!getWorkDirectory().exists())
         	return;
         
         getLog().info("Invoking optipng : " + optiPNGExec.getAbsolutePath());
-        Iterator<File> files = FileUtils.iterateFiles(new File(getWorkDirectory().getAbsoluteFile(), "resources"), new String[]{"png"}, true);
+        Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"png"}, true);
         while (files.hasNext()) {
             File file = files.next();
             try {

@@ -18,6 +18,7 @@ package org.nanoko.coffeemill.mojos.packaging;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -48,11 +49,30 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     public void execute() throws MojoExecutionException {
     	if(isSkipped())
     		return;
-    	if (!this.getWorkDirectory().isDirectory()){
+    	if (!this.getWorkDirectory().exists()){
         	getLog().warn("/!\\ Packaging assets skipped - " + this.getWorkDirectory().getAbsolutePath() + " does not exist !");
         	return;
         }
     	
+    	File[] assets = getWorkDirectory().listFiles();
+    	try {
+	    	for(File file : assets){
+	    		getLog().info("file : "+file.getAbsolutePath());
+	    		if(file.isDirectory()){
+	    			getLog().info("isDirectory");
+		    		FileUtils.copyDirectoryToDirectory(file, getBuildDirectory());					
+	    		}else{
+	    			getLog().info("else");
+	    			if(file.isFile() && !FSUtils.hasExtension(file, "js","css")){
+	    				getLog().info("isnot js/css file");
+	    				FileUtils.copyFileToDirectory(file, getBuildDirectory());
+	    			}
+	    		}
+	    	}
+    	} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	/*
     	File AssetsResourcesWorkDirectory = new File(this.getWorkDirectory(), "resources");
     	File AssetsResourcesBuildDirectory = new File(this.getBuildDirectory(), "resources");
     	FileFilter htmlFilter = FileFilterUtils.suffixFileFilter(".html");
@@ -67,7 +87,7 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
         	FileUtils.copyDirectory(this.getWorkDirectory(), this.getBuildDirectory(), htmlFilter);
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
-        }
+        }*/
        
     }
     

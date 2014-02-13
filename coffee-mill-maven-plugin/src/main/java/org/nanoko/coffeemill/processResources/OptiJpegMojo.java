@@ -59,6 +59,10 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
      */
     @Parameter(defaultValue="false")
     private boolean verbose;
+    
+    public void setVerbose(Boolean verbose){
+    	this.verbose = verbose;
+    }
 
     public void execute() throws MojoExecutionException {
     	if(isSkipped())
@@ -70,11 +74,11 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
             getLog().error("Cannot optimize JPEG files - jpegtran not installed.");
             return;
         } 
-        if(!new File(getWorkDirectory().getAbsoluteFile(), "resources").exists())
+        if(!getWorkDirectory().exists())
         	return;
         
         getLog().info("Invoking jpegtran : " + jpegTranExec.getAbsolutePath());
-        Iterator<File> files = FileUtils.iterateFiles(new File(getWorkDirectory().getAbsoluteFile(), "resources"), new String[]{"jpg", "jpeg"}, true);
+        Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"jpg", "jpeg"}, true);
         while (files.hasNext()) {
             File file = files.next();
             try {
