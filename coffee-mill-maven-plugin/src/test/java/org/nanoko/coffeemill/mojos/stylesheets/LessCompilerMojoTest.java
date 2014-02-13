@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffee.mill.mojos.css;
+package org.nanoko.coffeemill.mojos.stylesheets;
 
 import static org.junit.Assert.*;
 

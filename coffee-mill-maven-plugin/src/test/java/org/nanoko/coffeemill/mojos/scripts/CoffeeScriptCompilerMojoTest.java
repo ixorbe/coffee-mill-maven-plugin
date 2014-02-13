@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.mojos.scripts.coffee;
+package org.nanoko.coffeemill.mojos.scripts;
 
 import static org.junit.Assert.assertTrue;
 

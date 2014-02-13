@@ -13,26 +13,26 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffee.mill.mojos.css;
+package org.nanoko.coffeemill.mojos.stylesheets;
 
 import static org.junit.Assert.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-
-import org.nanoko.coffeemill.mojos.stylesheets.sass.SassCompilerMojo;
+import org.nanoko.coffeemill.mojos.stylesheets.css.CssCompilerMojo;
 
 import java.io.File;
 import java.util.Collection;
 
 /**
- * Test the SassCompilerMojo.
+ * Test the CssCompilerMojo.
  */
-public class SassCompilerMojoTest {
+public class CssCompilerMojoTest {
 	
-	private final File workDir = new File("target/test/sass/compilation/tmp/");
+	private final File workDir = new File("target/test/css/compilation/tmp/");
 	private final File stylesDir = new File("src/test/resources/stylesheets");
 	
 	@Before 
@@ -43,10 +43,10 @@ public class SassCompilerMojoTest {
 	
 	
     @Test
-    public void testLessCompilation() {
-        System.out.println("Should compile 1 Sass file");
+    public void testCssCompilation() {
+        System.out.println("Should compile two css files");
 
-        SassCompilerMojo mojo = new SassCompilerMojo();
+        CssCompilerMojo mojo = new CssCompilerMojo();
         mojo.setStylesheetsDir(stylesDir);
         mojo.setWorkDirectory(workDir);
         try {
@@ -56,15 +56,15 @@ public class SassCompilerMojoTest {
 			e.printStackTrace();
 		}
         Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
-        assertTrue(files.size()==1);
+        assertTrue(files.size()==2);
     }
     
 	
     @Test
-    public void testLessCompilationNoSources() {
+    public void testCssCompilationNoSources() {
         System.out.println("Should compile nothing");
 
-        SassCompilerMojo mojo = new SassCompilerMojo();
+        CssCompilerMojo mojo = new CssCompilerMojo();
         mojo.setStylesheetsDir(new File("nowhere"));
         mojo.setWorkDirectory(workDir);
         try {

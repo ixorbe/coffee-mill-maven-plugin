@@ -1,4 +1,4 @@
-package org.nanoko.coffeemill.mojos.scripts.js;
+package org.nanoko.coffeemill.mojos.scripts;
 
 import static org.junit.Assert.assertTrue;
 
@@ -12,6 +12,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.nanoko.coffeemill.mojos.scripts.js.JsMinifierMojo;
 
 public class JsMinifierMojoTest {
 
