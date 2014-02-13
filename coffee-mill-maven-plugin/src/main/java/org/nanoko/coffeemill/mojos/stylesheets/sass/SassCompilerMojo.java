@@ -69,7 +69,7 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     public void compile(File file) throws WatchingException {
         File out = getOutputCSSFile(file);
         getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
-        int exit = sass.execute("node-sass", file.getAbsolutePath().replaceAll(" ","\\ "), out.getAbsolutePath().replaceAll(" ","\\ "));
+        int exit = sass.execute("node-sass", file.getAbsolutePath(), out.getAbsolutePath());
 		getLog().debug("Sass execution exiting with " + exit + " status");
 
         if (!out.isFile()) {
