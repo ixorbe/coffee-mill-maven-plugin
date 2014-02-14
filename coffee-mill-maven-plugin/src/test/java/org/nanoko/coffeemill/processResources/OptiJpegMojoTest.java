@@ -54,7 +54,7 @@ public class OptiJpegMojoTest {
 	
 	@Test
     public void testJPEGOptimization() throws MojoExecutionException, MojoFailureException {
-		System.out.println("\n ==> Should optimize the test jpeg file (smaller file size).");
+		System.out.println("\n ==> Should optimize the jpeg test file (smaller file size).");
 
         File file = new File(mojo.getWorkDirectory(), "img/birds.jpeg");
         long size = file.length();

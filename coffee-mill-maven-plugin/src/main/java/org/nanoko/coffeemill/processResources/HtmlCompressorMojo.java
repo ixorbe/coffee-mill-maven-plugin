@@ -37,6 +37,10 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
      */
     @Parameter(defaultValue="false")
     private boolean skipHtmlCompression;
+    
+    public void setSkipHtmlCompression(Boolean skip){
+    	this.skipHtmlCompression = skip;
+    }
 	
     /**
      * Enables html compression.

@@ -50,7 +50,7 @@ public class OptiPngMojoTest {
 
     @Test
     public void testPNGOptimization() throws MojoExecutionException, MojoFailureException {
-		System.out.println("\n ==> Should optimize the test png file (smaller file size).");
+		System.out.println("\n ==> Should optimize the png test file (smaller file size).");
 
         File file = new File(mojo.getWorkDirectory(), "img/demo.png");
         long size = file.length();
