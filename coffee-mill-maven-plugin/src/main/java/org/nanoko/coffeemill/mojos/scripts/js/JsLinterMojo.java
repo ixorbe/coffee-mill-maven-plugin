@@ -2,6 +2,7 @@ package org.nanoko.coffeemill.mojos.scripts.js;
 
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -33,13 +34,18 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String PKG_NPM_NAME = "jslint";
     public static final String PKG_NPM_VERSION = "0.2.10";
     
+    public static Log defaultLogger;
+   
     private NPM lint;
 
+    public JsLinterMojo() {
+    	defaultLogger = new MavenLoggerWrapper(this.getLog());
+    }
     public void execute() throws MojoExecutionException {
 		if(isSkipped())
     		return;
 		
-    	lint = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
+    	lint = npm(defaultLogger, PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
         	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
             for(File file : files)

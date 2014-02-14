@@ -2,6 +2,7 @@ package org.nanoko.coffeemill.mojos.stylesheets.css;
 
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.logging.Log;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -33,13 +34,19 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String PKG_NPM_NAME = "csslint";
     public static final String PKG_NPM_VERSION = "0.10.0";
     
+    public static Log defaultLogger;
+    
     private NPM lint;
 
+    public CssLinterMojo() {
+    	defaultLogger = new MavenLoggerWrapper(this.getLog());
+    }
+    
     public void execute() throws MojoExecutionException {
 		if(isSkipped())
     		return;
 		
-    	lint = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
+    	lint = npm(defaultLogger, PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
         	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
             for(File file : files)
