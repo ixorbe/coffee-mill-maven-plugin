@@ -59,6 +59,10 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
     @Parameter(defaultValue="false")
     private boolean verbose;
     
+    public void setVerbose(Boolean verbose){
+    	this.verbose = verbose;
+    }
+    
     /**
      * Optimization level (0-7).
      * 2 by default.
