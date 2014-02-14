@@ -19,11 +19,10 @@ import static org.junit.Assert.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.stylesheets.css.CssAggregatorMojo;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -33,21 +32,15 @@ import java.util.Collection;
  * Test the CssAggregatorMojo.
  */
 public class CssAggregatorMojoTest {
-	
-	private final File testWorkDir = new File("target/test/css/aggregation/tmp/");
+
 	private final File srcStyleDir = new File("src/test/resources/stylesheets/");
-	private final File testBuildDir = new File("target/test/css/aggregation/www/");
+	private final File testWorkDir = new File("target/test/CssAggregatorMojoTest/www");
+	private final File testBuildDir = new File("target/test/CssAggregatorMojoTest/www-release");
 	private final File libDir = new File(testWorkDir , "libs");
 	
 	
 	@Before 
-	public void cleanWorkDirectory()  {
-        //clean output
-        if (testBuildDir.exists())
-        	FileUtils.deleteQuietly(testBuildDir);
-        if (testWorkDir.exists())
-        	FileUtils.deleteQuietly(testWorkDir);
-        
+	public void prepareTestDirectory()  {        
         //copy new ressources
         Collection<File> files = FileUtils.listFiles(srcStyleDir, new String[]{"css"}, true);
         for(File f : files) {
@@ -78,5 +71,14 @@ public class CssAggregatorMojoTest {
 			e.printStackTrace();
 		}
         assertTrue(new File(testBuildDir, "test.aggregate.css").exists());
+    }
+    
+    @After
+    public void cleanTestDirectory(){
+        //clean output
+        if (testBuildDir.exists())
+        	FileUtils.deleteQuietly(testBuildDir);
+        if (testWorkDir.exists())
+        	FileUtils.deleteQuietly(testWorkDir);
     }
 }

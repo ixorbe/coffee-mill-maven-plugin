@@ -15,8 +15,10 @@
 
 package org.nanoko.coffeemill.mojos.processResources;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.processResources.CopyAssetsMojo;
@@ -29,7 +31,7 @@ import static org.junit.Assert.assertTrue;
 public class OptiPngMojoTest {
 	
 	private final File assetsSourceTestDir = new File("src/test/resources/assets");
-	private final File workDir = new File("target/test/OptiPngMojo/www");
+	private final File workDir = new File("target/test/OptiPngMojoTest/www");
 	private OptiPngMojo mojo;
 	
 	public OptiPngMojoTest() throws MojoExecutionException{
@@ -69,7 +71,6 @@ public class OptiPngMojoTest {
             MojoFailureException {
     	System.out.println("\n ==> Should not optimize the test png file : should not find \"do_not_exist\" executable.");
 
-
         String name = OptiPngMojo.EXECUTABLE_NAME;
         OptiPngMojo.EXECUTABLE_NAME ="do_not_exist";
 
@@ -84,6 +85,12 @@ public class OptiPngMojoTest {
         assertTrue(newSize == size);
 
         OptiPngMojo.EXECUTABLE_NAME = name;
-
     }
+    
+    @After
+	public void cleanTestDirectory() {
+		if(this.mojo.getWorkDirectory().exists())
+			FileUtils.deleteQuietly(this.mojo.getWorkDirectory());
+	}
+    
 }

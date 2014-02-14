@@ -33,8 +33,8 @@ import org.nanoko.coffeemill.mojos.scripts.js.JsCompilerMojo;
 public class JsCompilerMojoTest {
 	
 	private final File jsSourceTestDir = new File("src/test/resources/js");
-	private final String testDir = "target/test/JSCompilerMojoTest/";
-	private final File workDir = new File(testDir + "/tmp");
+	private final String testDir = "target/test/JSCompilerMojoTest";
+	private final File workDir = new File(testDir, "tmp");
 	private JsCompilerMojo mojo;
 	
 	@Before

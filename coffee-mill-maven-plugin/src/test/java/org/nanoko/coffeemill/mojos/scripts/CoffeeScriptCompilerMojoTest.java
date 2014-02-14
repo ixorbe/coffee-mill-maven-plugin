@@ -23,11 +23,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.scripts.coffee.CoffeeScriptCompilerMojo;
-import org.nanoko.coffeemill.mojos.scripts.js.JsCompilerMojo;
 
 /**
  * Test the CoffeeScriptCompilerMojo.
@@ -35,8 +33,7 @@ import org.nanoko.coffeemill.mojos.scripts.js.JsCompilerMojo;
 public class CoffeeScriptCompilerMojoTest {
 	
 	private final File coffeescriptSourceTestDir = new File("src/test/resources/coffee");
-	private final String testDir = "target/test/CoffeeScriptCompilerMojoTest/";
-	private final File workDir = new File(testDir + "/tmp");
+	private final File workDir = new File("target/test/CoffeeScriptCompilerMojoTest/www");
 	private CoffeeScriptCompilerMojo mojo;
 	
 	

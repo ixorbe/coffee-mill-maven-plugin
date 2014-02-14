@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 
 import org.nanoko.coffeemill.mojos.stylesheets.sass.SassCompilerMojo;
@@ -32,14 +32,8 @@ import java.util.Collection;
  */
 public class SassCompilerMojoTest {
 	
-	private final File workDir = new File("target/test/sass/compilation/tmp/");
+	private final File workDir = new File("target/test/SassCompilerMojoTest/www");
 	private final File stylesDir = new File("src/test/resources/stylesheets");
-	
-	@Before 
-	public void cleanWorkDirectory() {
-        if (workDir.exists())
-        	FileUtils.deleteQuietly(workDir);
-    }
 	
 	
     @Test
@@ -65,7 +59,7 @@ public class SassCompilerMojoTest {
         System.out.println("Should compile nothing");
 
         SassCompilerMojo mojo = new SassCompilerMojo();
-        mojo.setStylesheetsDir(new File("nowhere"));
+        mojo.setStylesheetsDir(new File(stylesDir, "nowhere"));
         mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
@@ -75,5 +69,12 @@ public class SassCompilerMojoTest {
 		}
         Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
         assertFalse(files.size() > 0);
+    }
+    
+    @After 
+	public void cleanWorkDirectory() {
+        if (workDir.exists()){
+        	FileUtils.deleteQuietly(workDir);
+        }
     }
 }

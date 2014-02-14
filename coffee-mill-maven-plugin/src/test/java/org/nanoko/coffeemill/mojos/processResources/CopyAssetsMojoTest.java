@@ -34,7 +34,7 @@ import org.nanoko.coffeemill.mojos.processResources.CopyAssetsMojo;
 public class CopyAssetsMojoTest {
 	
 	private final File assetsSourceTestDir = new File("src/test/resources/assets");
-	private final File workDir = new File("target/test/CopyAssetsMojo/www");
+	private final File workDir = new File("target/test/CopyAssetsMojoTest/www");
 	private CopyAssetsMojo mojo;
 	
 	

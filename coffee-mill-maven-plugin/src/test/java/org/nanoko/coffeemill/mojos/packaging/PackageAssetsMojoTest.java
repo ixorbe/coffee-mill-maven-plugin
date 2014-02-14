@@ -5,9 +5,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +20,7 @@ public class PackageAssetsMojoTest {
 	// but need to call 'copyAssets' and 'OptiJpeg', 'OptiPng' and 'HtmlCompressor' mojo before
 	// so we just test the copy feature
 	private final File assetsSourceTestDir = new File("src/test/resources/assets");
-	private final File buildDir = new File("target/test/PackageAssetsMojo/www-release");
+	private final File buildDir = new File("target/test/PackageAssetsMojoTest/www-release");
 	private PackageAssetsMojo mojo;
 	
 	@Before
@@ -41,5 +43,11 @@ public class PackageAssetsMojoTest {
     	assertTrue(new File(this.mojo.getBuildDirectory().getAbsolutePath()+"/lemonde/le-monde_files/require.js").exists());
     	
     }
+    
+    @After
+	public void cleanTestDirectory() {
+		if(this.mojo.getBuildDirectory().exists())
+			FileUtils.deleteQuietly(this.mojo.getBuildDirectory());
+	}
     
 }

@@ -35,10 +35,10 @@ import org.nanoko.coffeemill.mojos.scripts.js.JsAggregatorMojo;
 public class JsAggregatorMojoTest {
 
 	private final File jsSourceTestDir = new File("src/test/resources/js");
-	private final String testDir = "target/test/JsAggregatorMojoTest/";
-	private final File workDir = new File(testDir + "/tmp");
-	private final File buildDir = new File(testDir + "/www");
-	private final File libDir = new File(workDir , "libs");
+	private final String testDir = "target/test/JsAggregatorMojoTest";
+	private final File workDir = new File(testDir, "www");
+	private final File buildDir = new File(testDir, "www-release");
+	private final File libDir = new File(workDir, "libs");
 	
 	private JsAggregatorMojo mojo;
 	

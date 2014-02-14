@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -17,8 +16,8 @@ import org.nanoko.coffeemill.mojos.scripts.js.JsMinifierMojo;
 public class JsMinifierMojoTest {
 
 	private final File jsFileToMinify = new File("src/test/resources/js/h-ubu.js");
-	private final String testDir = "target/test/JsMinifierMojoTest/";
-	private final File buildDir = new File(testDir + "/www");
+	private final String testDir = "target/test/JsMinifierMojoTest";
+	private final File buildDir = new File(testDir, "www");
 	private JsMinifierMojo mojo;
 	
 	@Before

@@ -20,32 +20,26 @@ import static org.junit.Assert.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 
 import org.nanoko.coffeemill.mojos.stylesheets.css.CssMinifierMojo;
 
-
-
-
 /**
  * Test the CssMinifierMojo.
  */
 public class CssMinifierMojoTest {
+	
 	private final File srcStyleFile = new File("src/test/resources/stylesheets/stuff.css");
-	private final File testBuildDir = new File("target/test/css/minification/www/");
+	private final File buildDir = new File("target/test/CssMinifierMojoTest/www-release");
 	
 	@Before 
-	public void cleanWorkDirectory()  {
-        //clean output
-        if (testBuildDir.exists())
-        	FileUtils.deleteQuietly(testBuildDir);
-        
+	public void prepareTestDirectory(){        
         try {
-			FileUtils.copyFileToDirectory( srcStyleFile , testBuildDir);
+			FileUtils.copyFileToDirectory( srcStyleFile , buildDir);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -57,7 +51,7 @@ public class CssMinifierMojoTest {
         System.out.println("It should minify the CSS");
 
         CssMinifierMojo mojo = new CssMinifierMojo();
-        mojo.setBuildDirectory(testBuildDir);
+        mojo.setBuildDirectory(buildDir);
         mojo.inputFilename = "stuff";
         try {
 			mojo.execute();
@@ -65,7 +59,7 @@ public class CssMinifierMojoTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        assertTrue(new File(testBuildDir, "stuff-min.css").exists());
+        assertTrue(new File(buildDir, "stuff-min.css").exists());
     }
     
     @Test
@@ -73,7 +67,7 @@ public class CssMinifierMojoTest {
         System.out.println("It should abort the CSS minification");
 
         CssMinifierMojo mojo = new CssMinifierMojo();
-        mojo.setBuildDirectory(testBuildDir);
+        mojo.setBuildDirectory(buildDir);
         mojo.inputFilename = "nofile";
         try {
 			mojo.execute();
@@ -81,6 +75,14 @@ public class CssMinifierMojoTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        assertFalse(new File(testBuildDir, "nofile-min.css").exists());
+        assertFalse(new File(buildDir, "nofile-min.css").exists());
+    }
+    
+    @After
+	public void cleanTestDirectory()  {
+        //clean output
+        if (buildDir.exists()){
+        	FileUtils.deleteQuietly(buildDir);
+        }
     }
 }

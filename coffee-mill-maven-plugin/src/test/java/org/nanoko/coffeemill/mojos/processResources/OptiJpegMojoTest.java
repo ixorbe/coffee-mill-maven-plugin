@@ -34,7 +34,7 @@ import org.nanoko.coffeemill.mojos.processResources.OptiJpegMojo;
 public class OptiJpegMojoTest {
 	
 	private final File assetsSourceTestDir = new File("src/test/resources/assets");
-	private final File workDir = new File("target/test/OptiJpegMojo/www");
+	private final File workDir = new File("target/test/OptiJpegMojoTest/www");
 	private OptiJpegMojo mojo;
 	
 	public OptiJpegMojoTest() throws MojoExecutionException{

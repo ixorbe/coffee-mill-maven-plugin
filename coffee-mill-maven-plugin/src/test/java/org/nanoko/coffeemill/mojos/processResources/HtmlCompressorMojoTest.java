@@ -15,8 +15,10 @@
 
 package org.nanoko.coffeemill.mojos.processResources;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.processResources.CopyAssetsMojo;
@@ -30,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 public class HtmlCompressorMojoTest {
 	
 	private final File assetsSourceTestDir = new File("src/test/resources/assets");
-	private final File workDir = new File("target/test/HtmlCompressorMojo/www");
+	private final File workDir = new File("target/test/HtmlCompressorMojoTest/www");
 	private HtmlCompressorMojo mojo;
 	
 	public HtmlCompressorMojoTest() throws MojoExecutionException{
@@ -83,5 +85,11 @@ public class HtmlCompressorMojoTest {
         // Optimization, so the new size is smaller.
         assertTrue(newSize < size);
     }
+    
+    @After
+	public void cleanTestDirectory() {
+		if(this.mojo.getWorkDirectory().exists())
+			FileUtils.deleteQuietly(this.mojo.getWorkDirectory());
+	}
 
 }

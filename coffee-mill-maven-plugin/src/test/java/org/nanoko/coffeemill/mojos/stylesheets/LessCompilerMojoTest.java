@@ -19,8 +19,7 @@ import static org.junit.Assert.*;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.After;
 import org.junit.Test;
 
 import org.nanoko.coffeemill.mojos.stylesheets.less.LessCompilerMojo;
@@ -33,15 +32,8 @@ import java.util.Collection;
  */
 public class LessCompilerMojoTest {
 	
-	private final File workDir = new File("target/test/less/compilation/tmp/");
+	private final File workDir = new File("target/test/LessCompilerMojoTest/www");
 	private final File stylesDir = new File("src/test/resources/stylesheets");
-	
-	@Before 
-	public void cleanWorkDirectory() {
-        if (workDir.exists())
-        	FileUtils.deleteQuietly(workDir);
-    }
-	
 	
     @Test
     public void testLessCompilation() {
@@ -66,7 +58,7 @@ public class LessCompilerMojoTest {
         System.out.println("Should compile nothing");
 
         LessCompilerMojo mojo = new LessCompilerMojo();
-        mojo.setStylesheetsDir(new File("nowhere"));
+        mojo.setStylesheetsDir(new File(stylesDir, "nowhere"));
         mojo.setWorkDirectory(workDir);
         try {
 			mojo.execute();
@@ -77,4 +69,12 @@ public class LessCompilerMojoTest {
         Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
         assertFalse(files.size() > 0);
     }
+    
+    @After
+	public void cleanTestDirectory() {
+        if (workDir.exists()){
+        	FileUtils.deleteQuietly(workDir);
+        }
+    }
+    
 }
