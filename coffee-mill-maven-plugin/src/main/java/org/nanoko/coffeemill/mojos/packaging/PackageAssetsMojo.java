@@ -16,12 +16,9 @@
 package org.nanoko.coffeemill.mojos.packaging;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
-import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -54,40 +51,20 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
         	return;
         }
     	
-    	File[] assets = getWorkDirectory().listFiles();
+    	File[] workAssets = getWorkDirectory().listFiles();
     	try {
-	    	for(File file : assets){
-	    		getLog().info("file : "+file.getAbsolutePath());
+	    	for(File file : workAssets){
 	    		if(file.isDirectory()){
-	    			getLog().info("isDirectory");
 		    		FileUtils.copyDirectoryToDirectory(file, getBuildDirectory());					
 	    		}else{
-	    			getLog().info("else");
 	    			if(file.isFile() && !FSUtils.hasExtension(file, "js","css")){
-	    				getLog().info("isnot js/css file");
 	    				FileUtils.copyFileToDirectory(file, getBuildDirectory());
 	    			}
 	    		}
 	    	}
     	} catch (IOException e) {
-			e.printStackTrace();
+    		throw new MojoExecutionException("Error during packaging assets from work directory : "+e.getMessage(), e);
 		}
-    	/*
-    	File AssetsResourcesWorkDirectory = new File(this.getWorkDirectory(), "resources");
-    	File AssetsResourcesBuildDirectory = new File(this.getBuildDirectory(), "resources");
-    	FileFilter htmlFilter = FileFilterUtils.suffixFileFilter(".html");
-    	
-    	if(!AssetsResourcesWorkDirectory.exists())
-    		return;
-    	
-    	try {   
-    		// Copy assets resources to build directory
-        	FileUtils.copyDirectory(AssetsResourcesWorkDirectory, AssetsResourcesBuildDirectory);
-        	// Copy all html files to build directory (using filter)
-        	FileUtils.copyDirectory(this.getWorkDirectory(), this.getBuildDirectory(), htmlFilter);
-        } catch (IOException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
-        }*/
        
     }
     

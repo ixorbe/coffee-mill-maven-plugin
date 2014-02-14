@@ -17,9 +17,6 @@ package org.nanoko.coffeemill.processResources;
 
 import java.io.File;
 
-import javax.jws.Oneway;
-
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.io.FileUtils;
@@ -47,16 +44,17 @@ public class OptiJpegMojoTest {
 	
 	
 	@Before
-	public void prepareTestDirectory(){  	
+	public void prepareTestDirectory(){
     	this.mojo = new OptiJpegMojo();     
     	this.mojo.setVerbose(true);
     	this.mojo.setWorkDirectory(this.workDir);
     	this.mojo.setAssetsDir(assetsSourceTestDir);
     }
 	
-	/*
+	
 	@Test
     public void testJPEGOptimization() throws MojoExecutionException, MojoFailureException {
+		System.out.println("\n ==> Should optimize the test jpeg file (smaller file size).");
 
         File file = new File(mojo.getWorkDirectory(), "img/birds.jpeg");
         long size = file.length();
@@ -71,9 +69,10 @@ public class OptiJpegMojoTest {
     }
 
     @Test
-    public void testJPEGOptimizationWhenOptiPNGIsNotInstalled() throws MojoExecutionException,
+    public void testJPEGOptimizationWhenJpegTranIsNotInstalled() throws MojoExecutionException,
             MojoFailureException {
-
+    	System.out.println("\n ==> Should not optimize the test jpeg file : should not find \"do_not_exist\" executable.");
+    	
         String name = OptiJpegMojo.EXECUTABLE_NAME;
         OptiJpegMojo.EXECUTABLE_NAME ="do_not_exist";
 
@@ -89,7 +88,7 @@ public class OptiJpegMojoTest {
 
         OptiJpegMojo.EXECUTABLE_NAME = name;
 
-    }*/
+    }
     
     
     @After

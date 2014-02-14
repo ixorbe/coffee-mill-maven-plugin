@@ -71,7 +71,7 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
         jpegTranExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
         if (jpegTranExec == null) {
-            getLog().error("Cannot optimize JPEG files - jpegtran not installed.");
+            getLog().error("Cannot optimize JPEG files - "+EXECUTABLE_NAME+" not installed.");
             return;
         } 
         if(!getWorkDirectory().exists())

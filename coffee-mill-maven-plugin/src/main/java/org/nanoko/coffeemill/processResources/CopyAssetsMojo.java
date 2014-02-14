@@ -36,30 +36,20 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
         	return;
         }
     	
-    	File[] assets = getAssetsDir().listFiles();
+    	File[] sourceAssets = getAssetsDir().listFiles();
     	try {
-	    	for(File file : assets){
-	    		getLog().info("file : "+file.getAbsolutePath());
+	    	for(File file : sourceAssets){
 	    		if(file.isDirectory()){
-	    			getLog().info("isDirectory");
 		    		FileUtils.copyDirectoryToDirectory(file, getWorkDirectory());					
 	    		}else{
-	    			getLog().info("else");
 	    			if(file.isFile() && !FSUtils.hasExtension(file, "js","css")){
-	    				getLog().info("isnot js/css file");
 	    				FileUtils.copyFileToDirectory(file, getWorkDirectory());
 	    			}
 	    		}
 	    	}
     	} catch (IOException e) {
-			e.printStackTrace();
+    		throw new MojoExecutionException("Error during copy assets from source directory : "+e.getMessage(), e);
 		}
-    	
-       /* try {   
-        	FileUtils.copyDirectory(this.getAssetsDir(), this.getWorkDirectory());
-        } catch (IOException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
-        }*/
     }
 
 
@@ -68,8 +58,7 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public void copy(File f) throws WatchingException {
-    	getLog().info("Copy Asset file "+f.getName()
-    			+" to "+this.getWorkDirectory().getAbsolutePath()  );
+    	getLog().info("Copy Asset file "+f.getName() + " to " + this.getWorkDirectory().getAbsolutePath()  );
     	try {
     		
     		File relativeWorkFile = FSUtils.computeRelativeFile(f, getAssetsDir(), this.getWorkDirectory());	
