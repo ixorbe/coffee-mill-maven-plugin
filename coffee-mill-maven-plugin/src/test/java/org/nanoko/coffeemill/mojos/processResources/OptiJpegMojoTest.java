@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.processResources;
+package org.nanoko.coffeemill.mojos.processResources;
 
 import java.io.File;
 
@@ -25,6 +25,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.nanoko.coffeemill.mojos.processResources.CopyAssetsMojo;
+import org.nanoko.coffeemill.mojos.processResources.OptiJpegMojo;
 
 /**
  * Test the OptiJpegMojo.

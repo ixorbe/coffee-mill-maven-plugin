@@ -1,4 +1,4 @@
-package packaging;
+package org.nanoko.coffeemill.mojos.packaging;
 
 import static org.junit.Assert.assertTrue;
 
