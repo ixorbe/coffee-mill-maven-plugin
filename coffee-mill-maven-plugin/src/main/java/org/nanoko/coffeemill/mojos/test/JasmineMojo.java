@@ -50,12 +50,11 @@ public class JasmineMojo extends AbstractCoffeeMillMojo {
 
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-    	getLog().info("1");
         if (skipJasmineTest) {
             getLog().debug("Skipping Jasmine Tests");
             return;
         }
-        getLog().info("2");
+        
         File test = new File(project.getBasedir(), "src/test");
         if (! test.exists()) {
             getLog().debug("Skipping Jasmine Tests - src/test not found");
@@ -66,14 +65,12 @@ public class JasmineMojo extends AbstractCoffeeMillMojo {
 
         // Prepare execution
         // Copy target/work to target/jasmine/src
-        getLog().info("3");
         try {
             FileUtils.copyDirectory(getWorkDirectory(), JasmineUtils.getJasmineSourceDirectory(project));
         } catch (IOException e) {
             throw new MojoExecutionException("Cannot prepare Jasmine execution", e);
         }
 
-        getLog().info("4");
         // Copy target/work-test to target/jasmine/spec
         try {
             FileUtils.copyDirectory(getWorkTestDirectory(), JasmineUtils.getJasmineSpecDirectory(project));
@@ -81,14 +78,12 @@ public class JasmineMojo extends AbstractCoffeeMillMojo {
             throw new MojoExecutionException("Cannot prepare Jasmine execution", e);
         }
 
-        getLog().info("5");
         // Skip the execution if the WorkTest directory is empty
         if (getWorkTestDirectory().list().length == 0) {
             getLog().debug("Skipping Jasmine Tests - no spec found in the directory");
             return;
         }
 
-        getLog().info("6");
         try {
             TestMojo testMojo = new TestMojo();
             JasmineUtils.prepareJasmineMojo(this, testMojo, javascriptAggregation);
