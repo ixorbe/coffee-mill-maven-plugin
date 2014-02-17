@@ -71,7 +71,6 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
         int exit = lint.execute("csslint", "--format=compact", input.getAbsolutePath());
     }
 
-
     public boolean fileCreated(File file) throws WatchingException {
         compile(file);
         return true;

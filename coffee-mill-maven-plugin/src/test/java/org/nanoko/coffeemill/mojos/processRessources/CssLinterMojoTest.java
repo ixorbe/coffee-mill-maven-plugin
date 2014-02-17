@@ -23,7 +23,7 @@ import org.nanoko.maven.WatchingException;
 
 public class CssLinterMojoTest {
 
-	private final File src_cssFile = new File("src/test/resources/stylesheets/stuff.css");
+	
 	
 	private final File testDir = new File("target/test/CssLinterMojoTest/");
 
@@ -42,14 +42,23 @@ public class CssLinterMojoTest {
 	
 	
 	@Test
-    public void testJavaScriptMinification() throws MojoExecutionException, MojoFailureException, WatchingException {  
+    public void testCssLintNoError() throws MojoExecutionException, MojoFailureException, WatchingException {  
     	System.out.println("\n ==> Should find no error in file");  
     	try {
-			FileUtils.copyFileToDirectory(this.src_cssFile, testDir);
+			FileUtils.copyFileToDirectory(new File("src/test/resources/stylesheets/test_no_error.css"), testDir);
 		} catch (IOException e) { e.printStackTrace(); } 
     	this.mojo.execute();
-    	System.out.println(mylog.historyLogs);
-    	//assertTrue( ((String) mylog.historyLogs.toArray()[2]).contains("is OK"));
+    	assertTrue( ((String) mylog.historyLogs.toArray()[2]).contains("Lint Free!"));
+    }
+	
+	@Test
+    public void testCssError() throws MojoExecutionException, MojoFailureException, WatchingException {  
+    	System.out.println("\n ==> Should find no error in file");  
+    	try {
+			FileUtils.copyFileToDirectory(new File("src/test/resources/stylesheets/test_warning.css"), testDir);
+		} catch (IOException e) { e.printStackTrace(); } 
+    	this.mojo.execute();
+    	assertFalse( ((String) mylog.historyLogs.toArray()[2]).contains("Lint Free!"));
     }
 	
 	@After

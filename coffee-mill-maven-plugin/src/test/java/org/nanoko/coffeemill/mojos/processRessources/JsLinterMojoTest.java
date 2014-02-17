@@ -44,7 +44,7 @@ public class JsLinterMojoTest {
     }
 	
 	@Test
-    public void testLintNoerror() throws MojoExecutionException, MojoFailureException, WatchingException {  
+    public void testJsLintError() throws MojoExecutionException, MojoFailureException, WatchingException {  
     	System.out.println("\n ==> Should says errors in file");
     	
     	try {
@@ -56,7 +56,7 @@ public class JsLinterMojoTest {
     }
 	
 	@Test
-    public void testJavaScriptMinification() throws MojoExecutionException, MojoFailureException, WatchingException {  
+    public void testJsLintNoErrror() throws MojoExecutionException, MojoFailureException, WatchingException {  
     	System.out.println("\n ==> Should find no error in file");  
     	try {
 			FileUtils.copyFileToDirectory(this.src_jsFileNoError, testDir);
