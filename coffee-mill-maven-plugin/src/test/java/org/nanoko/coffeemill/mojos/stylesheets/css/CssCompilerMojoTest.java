@@ -49,7 +49,7 @@ public class CssCompilerMojoTest {
 			e.printStackTrace();
 		}
         Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
-        assertTrue(files.size()==2);
+        assertTrue(files.size()==4);
     }
     
 	
