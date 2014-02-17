@@ -29,6 +29,7 @@ public class JsDocMojoTest {
 	
     @Test
     public void testJsDocGeneration() throws MojoExecutionException, MojoFailureException {
+    	System.out.println("==> Should generate javadoc from "+jsSourceDir);
     	this.mojo.inputFilename = "test-js-to-doc";
     	mojo.execute();
     	
