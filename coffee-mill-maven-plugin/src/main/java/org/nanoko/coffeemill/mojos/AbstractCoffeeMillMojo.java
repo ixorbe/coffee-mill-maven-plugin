@@ -132,6 +132,12 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
 	protected boolean skipJsCompilation;
 	
 	/**
+     * Enables / disables JsTestCompilation
+     */
+	@Parameter(defaultValue="false")
+	protected boolean skipJsTestCompilation;
+	
+	/**
      * Enables / disables JsAggregation
      */
 	@Parameter(defaultValue="false")
@@ -233,15 +239,14 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     }
     
     // JS-TEST-DIR
-    /*public File getJavaScriptTestDirectory(){
+    public File getJavaScriptTestDir(){
     	this.javaScriptTestDir.mkdirs();
     	return this.javaScriptTestDir;
     }
     
-    public void setJavascriptTestDirectory(File jsTestDir){
+    public void setJavascriptTestDir(File jsTestDir){
     	this.javaScriptTestDir = jsTestDir;
-    	this.javaScriptTestDir.mkdirs();
-    }*/
+    }
     
     // STYLESHEETS-DIR
     public File getStylesheetsDir() {

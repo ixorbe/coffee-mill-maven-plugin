@@ -48,14 +48,14 @@
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compress-html                                
                     </compile>
                     <process-test-resources>
-						<!-- org.apache.maven.plugins:maven-resources-plugin:testResources -->
+						org.apache.maven.plugins:maven-resources-plugin:testResources
                     </process-test-resources>
                     <test-compile>
-                        <!--org.nanoko.coffee-mill:coffee-mill-maven-plugin:test-compile-javascript,
-                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:test-compile-coffeescript-->
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:test-compile-javascript,
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:test-compile-coffeescript
                     </test-compile>
                     <test>
-						<!-- org.nanoko.coffee-mill:coffee-mill-maven-plugin:jasmine-test -->
+						org.nanoko.coffee-mill:coffee-mill-maven-plugin:jasmine-test
                     </test>
                     <package>
 	                    org.nanoko.coffee-mill:coffee-mill-maven-plugin:aggregate-javascript,
@@ -73,7 +73,7 @@
                         org.apache.maven.plugins:maven-install-plugin:install
                     </install>
                     <deploy>
-						<!-- org.apache.maven.plugins:maven-deploy-plugin:deploy -->
+						org.apache.maven.plugins:maven-deploy-plugin:deploy
                     </deploy>
                 </phases>
             </configuration>

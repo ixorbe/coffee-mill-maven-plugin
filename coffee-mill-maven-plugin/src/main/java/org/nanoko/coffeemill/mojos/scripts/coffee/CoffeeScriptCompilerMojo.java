@@ -40,12 +40,6 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
      */
     @Parameter(defaultValue= "src/main/coffee", required = true, readonly = true)
     public File coffeeScriptDir;
-
-    /**
-     * Where are CoffeeScript files implementing tests.
-     */
-    @Parameter(defaultValue= "src/test/coffee", required = true, readonly = true)
-    public File coffeeScriptTestDir;
             
     private NPM coffee;
     
