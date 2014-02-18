@@ -1,7 +1,7 @@
 
 /*
 #
-# Copyright 2013 OW2 Nanoko Project
+# Copyright 2013-2014 OW2 Nanoko Project
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -94,7 +94,7 @@ This lookup is done to register the ```HUBU``` namespace correctly on the right 
 
 /*
 #
-# Copyright 2013 OW2 Nanoko Project
+# Copyright 2013-2014 OW2 Nanoko Project
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -202,7 +202,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
 /*
 #
-# Copyright 2013 OW2 Nanoko Project
+# Copyright 2013-2014 OW2 Nanoko Project
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -664,7 +664,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
 /*
 #
-# Copyright 2013 OW2 Nanoko Project
+# Copyright 2013-2014 OW2 Nanoko Project
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -998,7 +998,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
 /*
 #
-# Copyright 2013 OW2 Nanoko Project
+# Copyright 2013-2014 OW2 Nanoko Project
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -1113,7 +1113,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
 /*
 #
-# Copyright 2013 OW2 Nanoko Project
+# Copyright 2013-2014 OW2 Nanoko Project
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -1658,7 +1658,7 @@ TODO Factories / Object creation strategy ?
 
 /*
 #
-# Copyright 2013 OW2 Nanoko Project
+# Copyright 2013-2014 OW2 Nanoko Project
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -2885,7 +2885,7 @@ represents the published and required services for a specific h-ubu's component.
 
 /*
 #
-# Copyright 2013 OW2 Nanoko Project
+# Copyright 2013-2014 OW2 Nanoko Project
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
