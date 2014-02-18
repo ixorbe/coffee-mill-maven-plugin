@@ -29,6 +29,22 @@ import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
         defaultPhase = LifecyclePhase.COMPILE)
 public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
 	
+	
+	private static final String PRESERVELINEBREAK = "preserveLineBreak" ;
+	private static final String REMOVECOMMENTS = "removeComments" ;
+	private static final String REMOVEMULTISPACES = "removeMultispaces" ;
+	private static final String REMOVEFORMATTRIBUTES = "removeFormAttributes" ;
+	private static final String REMOVEHTTPPROTOCOL = "removeHttpProtocol" ;	
+	private static final String REMOVEHTTPSPROTOCOL = "removeHttpsProtocol" ; 	
+	private static final String REMOVEINPUTATTRIBUTES = "removeInputAttributes";
+	private static final String REMOVEINTERTAGSPACES = "removeIntertagSpaces";
+	private static final String REMOVEJAVASCRIPTPROTOCOL = "removeJavascriptProtocol";
+	private static final String REMOVELINKATTRIBUTES = "removeLinkAttributes";
+	private static final String REMOVEQUOTES = "removeQuotes" ;
+	private static final String REMOVESCRIPTATTRIBUTES = "removeScriptAttributes" ;
+	private static final String REMOVESTYLEATTRIBUTES = "removeStyleAttributes" ;
+	private static final String SIMPLEBOOLEANATTRIBUTES = "simpleBooleanAttributes" ;	
+	private static final String SIMPLEDOCTYPE = "simpleDocType" ;
 	/**
      * Enables html compression.
      */
@@ -142,21 +158,21 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     	htmlCompressor = new HtmlCompressor();
 
     	if(htmlCompressionOptions!=null && !htmlCompressionOptions.isEmpty() ){	    		
-	        if(htmlCompressionOptions.containsKey("preserveLineBreak")) { preserveLineBreak = Boolean.valueOf(htmlCompressionOptions.get("preserveLineBreak")); }
-	    	if(htmlCompressionOptions.containsKey("removeComments")) 	{ removeComments = Boolean.valueOf(htmlCompressionOptions.get("removeComments")); }
-	    	if(htmlCompressionOptions.containsKey("removeMultispaces")) { removeMultispaces = Boolean.valueOf(htmlCompressionOptions.get("removeMultispaces")); }    	
-	    	if(htmlCompressionOptions.containsKey("removeFormAttributes")) 	{ removeFormAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeFormAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("removeHttpProtocol")) 	{ removeHttpProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeHttpProtocol")); }
-	    	if(htmlCompressionOptions.containsKey("removeHttpsProtocol")) 	{ removeHttpsProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeHttpsProtocol")); }    	
-	    	if(htmlCompressionOptions.containsKey("removeInputAttributes")) { removeInputAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeInputAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("removeIntertagSpaces")) 	{ removeIntertagSpaces = Boolean.valueOf(htmlCompressionOptions.get("removeIntertagSpaces")); }
-	    	if(htmlCompressionOptions.containsKey("removeJavascriptProtocol")) { removeJavascriptProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeJavascriptProtocol")); }    	
-	    	if(htmlCompressionOptions.containsKey("removeLinkAttributes")) { removeLinkAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeLinkAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("removeQuotes")) 	{ removeQuotes = Boolean.valueOf(htmlCompressionOptions.get("removeQuotes")); }
-	    	if(htmlCompressionOptions.containsKey("removeScriptAttributes")) { removeScriptAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeScriptAttributes")); }    	
-	    	if(htmlCompressionOptions.containsKey("removeStyleAttributes")) { removeStyleAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeStyleAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("simpleBooleanAttributes")) 	{ simpleBooleanAttributes = Boolean.valueOf(htmlCompressionOptions.get("simpleBooleanAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("simpleDocType")) { simpleDocType = Boolean.valueOf(htmlCompressionOptions.get("simpleDocType")); }
+	        if(htmlCompressionOptions.containsKey(PRESERVELINEBREAK)) { preserveLineBreak = Boolean.valueOf(htmlCompressionOptions.get(PRESERVELINEBREAK)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVECOMMENTS)) 	{ removeComments = Boolean.valueOf(htmlCompressionOptions.get(REMOVECOMMENTS)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEMULTISPACES)) { removeMultispaces = Boolean.valueOf(htmlCompressionOptions.get(REMOVEMULTISPACES)); }    	
+	    	if(htmlCompressionOptions.containsKey(REMOVEFORMATTRIBUTES)) 	{ removeFormAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEFORMATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEHTTPPROTOCOL)) 	{ removeHttpProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEHTTPPROTOCOL)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEHTTPSPROTOCOL)) 	{ removeHttpsProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEHTTPSPROTOCOL)); }    	
+	    	if(htmlCompressionOptions.containsKey(REMOVEINPUTATTRIBUTES)) { removeInputAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEINPUTATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEINTERTAGSPACES)) 	{ removeIntertagSpaces = Boolean.valueOf(htmlCompressionOptions.get(REMOVEINTERTAGSPACES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEJAVASCRIPTPROTOCOL)) { removeJavascriptProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEJAVASCRIPTPROTOCOL)); }    	
+	    	if(htmlCompressionOptions.containsKey(REMOVELINKATTRIBUTES)) { removeLinkAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVELINKATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEQUOTES)) 	{ removeQuotes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEQUOTES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVESCRIPTATTRIBUTES)) { removeScriptAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVESCRIPTATTRIBUTES)); }    	
+	    	if(htmlCompressionOptions.containsKey(REMOVESTYLEATTRIBUTES)) { removeStyleAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVESTYLEATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(SIMPLEBOOLEANATTRIBUTES)) 	{ simpleBooleanAttributes = Boolean.valueOf(htmlCompressionOptions.get(SIMPLEBOOLEANATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(SIMPLEDOCTYPE)) { simpleDocType = Boolean.valueOf(htmlCompressionOptions.get(SIMPLEDOCTYPE)); }
     	}	
     	
     	htmlCompressor.setPreserveLineBreaks(preserveLineBreak);
