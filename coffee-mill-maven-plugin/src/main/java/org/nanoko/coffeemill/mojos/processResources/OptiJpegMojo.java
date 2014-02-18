@@ -88,7 +88,7 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
             try {
 				optimize(file);
 			} catch (WatchingException e) {
-				this.getLog().error(e);
+				this.getLog().error(e.getMessage(), e);
 			}
         }
         //OptionsHelper.getBoolean(options, "verbose", false);

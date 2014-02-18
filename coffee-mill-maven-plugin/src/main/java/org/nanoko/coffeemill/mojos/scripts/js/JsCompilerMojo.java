@@ -73,7 +73,7 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	try {
 			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
 		} catch (IOException e) { 
-			this.getLog().error(e); 
+			this.getLog().error(e.getMessage(), e); 
 		}
     }
     

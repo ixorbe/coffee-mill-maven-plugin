@@ -67,7 +67,7 @@ public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
 	    		getLog().info("	Copy " + f.getAbsolutePath() + " to " + outputDirectory);
 				FileUtils.copyFile(f, out);
 	    	} catch (IOException e) {
-	    		this.getLog().error(e.getMessage());
+	    		this.getLog().error(e.getMessage(), e);
 	    	}
     	}
     }
