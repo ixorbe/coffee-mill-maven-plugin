@@ -63,7 +63,7 @@ public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
     	getLog().info("Copy JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());
     	try {
 			FileUtils.copyFileToDirectory(f, this.getWorkTestDirectory());
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (IOException e) { this.getLog().error(e); }
     }
     
     

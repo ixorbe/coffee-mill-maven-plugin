@@ -39,8 +39,10 @@ public class InjectionHelper {
                 theField.set(obj, value);
             } catch (NoSuchFieldException e1) {
                 LOGGER.error("Internal error - Cannot inject " + field + " in " + clazz.getName(), e);
+                LOGGER.error(e1.getMessage());
             } catch (IllegalAccessException e1) {
                 LOGGER.error("Internal error - Cannot inject " + field + " in " + clazz.getName(), e);
+                LOGGER.error(e1.getMessage());
             }
         } catch (IllegalAccessException e) {
             LOGGER.error("Internal error - Cannot inject " + field + " in " + clazz.getName(), e);

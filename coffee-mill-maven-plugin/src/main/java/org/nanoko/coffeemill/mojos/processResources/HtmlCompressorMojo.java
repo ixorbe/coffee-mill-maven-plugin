@@ -82,7 +82,7 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
 				compress(file);
         
     	} catch (WatchingException e) {
-			e.printStackTrace();
+    		this.getLog().error(e);
 		}
         
     }    
