@@ -42,8 +42,8 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     public String outputDir = null;
     
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;   
+    	if(isSkipped()){ return; }
+    	
     	jsdoc = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
         	compile();
@@ -57,16 +57,17 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     }
 
     public void compile() throws WatchingException {
-    	if(inputFilename == null)
+    	if(inputFilename == null) {
     		inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	}
     	
     	File input = new File( this.getBuildDirectory(), inputFilename+".js");
-    	if(!input.exists())
-    		return;
-    	File output = new File( this.getTargetDirectory(),"jsdoc-report" );
- 	
-    	if(output.exists())
+    	if(!input.exists()){ return; }
+    	
+    	File output = new File( this.getTargetDirectory(),"jsdoc-report" ); 	
+    	if(output.exists()) {
     		FileUtils.deleteQuietly(output);
+    	}
     	
         getLog().info("Make Js Doc for " + input.getAbsolutePath() );
         int exit = jsdoc.execute("jsdoc", input.getAbsolutePath(), "-d",  output.getAbsolutePath() );
@@ -78,8 +79,9 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     	if ( skipJsDocumentation || skipJsCompilation) {
             getLog().info("\033[31m JS Documentation skipped \033[37m");
             return true;
+        } else { 
+        	return false;
         }
-    	else return false;
     }
 
 }

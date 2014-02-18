@@ -5,7 +5,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
 
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.nanoko.java.NPM;
@@ -39,8 +38,7 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;    				
+    	if(isSkipped()) { return; }    				
 
     	ugly = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
@@ -51,14 +49,15 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return  !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
+        return !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
 
     public boolean compile() throws WatchingException {
     	getLog().info("Js Minification Compilation");
 		
-    	if(this.inputFileName == null)
+    	if(this.inputFileName == null) {
     		this.inputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	}
     	
     	boolean res = minify(this.inputFileName+"-all");
     	boolean res2 = minify(this.inputFileName);
@@ -68,12 +67,15 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     private boolean minify( String baseName) throws WatchingException {
     	// check if input is valid
     	File input = new File( this.getBuildDirectory(), baseName+".js");
-    		if(!input.exists())
-    			return false;
+		if(!input.exists()) {
+			return false;
+		}
+		
     	// if output exist, delete it
     	File output = new File( this.getBuildDirectory(), baseName+"-min.js");
-        if(output.exists())
+        if(output.exists()) {
         	FileUtils.deleteQuietly(output);
+        }
         
         getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
         int exit = ugly.execute("uglifyjs",input.getAbsolutePath(), "-o",  output.getAbsolutePath(),"-c");
@@ -106,8 +108,9 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipJsMinification || skipJsAggregation || skipJsCompilation) {
             getLog().info("\033[31m JS Minification skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 
 }

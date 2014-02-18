@@ -29,8 +29,8 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 	protected boolean skipAssetsCopy;
 		
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;
+    	if(isSkipped()) { return; }
+    	
     	if (!this.getAssetsDir().isDirectory()){
         	getLog().warn("/!\\ Copy assets skipped - " + this.getAssetsDir().getAbsolutePath() + " does not exist !");
         	return;
@@ -66,8 +66,9 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     		if (relativeWorkFile.getParentFile() != null) {
     			relativeWorkFile.getParentFile().mkdirs();
                 FileUtils.copyFileToDirectory(f, relativeWorkFile.getParentFile());
-            } else 
+            } else {
                 getLog().error("Cannot copy file - parent directory not accessible for " + relativeWorkFile);
+            }
 			
 		} catch (IOException e) {
 			throw new WatchingException(e.getMessage(), e); }
@@ -84,8 +85,9 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     	if(fileDeleted(file)) {
     		this.copy(file);
         	return true;
-    	} else
+    	} else {
     		return false;
+    	}
     }
 
     public boolean fileDeleted(File file) throws WatchingException {
@@ -101,8 +103,9 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipAssetsCopy) {
             getLog().info("\033[31m Asset copy skipped \033[37m");
             return true;
+        } else{
+        	return false;
         }
-    	else return false;
     }
 
 }

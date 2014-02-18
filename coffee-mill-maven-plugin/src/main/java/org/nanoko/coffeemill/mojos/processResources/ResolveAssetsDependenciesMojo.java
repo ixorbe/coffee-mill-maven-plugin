@@ -34,24 +34,31 @@ public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
 
 	File outputDirectory=null;
     public void execute() throws MojoExecutionException, MojoFailureException {   
-    	if(outputDirectory  == null)
+    	if(outputDirectory  == null){
     		outputDirectory = this.getLibDirectory();
+    	}
     	
-    	Set<Artifact> dependencies = this.project.getArtifacts();
+    	@SuppressWarnings("unchecked")
+		Set<Artifact> dependencies = this.project.getArtifacts();
         Set<Artifact> keepers = new LinkedHashSet<Artifact>();
+        
         // Only retrieve JS & CSS dependencies
         for(Artifact a : dependencies) {
-        	if(a.getType().equals("js") || a.getType().equals("css"))
+        	if(a.getType().equals("js") || a.getType().equals("css")){
         		keepers.add(a);
-        	else getLog().warn(a.getFile().getName() + " dependency can't be resolved");
+        	} else {
+        		getLog().warn(a.getFile().getName() + " dependency can't be resolved");
+        	}
         }
-        if(keepers.size()>0)
+        if(keepers.size()>0) {
         	copyDependencies(keepers);
+        }
     }
     
     public void copyDependencies(Set<Artifact> artifacts){
-    	if(!outputDirectory.exists())
+    	if(!outputDirectory.exists()) {
     		outputDirectory.mkdirs();
+    	}
     	
     	for( Artifact a : artifacts) {
 	    	try {

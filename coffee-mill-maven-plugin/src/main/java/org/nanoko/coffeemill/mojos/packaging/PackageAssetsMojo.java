@@ -44,8 +44,8 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 	protected boolean skipAssetsPackage;
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;
+    	if(isSkipped()){ return; }
+    	
     	if (!this.getWorkDirectory().exists()){
         	getLog().warn("/!\\ Packaging assets skipped - " + this.getWorkDirectory().getAbsolutePath() + " does not exist !");
         	return;
@@ -83,8 +83,9 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     		if (relativeBuildFile.getParentFile() != null) {
     			relativeBuildFile.getParentFile().mkdirs();
                 FileUtils.copyFileToDirectory(relativeWorkFile, relativeBuildFile.getParentFile());
-            } else 
+            } else{ 
                 getLog().error("Cannot copy file - parent directory not accessible for " + relativeBuildFile);
+            }
 			
 		} catch (IOException e) {
 			throw new WatchingException(e.getMessage(), e); }
@@ -114,8 +115,9 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipAssetsPackage) {
             getLog().info("\033[31m Asset packaging skipped \033[37m");
             return true;
+        } else{
+        	return false;
         }
-    	else return false;
     }
     
     

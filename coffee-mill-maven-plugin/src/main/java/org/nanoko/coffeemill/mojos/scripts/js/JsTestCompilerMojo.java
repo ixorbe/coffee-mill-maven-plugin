@@ -33,8 +33,7 @@ public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
 	
     public void execute() throws MojoExecutionException, MojoFailureException {        
     	try {
-    		if(isSkipped())
-        		return;
+    		if(isSkipped()) { return; }
     		
     		if (!this.getJavaScriptTestDir().isDirectory()) {
     			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptTestDir().getAbsolutePath() + " does not exist !");
@@ -49,8 +48,9 @@ public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
     			return;
     		}
         	
-            for(File file : files)
+            for(File file : files) {
             	copy(file);    		
+            }
             
     	} catch (WatchingException e) {
             throw new MojoExecutionException(e.getMessage(), e);
@@ -72,8 +72,9 @@ public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
     	if (skipJsTestCompilation) {
             getLog().info("\033[31m JS Test Compilation skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 
 }

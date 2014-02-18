@@ -46,8 +46,7 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
 
     
     public void execute() throws MojoExecutionException, MojoFailureException {
-    	if(isSkipped())
-    		return;
+    	if(isSkipped()) { return; }
     	
     	if (!this.coffeeScriptDir.isDirectory()){
         	getLog().warn("/!\\ CoffeeScript compilation skipped - " + coffeeScriptDir.getAbsolutePath() + " does not exist !");
@@ -64,8 +63,9 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
 			return;
 		}
 			
-		for(File file : files)
-			invokeCoffeeScriptCompiler(file, getWorkDirectory());      	
+		for(File file : files) {
+			invokeCoffeeScriptCompiler(file, getWorkDirectory());
+		}
 
     }
 

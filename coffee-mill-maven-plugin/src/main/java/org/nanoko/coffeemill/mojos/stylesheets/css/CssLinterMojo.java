@@ -42,15 +42,17 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
     	defaultLogger = new MavenLoggerWrapper(this.getLog());
     }
     
+    
     public void execute() throws MojoExecutionException {
-		if(isSkipped())
-    		return;
+		
+    	if(isSkipped()) { return; }
 		
     	lint = npm(defaultLogger, PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
         	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
-            for(File file : files)
+            for(File file : files) {
             	compile(file);
+            }
 
         } catch (WatchingException e) {
             throw new MojoExecutionException(e.getMessage(), e);
@@ -58,14 +60,15 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return  !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
+        return !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
 
     public void compile(File f) throws WatchingException {
     	String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".css";
     	File input = new File( this.getWorkDirectory(), name);
-    	if(!input.exists())
+    	if(!input.exists()) {
     		return;
+    	}
 
         getLog().info("Linting " + input.getAbsolutePath());
         int exit = lint.execute("csslint", "--format=compact", input.getAbsolutePath());
@@ -90,8 +93,9 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipJsLint || skipJsCompilation) {
             getLog().info("\033[31m JS Lint Optimizer skipped \033[37m");
             return true;
+        } else {
+        	return false;   	
         }
-    	else return false;   	
     }
 
 }

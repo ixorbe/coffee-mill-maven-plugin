@@ -65,8 +65,7 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;
+    	if(isSkipped()) { return; }
 
         jpegTranExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
@@ -74,8 +73,8 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
             getLog().error("Cannot optimize JPEG files - "+EXECUTABLE_NAME+" not installed.");
             return;
         } 
-        if(!getWorkDirectory().exists())
-        	return;
+        
+        if(!getWorkDirectory().exists()) { return; }
         
         getLog().info("Invoking jpegtran : " + jpegTranExec.getAbsolutePath());
         Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"jpg", "jpeg"}, true);
@@ -167,7 +166,8 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipPicturesOptimization) {
             getLog().info("\033[31m JPEG Optimization skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 }

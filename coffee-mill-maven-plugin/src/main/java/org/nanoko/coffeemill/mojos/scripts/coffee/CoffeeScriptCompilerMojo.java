@@ -43,9 +43,8 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeScriptCompilerMojo i
 
     
     private void compile(File file) throws WatchingException {
-        if (file == null) {
-            return;
-        }
+        if (file == null) { return; }
+        
         //File out = new File(getWorkDirectory(), file.getName());
         getLog().info("Compiling CoffeeScript " + file.getAbsolutePath() + " to " + getWorkDirectory().getAbsolutePath());
 
@@ -81,8 +80,9 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeScriptCompilerMojo i
     	if (skipJsCompilation) {
             getLog().info("\033[31m CoffeeScript Compilation skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 
 }

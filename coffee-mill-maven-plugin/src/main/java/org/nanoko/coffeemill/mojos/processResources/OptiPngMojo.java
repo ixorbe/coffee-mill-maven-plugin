@@ -72,8 +72,7 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
     private int level = 2;
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;
+    	if(isSkipped()) { return; }
 
     	optiPNGExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
@@ -81,8 +80,8 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
             getLog().error("Cannot optimize PNG files - optipng not installed.");
             return;
         } 
-        if(!getWorkDirectory().exists())
-        	return;
+        
+        if(!getWorkDirectory().exists()) { return; }
         
         getLog().info("Invoking optipng : " + optiPNGExec.getAbsolutePath());
         Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"png"}, true);
@@ -156,7 +155,8 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipPicturesOptimization) {
             getLog().info("\033[31m PNG Optimization skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 }

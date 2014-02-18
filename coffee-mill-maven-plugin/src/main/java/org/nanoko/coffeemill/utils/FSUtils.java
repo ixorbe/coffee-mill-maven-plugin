@@ -31,11 +31,13 @@ public class FSUtils {
     	    if (file.canRead()) {
 	    		for (File temp : file.listFiles()) {
 	    		    if (temp.isDirectory()) {
-	    		    	if(isInDirectory(filename, temp))
+	    		    	if(isInDirectory(filename, temp)) {
 	    		    		return true;
+	    		    	}
 	    		    } else {
-		    			if (filename.toLowerCase().equals(temp.getName().toLowerCase()))		
+		    			if (filename.toLowerCase().equals(temp.getName().toLowerCase())) {	
 		    			    return true;
+		    			}
 	    		    }
 	    	    }
 	     

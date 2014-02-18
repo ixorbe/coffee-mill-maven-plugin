@@ -4,7 +4,6 @@ package org.nanoko.coffeemill.mojos.packaging;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.archiver.zip.ZipArchiver;
 
@@ -40,8 +39,9 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
 
     private void createApplicationDistribution() throws IOException {
     	this.getLog().info("createApplicationDistribution");
-    	if( this.project != null )
+    	if( this.project != null ){
     		this.outputFileName =  this.project.getArtifactId() + "-" + this.project.getVersion() + ".zip";
+    	}
 
     	File distFile = new File(this.getTargetDirectory(), this.outputFileName);
         ZipArchiver archiver = new ZipArchiver();
@@ -50,8 +50,9 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
         archiver.setDestFile(distFile);
         archiver.createArchive();
         this.getLog().info("getDirectory="+getBuildDirectory());
-        if(projectHelper != null )
+        if(projectHelper != null ){
         	projectHelper.attachArtifact(project, "zip", distFile);
+        }
     }
     
     

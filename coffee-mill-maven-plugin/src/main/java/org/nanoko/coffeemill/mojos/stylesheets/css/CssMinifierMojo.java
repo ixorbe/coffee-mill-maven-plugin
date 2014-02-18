@@ -37,8 +37,8 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public String inputFilename = null;
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;
+    	
+    	if(isSkipped()) { return; }
     	
         cleancss = npm(new MavenLoggerWrapper(this.getLog()), CLEANCSS_NPM_NAME, CLEANCSS_NPM_VERSION);
         try {
@@ -49,13 +49,14 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return  !isSkipped() && FSUtils.hasExtension(file, stylesheetsExtensions);
+        return !isSkipped() && FSUtils.hasExtension(file, stylesheetsExtensions);
     }
 
     public boolean compile() throws WatchingException {
  
-    	if(this.inputFilename == null)
+    	if(this.inputFilename == null) {
     		this.inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	}
     	
     	boolean res = minify(this.inputFilename+"-all");
     	boolean res2 = minify(this.inputFilename);
@@ -65,12 +66,15 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     private boolean minify( String baseName) throws WatchingException {
     	// check if input is valid
     	File input = new File( this.getBuildDirectory(), baseName+".css");
-    		if(!input.exists())
-    			return false;
+		if(!input.exists()) {
+			return false;
+		}
+		
     	// if output exist, delete it
     	File output = new File( this.getBuildDirectory(),baseName+"-min.css");
-        if(output.exists())
+        if(output.exists()) {
         	FileUtils.deleteQuietly(output);
+        }
         
         getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
         int exit = cleancss.execute("cleancss", "-o",  output.getAbsolutePath(),input.getAbsolutePath());
@@ -102,8 +106,9 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipCssMinification || skipCssAggregation || skipCssCompilation) {
             getLog().info("\033[31m CSS Minification skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 
 }

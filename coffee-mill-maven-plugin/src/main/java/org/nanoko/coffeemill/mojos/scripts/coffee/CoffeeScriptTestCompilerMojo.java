@@ -61,8 +61,9 @@ public class CoffeeScriptTestCompilerMojo extends AbstractCoffeeScriptCompilerMo
     	if (skipCoffeeScriptTestCompilation) {
             getLog().info("\033[31m CoffeeScript Test Compilation skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 
 }

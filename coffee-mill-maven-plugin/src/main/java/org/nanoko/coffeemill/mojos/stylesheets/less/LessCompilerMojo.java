@@ -33,8 +33,8 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;
+    	
+    	if(isSkipped()) { return; }
     	
         less = npm(new MavenLoggerWrapper(this.getLog()), LESS_NPM_NAME, LESS_NPM_VERSION);
         try {
@@ -99,8 +99,9 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipCssCompilation) {
             getLog().info("\033[31m LESS Compilation skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 
 }

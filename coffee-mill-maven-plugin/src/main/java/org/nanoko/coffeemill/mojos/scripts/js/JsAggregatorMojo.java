@@ -40,11 +40,11 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 	
 	@Parameter(defaultValue="true")
 	private boolean failedOnMissingFile;
+	
 
     public void execute() throws MojoExecutionException, MojoFailureException {
     	try {
-    		if(isSkipped())
-        		return;
+    		if(isSkipped()){ return; }
     		
     		if (!this.getWorkDirectory().isDirectory()){
             	getLog().warn("JavaScript aggregation skipped - " + this.getWorkDirectory() + " does not exist !");
@@ -64,12 +64,14 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public void aggregate() throws WatchingException {
-    	if(this.outputFileName == null)
+    	if(this.outputFileName == null) {
     		this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	}
     	
     	File output = new File( this.getBuildDirectory(), this.outputFileName + ".js");
-    	if(output.exists())
+    	if(output.exists()) {
     		FileUtils.deleteQuietly(output); 
+    	}
     	
     	// Classic Aggregation (app + ext. libs)
     	if (jsAggregationFiles == null || jsAggregationFiles.isEmpty()) {
@@ -80,10 +82,9 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     			} catch (IOException e) {
     				e.printStackTrace();
     			}
-        	}    		
-        } 
-    	// Aggregation from pom.xml JsAggregationFiles list
-    	else {
+        	}
+    	// else aggregate from pom.xml JsAggregationFiles list
+        } else {    		
         	aggregateFromListFiles(output);        	
         }
     	
@@ -126,8 +127,9 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     
     private void aggregateAppWithLibs(File in) throws WatchingException, IOException {
     	File output = new File(this.getBuildDirectory(),  this.outputFileName+"-all.js");
-    	if(output.exists())
-    		FileUtils.deleteQuietly(output);  
+    	if(output.exists()){
+    		FileUtils.deleteQuietly(output);
+    	}
     	
     	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"js"}, true);
 
@@ -177,8 +179,9 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipJsAggregation || skipJsCompilation) {
             getLog().info("\033[31m JS Aggregation skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 
 

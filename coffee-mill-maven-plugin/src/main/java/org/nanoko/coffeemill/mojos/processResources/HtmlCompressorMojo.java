@@ -15,11 +15,8 @@ import org.nanoko.maven.WatchingException;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
 
@@ -71,15 +68,15 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;
+    	if(isSkipped()) { return; }
     	
     	this.configure();
     	
     	try {
 	    	Collection<File> files = FileUtils.listFiles(getAssetsDir(), new String[]{"html", "htm"}, true);
-	        for (File file : files)            
+	        for (File file : files) {          
 				compress(file);
+	        }
         
     	} catch (WatchingException e) {
 			e.printStackTrace();
@@ -96,10 +93,11 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     	getLog().info("Compress Html file "+file.getName() +" from " + this.getAssetsDir().getAbsolutePath());
     	try {
             String result = htmlCompressor.compress(FileUtils.readFileToString(file));
-          //File out = getOutputHtmlFile(file);
+            //File out = getOutputHtmlFile(file);
             File out = FSUtils.computeRelativeFile(file, getAssetsDir(), getWorkDirectory());
-            if(out.exists())
+            if(out.exists()){
             	FileUtils.deleteQuietly(out);
+            }
             out.getParentFile().mkdirs();
             FileUtils.write(out, result);
             writeStatistics(htmlCompressor, file);
@@ -131,8 +129,9 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipHtmlCompression) {
             getLog().info("\033[31m HTML Compression skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
     
     
@@ -240,7 +239,7 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static String humanReadableByteCount(long bytes, boolean si) {
         int unit = si ? 1000 : 1024;
-        if (bytes < unit) return bytes + " B";
+        if (bytes < unit) { return bytes + " B"; }
         int exp = (int) (Math.log(bytes) / Math.log(unit));
         String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);

@@ -33,8 +33,8 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped())
-    		return;
+    	
+    	if(isSkipped()) { return; }
     	
     	sass = npm(new MavenLoggerWrapper(this.getLog()), SASS_NPM_NAME, SASS_NPM_VERSION);
         try {
@@ -99,8 +99,9 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipCssCompilation) {
             getLog().info("\033[31m Sass Compilation skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 
 }

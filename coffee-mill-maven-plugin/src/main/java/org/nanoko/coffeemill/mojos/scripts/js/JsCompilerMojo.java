@@ -34,8 +34,7 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 	
     public void execute() throws MojoExecutionException, MojoFailureException {        
     	try {
-    		if(isSkipped())
-        		return;
+    		if(isSkipped()){ return; }
     		
     		if (!this.getJavaScriptDir().isDirectory()) {
     			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptDir().getAbsolutePath() + " does not exist !");
@@ -50,8 +49,9 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     			return;
     		}
         	
-            for(File file : files)
-            	copy(file);    		
+            for(File file : files){
+            	copy(file);   
+            }
             
     	} catch (WatchingException e) {
             throw new MojoExecutionException(e.getMessage(), e);
@@ -81,8 +81,9 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     public boolean fileUpdated(File file) throws WatchingException {
     	if(fileDeleted(file)) {
     		return this.fileCreated(file);
-    	} else
+    	} else {
     		return false;
+    	}
     }
 
     public boolean fileDeleted(File file) {
@@ -98,8 +99,9 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	if (skipJsCompilation) {
             getLog().info("\033[31m JS Compilation skipped \033[37m");
             return true;
+        } else {
+        	return false;
         }
-    	else return false;
     }
 
 }
