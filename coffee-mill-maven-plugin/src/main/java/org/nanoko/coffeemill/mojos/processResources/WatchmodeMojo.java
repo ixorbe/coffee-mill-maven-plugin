@@ -1,18 +1,15 @@
 package org.nanoko.coffeemill.mojos.processResources;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
-import org.nanoko.coffeemill.mojos.scripts.coffee.CoffeeScriptCompilerMojo;
 import org.nanoko.maven.WatchingException;
 import org.nanoko.maven.pipeline.Pipeline;
 import org.nanoko.maven.pipeline.Pipelines;
-import org.nanoko.maven.pipeline.Watchers;
 import org.nanoko.coffeemill.utils.MavenLoggerWrapper;
 
 import org.eclipse.jetty.server.Handler;
@@ -85,7 +82,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         resource_handler.setDirectoriesListed(true);
         resource_handler.setWelcomeFiles(new String[]{ "index.html" });
         try {
-			resource_handler.setResourceBase(this.getBuildDirectory().getCanonicalPath());
+			resource_handler.setResourceBase(this.getWorkDirectory().getCanonicalPath());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

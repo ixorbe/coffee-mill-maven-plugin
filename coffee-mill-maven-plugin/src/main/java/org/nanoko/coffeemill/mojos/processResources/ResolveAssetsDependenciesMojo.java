@@ -56,8 +56,9 @@ public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
     	for( Artifact a : artifacts) {
 	    	try {
 				File f = a.getFile();
+				File out  = new File(outputDirectory, a.getArtifactId()+"."+a.getType());
 	    		getLog().info("	Copy " + f.getAbsolutePath() + " to " + outputDirectory);
-				FileUtils.copyFileToDirectory(f, outputDirectory);
+				FileUtils.copyFile(f, out);
 	    	} catch (IOException e) {}
     	}
     }
