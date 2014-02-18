@@ -29,6 +29,22 @@ import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
         defaultPhase = LifecyclePhase.COMPILE)
 public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
 	
+	
+	private static final String PRESERVELINEBREAK = "preserveLineBreak" ;
+	private static final String REMOVECOMMENTS = "removeComments" ;
+	private static final String REMOVEMULTISPACES = "removeMultispaces" ;
+	private static final String REMOVEFORMATTRIBUTES = "removeFormAttributes" ;
+	private static final String REMOVEHTTPPROTOCOL = "removeHttpProtocol" ;	
+	private static final String REMOVEHTTPSPROTOCOL = "removeHttpsProtocol" ; 	
+	private static final String REMOVEINPUTATTRIBUTES = "removeInputAttributes";
+	private static final String REMOVEINTERTAGSPACES = "removeIntertagSpaces";
+	private static final String REMOVEJAVASCRIPTPROTOCOL = "removeJavascriptProtocol";
+	private static final String REMOVELINKATTRIBUTES = "removeLinkAttributes";
+	private static final String REMOVEQUOTES = "removeQuotes" ;
+	private static final String REMOVESCRIPTATTRIBUTES = "removeScriptAttributes" ;
+	private static final String REMOVESTYLEATTRIBUTES = "removeStyleAttributes" ;
+	private static final String SIMPLEBOOLEANATTRIBUTES = "simpleBooleanAttributes" ;	
+	private static final String SIMPLEDOCTYPE = "simpleDocType" ;
 	/**
      * Enables html compression.
      */
@@ -142,7 +158,8 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     public void configure(){
     	htmlCompressor = new HtmlCompressor();
 
-    	if(htmlCompressionOptions!=null && !htmlCompressionOptions.isEmpty() ){	    		
+    	if(htmlCompressionOptions!=null && !htmlCompressionOptions.isEmpty() ){	
+    		
 	        if(htmlCompressionOptions.containsKey("preserveLineBreak")) { 
 	        	preserveLineBreak = Boolean.valueOf(htmlCompressionOptions.get("preserveLineBreak")); 
 	        }
