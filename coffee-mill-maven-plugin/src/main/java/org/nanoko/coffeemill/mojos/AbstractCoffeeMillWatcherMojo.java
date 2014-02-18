@@ -1,7 +1,6 @@
 package org.nanoko.coffeemill.mojos;
 
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugins.annotations.Parameter;
 
 import org.nanoko.maven.pipeline.Watchers;
 import org.nanoko.maven.Watcher;

@@ -158,53 +158,22 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     public void configure(){
     	htmlCompressor = new HtmlCompressor();
 
-    	if(htmlCompressionOptions!=null && !htmlCompressionOptions.isEmpty() ){	
-    		
-	        if(htmlCompressionOptions.containsKey("preserveLineBreak")) { 
-	        	preserveLineBreak = Boolean.valueOf(htmlCompressionOptions.get("preserveLineBreak")); 
-	        }
-	    	if(htmlCompressionOptions.containsKey("removeComments")) { 
-	    		removeComments = Boolean.valueOf(htmlCompressionOptions.get("removeComments")); 
-	    	}
-	    	if(htmlCompressionOptions.containsKey("removeMultispaces")) { 
-	    		removeMultispaces = Boolean.valueOf(htmlCompressionOptions.get("removeMultispaces")); 
-	    	}    	
-	    	if(htmlCompressionOptions.containsKey("removeFormAttributes")) { 
-	    		removeFormAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeFormAttributes")); 
-	    	}
-	    	if(htmlCompressionOptions.containsKey("removeHttpProtocol")) { 
-	    		removeHttpProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeHttpProtocol")); 
-	    	}
-	    	if(htmlCompressionOptions.containsKey("removeHttpsProtocol")) { 
-	    		removeHttpsProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeHttpsProtocol")); 
-	    	}    	
-	    	if(htmlCompressionOptions.containsKey("removeInputAttributes")) { 
-	    		removeInputAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeInputAttributes")); 
-	    	}
-	    	if(htmlCompressionOptions.containsKey("removeIntertagSpaces")) { 
-	    		removeIntertagSpaces = Boolean.valueOf(htmlCompressionOptions.get("removeIntertagSpaces")); 
-	    	}
-	    	if(htmlCompressionOptions.containsKey("removeJavascriptProtocol")) { 
-	    		removeJavascriptProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeJavascriptProtocol")); 
-	    	}    	
-	    	if(htmlCompressionOptions.containsKey("removeLinkAttributes")) { 
-	    		removeLinkAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeLinkAttributes")); 
-	    	}
-	    	if(htmlCompressionOptions.containsKey("removeQuotes")) { 
-	    		removeQuotes = Boolean.valueOf(htmlCompressionOptions.get("removeQuotes")); 
-	    	}
-	    	if(htmlCompressionOptions.containsKey("removeScriptAttributes")) { 
-	    		removeScriptAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeScriptAttributes")); 
-	    	}    	
-	    	if(htmlCompressionOptions.containsKey("removeStyleAttributes")) { 
-	    		removeStyleAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeStyleAttributes")); 
-	    	}
-	    	if(htmlCompressionOptions.containsKey("simpleBooleanAttributes")) { 
-	    		simpleBooleanAttributes = Boolean.valueOf(htmlCompressionOptions.get("simpleBooleanAttributes")); 
-	    	}
-	    	if(htmlCompressionOptions.containsKey("simpleDocType")) { 
-	    		simpleDocType = Boolean.valueOf(htmlCompressionOptions.get("simpleDocType")); 
-	    	}
+    	if(htmlCompressionOptions!=null && !htmlCompressionOptions.isEmpty() ){	    		
+	        if(htmlCompressionOptions.containsKey(PRESERVELINEBREAK)) { preserveLineBreak = Boolean.valueOf(htmlCompressionOptions.get(PRESERVELINEBREAK)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVECOMMENTS)) 	{ removeComments = Boolean.valueOf(htmlCompressionOptions.get(REMOVECOMMENTS)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEMULTISPACES)) { removeMultispaces = Boolean.valueOf(htmlCompressionOptions.get(REMOVEMULTISPACES)); }    	
+	    	if(htmlCompressionOptions.containsKey(REMOVEFORMATTRIBUTES)) 	{ removeFormAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEFORMATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEHTTPPROTOCOL)) 	{ removeHttpProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEHTTPPROTOCOL)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEHTTPSPROTOCOL)) 	{ removeHttpsProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEHTTPSPROTOCOL)); }    	
+	    	if(htmlCompressionOptions.containsKey(REMOVEINPUTATTRIBUTES)) { removeInputAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEINPUTATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEINTERTAGSPACES)) 	{ removeIntertagSpaces = Boolean.valueOf(htmlCompressionOptions.get(REMOVEINTERTAGSPACES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEJAVASCRIPTPROTOCOL)) { removeJavascriptProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEJAVASCRIPTPROTOCOL)); }    	
+	    	if(htmlCompressionOptions.containsKey(REMOVELINKATTRIBUTES)) { removeLinkAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVELINKATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVEQUOTES)) 	{ removeQuotes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEQUOTES)); }
+	    	if(htmlCompressionOptions.containsKey(REMOVESCRIPTATTRIBUTES)) { removeScriptAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVESCRIPTATTRIBUTES)); }    	
+	    	if(htmlCompressionOptions.containsKey(REMOVESTYLEATTRIBUTES)) { removeStyleAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVESTYLEATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(SIMPLEBOOLEANATTRIBUTES)) 	{ simpleBooleanAttributes = Boolean.valueOf(htmlCompressionOptions.get(SIMPLEBOOLEANATTRIBUTES)); }
+	    	if(htmlCompressionOptions.containsKey(SIMPLEDOCTYPE)) { simpleDocType = Boolean.valueOf(htmlCompressionOptions.get(SIMPLEDOCTYPE)); }
     	}	
     	
     	htmlCompressor.setPreserveLineBreaks(preserveLineBreak);
@@ -260,21 +229,23 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
         NumberFormat formatter = new DecimalFormat("#0.00");
         String eol = "\n";
         String hr = "+-----------------------------+-----------------------------+-----------------------------+";
-        StringBuilder sb = new StringBuilder(file.getName() + " - HTML compression statistics:").append(eol);
-        sb.append(hr).append(eol);
-        sb.append(String.format(format, "| Category", "| Original", "| Compressed", "|")).append(eol);
-        sb.append(hr).append(eol);
-        sb.append(String.format(format, "| Filesize", "| " + origFilesize, "| " + compFilesize, "|")).append(eol);
-        sb.append(String.format(format, "| Empty Chars", "| " + origEmptyChars, "| " + compEmptyChars, "|")).append(eol);
-        sb.append(String.format(format, "| Script Size", "| " + origInlineScriptSize, "| " + compInlineScriptSize, "|")).append(eol);
-        sb.append(String.format(format, "| Style Size", "| " + origInlineStyleSize, "| " + compInlineStyleSize, "|")).append(eol);
-        sb.append(String.format(format, "| Event Handler Size", "| " + origInlineEventSize, "| " + compInlineEventSize, "|")).append(eol);
-        sb.append(hr).append(eol);
-        sb.append(String.format("%-90s%-2s",
+        String sb = "";
+        sb.concat(file.getName() + " - HTML compression statistics:").concat(eol);
+        //StringBuilder sb = new StringBuilder().append(eol);
+        sb.concat(hr).concat(eol);
+        sb.concat(String.format(format, "| Category", "| Original", "| Compressed", "|")).concat(eol);
+        sb.concat(hr).concat(eol);
+        sb.concat(String.format(format, "| Filesize", "| " + origFilesize, "| " + compFilesize, "|")).concat(eol);
+        sb.concat(String.format(format, "| Empty Chars", "| " + origEmptyChars, "| " + compEmptyChars, "|")).concat(eol);
+        sb.concat(String.format(format, "| Script Size", "| " + origInlineScriptSize, "| " + compInlineScriptSize, "|")).concat(eol);
+        sb.concat(String.format(format, "| Style Size", "| " + origInlineStyleSize, "| " + compInlineStyleSize, "|")).concat(eol);
+        sb.concat(String.format(format, "| Event Handler Size", "| " + origInlineEventSize, "| " + compInlineEventSize, "|")).concat(eol);
+        sb.concat(hr).concat(eol);
+        sb.concat(String.format("%-90s%-2s",
                 String.format("| Time: %s, Preserved: %s, Compression Ratio: %s, Savings: %s%%",
                         elapsedTime, preservedSize, formatter.format(compressionRatio), formatter.format(spaceSavings*100)),
-                "|")).append(eol);
-        sb.append(hr).append(eol);
+                "|")).concat(eol);
+        sb.concat(hr).concat(eol);
 
         String statistics = sb.toString();
         getLog().info(statistics);
@@ -297,10 +268,10 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static String getElapsedHMSTime(long elapsedTime) {
         String format = String.format("%%0%dd", 2);
-        elapsedTime = elapsedTime / 1000;
-        String seconds = String.format(format, elapsedTime % 60);
-        String minutes = String.format(format, (elapsedTime % 3600) / 60);
-        String hours = String.format(format, elapsedTime / 3600);
+        long newElapsedTime = elapsedTime / 1000;
+        String seconds = String.format(format, newElapsedTime % 60);
+        String minutes = String.format(format, (newElapsedTime % 3600) / 60);
+        String hours = String.format(format, newElapsedTime / 3600);
         return hours + ":" + minutes + ":" + seconds;
     }
 

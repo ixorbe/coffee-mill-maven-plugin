@@ -39,15 +39,15 @@ public class JasmineUtils {
         MavenProject project = mill.project;
         mojo.setLog(mill.getLog());
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "jsSrcDir",
-                new File(project.getBasedir(), "src/main/coffee")); //TODO This should be configurable.
+                new File(project.getBasedir(), "src/main/coffee")); 
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "jsTestSrcDir",
-                new File(project.getBasedir(), "src/test/js")); //TODO This should be configurable.
+                new File(project.getBasedir(), "src/test/js")); 
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "webDriverClassName",
-                "org.openqa.selenium.htmlunit.HtmlUnitDriver"); //TODO This should be configurable.
+                "org.openqa.selenium.htmlunit.HtmlUnitDriver"); 
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "browserVersion",
-                "FIREFOX_3"); //TODO This should be configurable.
+                "FIREFOX_3"); 
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "format",
-                "documentation"); //TODO This should be configurable.
+                "documentation"); 
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "jasmineTargetDir",
                 new File(project.getBuild().getDirectory(), "jasmine"));
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "specDirectoryName",
