@@ -79,7 +79,7 @@ public class JasmineUtils {
         	 try {
                  FileUtils.copyFileToDirectory(file, getJasmineDirectory(project));
              } catch (IOException e) {
-                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                mill.getLog().error(e);
              }
              deps.add(file.getName()); 
         }
@@ -150,7 +150,7 @@ public class JasmineUtils {
                     try {
                         FileUtils.copyFileToDirectory(file, getJasmineITDirectory(mill.project));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                    	mill.getLog().error(e);
                     }
                     deps.add(filename);
                 }

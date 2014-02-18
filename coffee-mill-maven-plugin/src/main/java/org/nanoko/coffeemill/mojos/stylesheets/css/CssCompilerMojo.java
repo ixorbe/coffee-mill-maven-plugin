@@ -52,7 +52,7 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	getLog().info("Copy css files from " + getStylesheetsDir().getAbsolutePath());
     	try {
 			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
-		} catch (IOException e) { e.printStackTrace(); }
+		} catch (IOException e) { this.getLog().error(e); }
     }
 
 

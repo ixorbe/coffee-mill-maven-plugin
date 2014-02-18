@@ -62,7 +62,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         } else {
             try {
                 Thread.sleep(1000000000); // Pretty long
-            } catch (InterruptedException e) { /* ignore */ }
+            } catch (InterruptedException e) { this.getLog().error(e); }
         }
 
         pipeline.shutdown();
@@ -84,8 +84,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         try {
 			resource_handler.setResourceBase(this.getWorkDirectory().getCanonicalPath());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.getLog().error(e);
 		}
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] { resource_handler, new DefaultHandler() });

@@ -90,7 +90,7 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
             try {
 				optimize(file);
 			} catch (WatchingException e) {
-				e.printStackTrace();
+				this.getLog().error(e);
 			}
         }
         //OptionsHelper.getBoolean(options, "verbose", false);

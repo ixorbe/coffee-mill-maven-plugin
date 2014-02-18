@@ -80,7 +80,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         		try {
     				aggregateAppWithLibs(output);
     			} catch (IOException e) {
-    				e.printStackTrace();
+    				this.getLog().error(e);
     			}
         	}
     	// else aggregate from pom.xml JsAggregationFiles list
@@ -150,7 +150,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	try {
  			FileAggregation.joinFiles( output, files);
  		} catch (IOException e) {
- 			e.printStackTrace();
+ 			this.getLog().error(e);
  		}
 
         if (!output.isFile()) {
