@@ -84,7 +84,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         try {
 			resource_handler.setResourceBase(this.getWorkDirectory().getCanonicalPath());
 		} catch (IOException e) {
-			this.getLog().error(e);
+			this.getLog().error(e.getMessage(), e);
 		}
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] { resource_handler, new DefaultHandler() });
