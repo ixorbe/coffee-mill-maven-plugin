@@ -77,14 +77,11 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	if (jsAggregationFiles == null || jsAggregationFiles.isEmpty()) {
     		
     		if(aggregateAppOnly(output)) {
-        		try {
     				aggregateAppWithLibs(output);
-    			} catch (IOException e) {
-    				this.getLog().error(e);
-    			}
-        	}
-    	// else aggregate from pom.xml JsAggregationFiles list
-        } else {    		
+        	}    		
+        } 
+    	// Aggregation from pom.xml JsAggregationFiles list
+    	else {
         	aggregateFromListFiles(output);        	
         }
     	
@@ -125,7 +122,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         return true;
     }
     
-    private void aggregateAppWithLibs(File in) throws WatchingException, IOException {
+    private void aggregateAppWithLibs(File in) throws WatchingException{
     	File output = new File(this.getBuildDirectory(),  this.outputFileName+"-all.js");
     	if(output.exists()){
     		FileUtils.deleteQuietly(output);
@@ -135,7 +132,11 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
         if(files.isEmpty()){
         	getLog().warn("JavaScript External libraries directory "+this.getLibDirectory().getAbsolutePath()+" is empty !");
-        	FileUtils.copyFile(in, output);
+        	try {
+				FileUtils.copyFile(in, output);
+			} catch (IOException e) {
+				this.getLog().error(e.getMessage(), e);
+			}
         	return;
         }
         
@@ -150,7 +151,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	try {
  			FileAggregation.joinFiles( output, files);
  		} catch (IOException e) {
- 			this.getLog().error(e);
+ 			this.getLog().error(e.getMessage(), e);
  		}
 
         if (!output.isFile()) {

@@ -70,7 +70,7 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	getLog().info("Copy JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
     	try {
 			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
-		} catch (IOException e) { this.getLog().error(e); }
+		} catch (IOException e) { this.getLog().error(e.getMessage(), e); }
     }
     
     public boolean fileCreated(File file) throws WatchingException {
