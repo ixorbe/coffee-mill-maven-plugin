@@ -16,21 +16,13 @@
 package org.nanoko.coffeemill.mojos.scripts.coffee;
 
 import java.io.File;
-import java.util.Collection;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
-import org.nanoko.java.NPM;
-//import org.nanoko.coffee.mill.processors.CoffeeScriptCompilationProcessor;
-//import org.nanoko.coffee.mill.processors.Processor;
-//import org.nanoko.coffee.mill.utils.OptionsHelper;
-import org.nanoko.maven.WatchingException;
 
 /**
  * Compiles CoffeeScript files.
@@ -43,26 +35,13 @@ import org.nanoko.maven.WatchingException;
 requiresDependencyResolution = ResolutionScope.COMPILE,
 requiresProject = true,
 defaultPhase = LifecyclePhase.TEST)
-public class CoffeeScriptTestCompilerMojo extends AbstractCoffeeMillMojo {
-
-    private static final String COFFEE_SCRIPT_ARTIFACTID = "coffeescript";
-    public static final String COFFEE_SCRIPT_COMMAND = "coffee";
-    
-    /**
-     * Enables / Disables the coffeescript compilation.
-     * Be aware that this property disables the compilation on both main sources and test sources.
-     */
-    @Parameter(defaultValue="false")
-    protected boolean skipCoffeeScriptCompilation;
+public class CoffeeScriptTestCompilerMojo extends AbstractCoffeeScriptCompilerMojo {
     
     /**
      * Where are CoffeeScript files implementing tests.
      */
     @Parameter(defaultValue="src/test/coffee", required = true, readonly = true)
     private File coffeeScriptTestDir;
-    
-    
-    private NPM coffee;
     
     
     /**
@@ -74,39 +53,9 @@ public class CoffeeScriptTestCompilerMojo extends AbstractCoffeeMillMojo {
     
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-    	if (!isSkipped()) {
-            return;
-        }    	
-    	
-    	 if (!coffeeScriptTestDir.exists()) {
-             return;
-         }
-    	
-    	Collection<File> files = FileUtils.listFiles(this.coffeeScriptTestDir, new String[]{"coffee"}, true);
-		
-		if(files.isEmpty()){
-			getLog().warn("/!\\ CoffeeScript sources directory " + this.coffeeScriptTestDir.getAbsolutePath() + " is empty !");
-			return;
-		}
-		
-		for(File file : files){
-	        getLog().info("Compiling CoffeeScript " + file.getAbsolutePath() + " to " + getWorkDirectory().getAbsolutePath());
-	
-	        try {
-	            invokeCoffeeScriptCompiler(file, getWorkDirectory());
-	        } catch (MojoExecutionException e) { //NOSONAR
-	            throw new MojoExecutionException("Error during the compilation of " + file.getName() + " : " + e.getMessage());
-	        }
-		}
+    	this.setCoffeeScriptDir(coffeeScriptTestDir);
+    	super.execute();
     }
-    
-    
-    private void invokeCoffeeScriptCompiler(File input, File out) throws MojoExecutionException {
-        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(),
-                input.getAbsolutePath());
-        getLog().debug("CoffeeScript compilation exits with " + exit + " status");
-    }
-    
     
     private boolean isSkipped(){
     	if (skipCoffeeScriptTestCompilation) {

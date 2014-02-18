@@ -34,6 +34,10 @@
         <mavenVersion>3.1.1</mavenVersion>
         <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
         <site.path>maven/snapshot</site.path>
+        
+        <!-- version forced by jasmine-maven-plugin compatibility -->
+        <jetty.version>8.1.14.v20131031</jetty.version>
+        <!-- <jetty.version>9.1.1.v20140108</jetty.version> -->
     </properties>
 
     <prerequisites>
@@ -57,14 +61,19 @@
             <version>0.0.6-SNAPSHOT</version>            
         </dependency>
         
-        <!-- Jetty -->
-        <!-- version forced by jasmine-maven-plugin compatibility -->
+        <!-- Jetty -->		
         <dependency>
-		    <groupId>org.eclipse.jetty</groupId>
-		    <artifactId>jetty-server</artifactId>
-		    <!-- <version>9.1.1.v20140108</version> -->
-		    <version>8.1.14.v20131031</version>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${jetty.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>${jetty.version}</version>
+		</dependency>
+        
 		
         <!-- JS Compiler -->
         <dependency>
