@@ -6,6 +6,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import org.nanoko.maven.WatchingException;
@@ -15,7 +16,9 @@ import org.nanoko.coffeemill.utils.FileAggregation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -28,6 +31,15 @@ import java.util.Collection;
 public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 	
 	public String outputFileName;
+	
+	/**
+     * Define ordered Js files list to aggregate
+     */
+	@Parameter
+    protected List<String> jsAggregationFiles;
+	
+	@Parameter(defaultValue="true")
+	private boolean failedOnMissingFile;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
     	try {
@@ -57,18 +69,48 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	
     	File output = new File( this.getBuildDirectory(), this.outputFileName + ".js");
     	if(output.exists())
-    		FileUtils.deleteQuietly(output);   
+    		FileUtils.deleteQuietly(output); 
     	
-    	if(aggregateAppOnly(output)) {
-    		try {
-				aggregateAppWithLibs(output);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
+    	// Classic Aggregation (app + ext. libs)
+    	if (jsAggregationFiles == null || jsAggregationFiles.isEmpty()) {
+    		
+    		if(aggregateAppOnly(output)) {
+        		try {
+    				aggregateAppWithLibs(output);
+    			} catch (IOException e) {
+    				e.printStackTrace();
+    			}
+        	}    		
+        } 
+    	// Aggregation from pom.xml JsAggregationFiles list
+    	else {
+        	aggregateFromListFiles(output);        	
+        }
     	
     }
+    
+    
+    private boolean aggregateFromListFiles(File output) throws WatchingException {
+    	Collection<File> files = new ArrayList<File>();
+    	
+    	for (String filename : jsAggregationFiles) {
+            File file = FSUtils.resolveFile(filename, getWorkDirectory(), getLibDirectory(), "js");
+            if (file == null) {
+                if (failedOnMissingFile) {
+                    throw new WatchingException("Aggregation failed : " + filename + " file missing in " + getWorkDirectory().getAbsolutePath());
+                } else {
+                    getLog().warn("Issue detected during aggregation : " + filename + " missing");
+                }
+            } else {
+                // The file exists.
+                files.add(file);
+            }
+        }
+    	
+    	joinFiles(output, files);
+        return true;
+    }
+    
 
     private boolean aggregateAppOnly(File output) throws WatchingException {
     	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
@@ -78,22 +120,14 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         }
     	getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
     	
-        try {
-			FileAggregation.joinFiles( output, files);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-        if (!output.isFile()) {
-            throw new WatchingException("Error during the Js aggregation check log");
-        }
+    	joinFiles(output, files);
         return true;
     }
     
     private void aggregateAppWithLibs(File in) throws WatchingException, IOException {
     	File output = new File(this.getBuildDirectory(),  this.outputFileName+"-all.js");
     	if(output.exists())
-    		FileUtils.deleteQuietly(output);    
+    		FileUtils.deleteQuietly(output);  
     	
     	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"js"}, true);
 
@@ -106,16 +140,22 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         files.add(in);
     	getLog().info("Aggregate Js files from " + this.getLibDirectory().getAbsolutePath());
     	  
-        try {
-			FileAggregation.joinFiles( output, files);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	joinFiles(output, files);
+    }
+    
+    
+    private void joinFiles(File output, Collection<File> files) throws WatchingException{
+    	try {
+ 			FileAggregation.joinFiles( output, files);
+ 		} catch (IOException e) {
+ 			e.printStackTrace();
+ 		}
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the Js aggregation check log");
         }
     }
+    
     
     public boolean fileCreated(File file) throws WatchingException {
     	this.aggregate();

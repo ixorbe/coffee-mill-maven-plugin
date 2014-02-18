@@ -1,6 +1,7 @@
 package org.nanoko.coffeemill.utils;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +103,28 @@ public class FSUtils {
         String path = file.getAbsolutePath();
         String relativePath = path.substring(rel.getAbsolutePath().length());
         return new File(dir, relativePath);
+    }
+    
+    
+    public static File resolveFile(final String name, File workDir, File libDir, String extension) {
+        // 1) Check for the file in the workDir with a direct name
+        File file = new File(workDir, name);
+        if (file.isFile()) { return file; }
+
+        // 2) Try to append the extension
+        file = new File(workDir, name + "." + extension);
+        if (file.isFile()) { return file; }
+
+        // 3) Search in the libDir as prefix
+        if (libDir != null  && libDir.exists()) {
+            File[] files = libDir.listFiles(new FilenameFilter() {
+                public boolean accept(File file, String s) {
+                    return s.startsWith(name);
+                }
+            });
+            if (files.length > 0) { return files[0]; }
+        }
+        return null;
     }
     
     

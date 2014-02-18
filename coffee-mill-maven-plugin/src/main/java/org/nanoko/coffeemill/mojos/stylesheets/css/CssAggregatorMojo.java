@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import org.nanoko.maven.WatchingException;
@@ -13,7 +14,9 @@ import org.nanoko.coffeemill.utils.FileAggregation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -27,6 +30,16 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 	
 	
 	public String outputFileName = null;
+	
+	/**
+     * Define ordered Css files list to aggregate
+     */
+	@Parameter
+    protected List<String> cssAggregationFiles;
+	
+	@Parameter(defaultValue="true")
+	private boolean failedOnMissingFile;
+	
 	
     public void execute() throws MojoExecutionException {
     	if(isSkipped())
@@ -53,34 +66,57 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	if(output.exists())
     		FileUtils.deleteQuietly(output);   
     	
-    	if(aggregateAppOnly(output)) {
-    		try {
-				aggregateAppWithLibs(output);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
     	
+    	
+    	// Classic Aggregation (app + ext. libs)
+    	if (cssAggregationFiles == null || cssAggregationFiles.isEmpty()) {
+    		
+    		if(aggregateAppOnly(output)) {
+        		try {
+    				aggregateAppWithLibs(output);
+    			} catch (IOException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+        	}    		
+        } 
+    	// Aggregation from pom.xml JsAggregationFiles list
+    	else {
+        	aggregateFromListFiles(output);        	
+        }
+    	
+    }
+    
+    private boolean aggregateFromListFiles(File output) throws WatchingException {
+    	Collection<File> files = new ArrayList<File>();
+    	
+    	for (String filename : cssAggregationFiles) {
+            File file = FSUtils.resolveFile(filename, getWorkDirectory(), getLibDirectory(), "css");
+            if (file == null) {
+                if (failedOnMissingFile) {
+                    throw new WatchingException("Aggregation failed : " + filename + " file missing in " + getWorkDirectory().getAbsolutePath());
+                } else {
+                    getLog().warn("Issue detected during aggregation : " + filename + " missing");
+                }
+            } else {
+                // The file exists.
+                files.add(file);
+            }
+        }
+    	
+    	joinFiles(output, files);
+        return true;
     }
     
     private boolean aggregateAppOnly(File output) throws WatchingException {
     	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
         if(files.isEmpty()){
-        	getLog().warn("JavaScript work directory "+this.getWorkDirectory().getAbsolutePath()+" is empty !");
+        	getLog().warn("No Css files in work directory "+this.getWorkDirectory().getAbsolutePath());
         	return false;
         }
     	getLog().info("Aggregate Css files from " + this.getWorkDirectory().getAbsolutePath());
     	
-        try {
-			FileAggregation.joinFiles( output, files);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-        if (!output.isFile()) {
-            throw new WatchingException("Error during the Css aggregation check log");
-        }
+    	joinFiles(output, files);
         return true;
     }
     
@@ -100,16 +136,19 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         files.add(in);
     	getLog().info("Aggregate Css files from " + this.getLibDirectory().getAbsolutePath());
     	  
-        try {
-			FileAggregation.joinFiles( output, files);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	joinFiles(output, files);        
+    }
+    
+    private void joinFiles(File output, Collection<File> files) throws WatchingException{
+    	try {
+ 			FileAggregation.joinFiles( output, files);
+ 		} catch (IOException e) {
+ 			e.printStackTrace();
+ 		}
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the Css aggregation check log");
         }
-        
     }
 
 
