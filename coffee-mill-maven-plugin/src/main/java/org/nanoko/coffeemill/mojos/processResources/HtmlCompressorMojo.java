@@ -159,21 +159,51 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     	htmlCompressor = new HtmlCompressor();
 
     	if(htmlCompressionOptions!=null && !htmlCompressionOptions.isEmpty() ){	    		
-	        if(htmlCompressionOptions.containsKey(PRESERVELINEBREAK)) { preserveLineBreak = Boolean.valueOf(htmlCompressionOptions.get(PRESERVELINEBREAK)); }
-	    	if(htmlCompressionOptions.containsKey(REMOVECOMMENTS)) 	{ removeComments = Boolean.valueOf(htmlCompressionOptions.get(REMOVECOMMENTS)); }
-	    	if(htmlCompressionOptions.containsKey(REMOVEMULTISPACES)) { removeMultispaces = Boolean.valueOf(htmlCompressionOptions.get(REMOVEMULTISPACES)); }    	
-	    	if(htmlCompressionOptions.containsKey(REMOVEFORMATTRIBUTES)) 	{ removeFormAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEFORMATTRIBUTES)); }
-	    	if(htmlCompressionOptions.containsKey(REMOVEHTTPPROTOCOL)) 	{ removeHttpProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEHTTPPROTOCOL)); }
-	    	if(htmlCompressionOptions.containsKey(REMOVEHTTPSPROTOCOL)) 	{ removeHttpsProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEHTTPSPROTOCOL)); }    	
-	    	if(htmlCompressionOptions.containsKey(REMOVEINPUTATTRIBUTES)) { removeInputAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEINPUTATTRIBUTES)); }
-	    	if(htmlCompressionOptions.containsKey(REMOVEINTERTAGSPACES)) 	{ removeIntertagSpaces = Boolean.valueOf(htmlCompressionOptions.get(REMOVEINTERTAGSPACES)); }
-	    	if(htmlCompressionOptions.containsKey(REMOVEJAVASCRIPTPROTOCOL)) { removeJavascriptProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEJAVASCRIPTPROTOCOL)); }    	
-	    	if(htmlCompressionOptions.containsKey(REMOVELINKATTRIBUTES)) { removeLinkAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVELINKATTRIBUTES)); }
-	    	if(htmlCompressionOptions.containsKey(REMOVEQUOTES)) 	{ removeQuotes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEQUOTES)); }
-	    	if(htmlCompressionOptions.containsKey(REMOVESCRIPTATTRIBUTES)) { removeScriptAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVESCRIPTATTRIBUTES)); }    	
-	    	if(htmlCompressionOptions.containsKey(REMOVESTYLEATTRIBUTES)) { removeStyleAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVESTYLEATTRIBUTES)); }
-	    	if(htmlCompressionOptions.containsKey(SIMPLEBOOLEANATTRIBUTES)) 	{ simpleBooleanAttributes = Boolean.valueOf(htmlCompressionOptions.get(SIMPLEBOOLEANATTRIBUTES)); }
-	    	if(htmlCompressionOptions.containsKey(SIMPLEDOCTYPE)) { simpleDocType = Boolean.valueOf(htmlCompressionOptions.get(SIMPLEDOCTYPE)); }
+	        if(htmlCompressionOptions.containsKey(PRESERVELINEBREAK)) {
+	        	preserveLineBreak = Boolean.valueOf(htmlCompressionOptions.get(PRESERVELINEBREAK));
+	        }
+	    	if(htmlCompressionOptions.containsKey(REMOVECOMMENTS)) 	{
+	    		removeComments = Boolean.valueOf(htmlCompressionOptions.get(REMOVECOMMENTS));
+	    	}
+	    	if(htmlCompressionOptions.containsKey(REMOVEMULTISPACES)) {
+	    		removeMultispaces = Boolean.valueOf(htmlCompressionOptions.get(REMOVEMULTISPACES));
+	    	}    	
+	    	if(htmlCompressionOptions.containsKey(REMOVEFORMATTRIBUTES)) {
+	    		removeFormAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEFORMATTRIBUTES));
+	    	}
+	    	if(htmlCompressionOptions.containsKey(REMOVEHTTPPROTOCOL)) 	{
+	    		removeHttpProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEHTTPPROTOCOL));
+	    	}
+	    	if(htmlCompressionOptions.containsKey(REMOVEHTTPSPROTOCOL)) {
+	    		removeHttpsProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEHTTPSPROTOCOL));
+	    	}    	
+	    	if(htmlCompressionOptions.containsKey(REMOVEINPUTATTRIBUTES)) {
+	    		removeInputAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEINPUTATTRIBUTES));
+	    	}
+	    	if(htmlCompressionOptions.containsKey(REMOVEINTERTAGSPACES)) 	{
+	    		removeIntertagSpaces = Boolean.valueOf(htmlCompressionOptions.get(REMOVEINTERTAGSPACES));
+	    	}
+	    	if(htmlCompressionOptions.containsKey(REMOVEJAVASCRIPTPROTOCOL)) {
+	    		removeJavascriptProtocol = Boolean.valueOf(htmlCompressionOptions.get(REMOVEJAVASCRIPTPROTOCOL));
+	    	}    	
+	    	if(htmlCompressionOptions.containsKey(REMOVELINKATTRIBUTES)) {
+	    		removeLinkAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVELINKATTRIBUTES));
+	    	}
+	    	if(htmlCompressionOptions.containsKey(REMOVEQUOTES)) 	{
+	    		removeQuotes = Boolean.valueOf(htmlCompressionOptions.get(REMOVEQUOTES));
+	    	}
+	    	if(htmlCompressionOptions.containsKey(REMOVESCRIPTATTRIBUTES)) {
+	    		removeScriptAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVESCRIPTATTRIBUTES));
+	    	}    	
+	    	if(htmlCompressionOptions.containsKey(REMOVESTYLEATTRIBUTES)) {
+	    		removeStyleAttributes = Boolean.valueOf(htmlCompressionOptions.get(REMOVESTYLEATTRIBUTES));
+	    	}
+	    	if(htmlCompressionOptions.containsKey(SIMPLEBOOLEANATTRIBUTES)) {
+	    		simpleBooleanAttributes = Boolean.valueOf(htmlCompressionOptions.get(SIMPLEBOOLEANATTRIBUTES));
+	    	}
+	    	if(htmlCompressionOptions.containsKey(SIMPLEDOCTYPE)) {
+	    		simpleDocType = Boolean.valueOf(htmlCompressionOptions.get(SIMPLEDOCTYPE));
+	    	}
     	}	
     	
     	htmlCompressor.setPreserveLineBreaks(preserveLineBreak);
