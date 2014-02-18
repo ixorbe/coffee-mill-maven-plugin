@@ -26,7 +26,9 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException {
     	
-    	if(isSkipped()) { return; }
+    	if(isSkipped()) { 
+    		return; 
+    	}
     	
         try {
             if ( getStylesheetsDir().isDirectory()) {
@@ -52,7 +54,9 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	getLog().info("Copy css files from " + getStylesheetsDir().getAbsolutePath());
     	try {
 			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
-		} catch (IOException e) { this.getLog().error(e); }
+		} catch (IOException e) { 
+			this.getLog().error(e); 
+		}
     }
 
 

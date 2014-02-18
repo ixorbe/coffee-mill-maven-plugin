@@ -42,7 +42,10 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     public String outputDir = null;
     
     public void execute() throws MojoExecutionException {
-    	if(isSkipped()){ return; }
+    	
+    	if(isSkipped()) { 
+    		return; 
+    	}
     	
     	jsdoc = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
@@ -62,7 +65,9 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     	}
     	
     	File input = new File( this.getBuildDirectory(), inputFilename+".js");
-    	if(!input.exists()){ return; }
+    	if(!input.exists()) { 
+    		return; 
+    	}
     	
     	File output = new File( this.getTargetDirectory(),"jsdoc-report" ); 	
     	if(output.exists()) {

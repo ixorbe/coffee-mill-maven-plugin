@@ -34,7 +34,9 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException {
     	
-    	if(isSkipped()) { return; }
+    	if(isSkipped()) { 
+    		return; 
+    	}
     	
         less = npm(new MavenLoggerWrapper(this.getLog()), LESS_NPM_NAME, LESS_NPM_VERSION);
         try {

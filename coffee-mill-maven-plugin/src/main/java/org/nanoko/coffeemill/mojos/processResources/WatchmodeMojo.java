@@ -62,7 +62,9 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         } else {
             try {
                 Thread.sleep(1000000000); // Pretty long
-            } catch (InterruptedException e) { this.getLog().error(e); }
+            } catch (InterruptedException e) { 
+            	this.getLog().error(e); 
+            }
         }
 
         pipeline.shutdown();

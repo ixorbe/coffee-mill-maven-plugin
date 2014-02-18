@@ -65,7 +65,10 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped()) { return; }
+    	
+    	if(isSkipped()) { 
+    		return; 
+    	}
 
         jpegTranExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
@@ -74,7 +77,9 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
             return;
         } 
         
-        if(!getWorkDirectory().exists()) { return; }
+        if(!getWorkDirectory().exists()) { 
+        	return; 
+        }
         
         getLog().info("Invoking jpegtran : " + jpegTranExec.getAbsolutePath());
         Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"jpg", "jpeg"}, true);

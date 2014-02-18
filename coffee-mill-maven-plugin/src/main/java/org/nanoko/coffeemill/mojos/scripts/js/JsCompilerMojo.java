@@ -34,7 +34,9 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 	
     public void execute() throws MojoExecutionException, MojoFailureException {        
     	try {
-    		if(isSkipped()){ return; }
+    		if(isSkipped()) { 
+    			return; 
+    		}
     		
     		if (!this.getJavaScriptDir().isDirectory()) {
     			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptDir().getAbsolutePath() + " does not exist !");
@@ -70,7 +72,9 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     	getLog().info("Copy JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
     	try {
 			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
-		} catch (IOException e) { this.getLog().error(e); }
+		} catch (IOException e) { 
+			this.getLog().error(e); 
+		}
     }
     
     public boolean fileCreated(File file) throws WatchingException {

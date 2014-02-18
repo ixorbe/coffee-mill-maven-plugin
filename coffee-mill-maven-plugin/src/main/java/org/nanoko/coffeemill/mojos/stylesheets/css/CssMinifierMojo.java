@@ -38,7 +38,9 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException {
     	
-    	if(isSkipped()) { return; }
+    	if(isSkipped()) { 
+    		return; 
+    	}
     	
         cleancss = npm(new MavenLoggerWrapper(this.getLog()), CLEANCSS_NPM_NAME, CLEANCSS_NPM_VERSION);
         try {

@@ -42,7 +42,10 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 	
 	
     public void execute() throws MojoExecutionException {
-    	if(isSkipped()) { return; }
+    	
+    	if(isSkipped()) { 
+    		return; 
+    	}
     	
         try {
             if ( this.getWorkDirectory().isDirectory()) {

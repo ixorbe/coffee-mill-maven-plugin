@@ -44,7 +44,10 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 	protected boolean skipAssetsPackage;
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped()){ return; }
+    	
+    	if(isSkipped()){ 
+    		return; 
+    	}
     	
     	if (!this.getWorkDirectory().exists()){
         	getLog().warn("/!\\ Packaging assets skipped - " + this.getWorkDirectory().getAbsolutePath() + " does not exist !");
@@ -88,7 +91,8 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
             }
 			
 		} catch (IOException e) {
-			throw new WatchingException(e.getMessage(), e); }
+			throw new WatchingException(e.getMessage(), e); 
+		}
     }
     
     

@@ -29,7 +29,10 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 	protected boolean skipAssetsCopy;
 		
     public void execute() throws MojoExecutionException {
-    	if(isSkipped()) { return; }
+    	
+    	if(isSkipped()) { 
+    		return; 
+    	}
     	
     	if (!this.getAssetsDir().isDirectory()){
         	getLog().warn("/!\\ Copy assets skipped - " + this.getAssetsDir().getAbsolutePath() + " does not exist !");
@@ -71,7 +74,8 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
             }
 			
 		} catch (IOException e) {
-			throw new WatchingException(e.getMessage(), e); }
+			throw new WatchingException(e.getMessage(), e); 
+		}
     }
 
 

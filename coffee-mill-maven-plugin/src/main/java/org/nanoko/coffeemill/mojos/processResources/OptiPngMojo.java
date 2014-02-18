@@ -72,7 +72,10 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
     private int level = 2;
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped()) { return; }
+    	
+    	if(isSkipped()) { 
+    		return; 
+    	}
 
     	optiPNGExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
@@ -81,7 +84,9 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
             return;
         } 
         
-        if(!getWorkDirectory().exists()) { return; }
+        if(!getWorkDirectory().exists()) { 
+        	return; 
+        }
         
         getLog().info("Invoking optipng : " + optiPNGExec.getAbsolutePath());
         Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"png"}, true);

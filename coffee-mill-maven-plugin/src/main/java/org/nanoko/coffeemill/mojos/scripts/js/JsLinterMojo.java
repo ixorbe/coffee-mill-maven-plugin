@@ -43,7 +43,9 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
     }
     public void execute() throws MojoExecutionException {
     	
-		if(isSkipped()) { return; }
+		if(isSkipped()) { 
+			return; 
+		}
 		
     	lint = npm(defaultLogger, PKG_NPM_NAME, PKG_NPM_VERSION);
         try {

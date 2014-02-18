@@ -68,7 +68,9 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped()) { return; }
+    	if(isSkipped()) { 
+    		return; 
+    	}
     	
     	this.configure();
     	
@@ -76,8 +78,7 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
 	    	Collection<File> files = FileUtils.listFiles(getAssetsDir(), new String[]{"html", "htm"}, true);
 	        for (File file : files) {          
 				compress(file);
-	        }
-        
+	        }        
     	} catch (WatchingException e) {
     		this.getLog().error(e);
 		}
@@ -142,21 +143,51 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     	htmlCompressor = new HtmlCompressor();
 
     	if(htmlCompressionOptions!=null && !htmlCompressionOptions.isEmpty() ){	    		
-	        if(htmlCompressionOptions.containsKey("preserveLineBreak")) { preserveLineBreak = Boolean.valueOf(htmlCompressionOptions.get("preserveLineBreak")); }
-	    	if(htmlCompressionOptions.containsKey("removeComments")) 	{ removeComments = Boolean.valueOf(htmlCompressionOptions.get("removeComments")); }
-	    	if(htmlCompressionOptions.containsKey("removeMultispaces")) { removeMultispaces = Boolean.valueOf(htmlCompressionOptions.get("removeMultispaces")); }    	
-	    	if(htmlCompressionOptions.containsKey("removeFormAttributes")) 	{ removeFormAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeFormAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("removeHttpProtocol")) 	{ removeHttpProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeHttpProtocol")); }
-	    	if(htmlCompressionOptions.containsKey("removeHttpsProtocol")) 	{ removeHttpsProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeHttpsProtocol")); }    	
-	    	if(htmlCompressionOptions.containsKey("removeInputAttributes")) { removeInputAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeInputAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("removeIntertagSpaces")) 	{ removeIntertagSpaces = Boolean.valueOf(htmlCompressionOptions.get("removeIntertagSpaces")); }
-	    	if(htmlCompressionOptions.containsKey("removeJavascriptProtocol")) { removeJavascriptProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeJavascriptProtocol")); }    	
-	    	if(htmlCompressionOptions.containsKey("removeLinkAttributes")) { removeLinkAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeLinkAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("removeQuotes")) 	{ removeQuotes = Boolean.valueOf(htmlCompressionOptions.get("removeQuotes")); }
-	    	if(htmlCompressionOptions.containsKey("removeScriptAttributes")) { removeScriptAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeScriptAttributes")); }    	
-	    	if(htmlCompressionOptions.containsKey("removeStyleAttributes")) { removeStyleAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeStyleAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("simpleBooleanAttributes")) 	{ simpleBooleanAttributes = Boolean.valueOf(htmlCompressionOptions.get("simpleBooleanAttributes")); }
-	    	if(htmlCompressionOptions.containsKey("simpleDocType")) { simpleDocType = Boolean.valueOf(htmlCompressionOptions.get("simpleDocType")); }
+	        if(htmlCompressionOptions.containsKey("preserveLineBreak")) { 
+	        	preserveLineBreak = Boolean.valueOf(htmlCompressionOptions.get("preserveLineBreak")); 
+	        }
+	    	if(htmlCompressionOptions.containsKey("removeComments")) { 
+	    		removeComments = Boolean.valueOf(htmlCompressionOptions.get("removeComments")); 
+	    	}
+	    	if(htmlCompressionOptions.containsKey("removeMultispaces")) { 
+	    		removeMultispaces = Boolean.valueOf(htmlCompressionOptions.get("removeMultispaces")); 
+	    	}    	
+	    	if(htmlCompressionOptions.containsKey("removeFormAttributes")) { 
+	    		removeFormAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeFormAttributes")); 
+	    	}
+	    	if(htmlCompressionOptions.containsKey("removeHttpProtocol")) { 
+	    		removeHttpProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeHttpProtocol")); 
+	    	}
+	    	if(htmlCompressionOptions.containsKey("removeHttpsProtocol")) { 
+	    		removeHttpsProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeHttpsProtocol")); 
+	    	}    	
+	    	if(htmlCompressionOptions.containsKey("removeInputAttributes")) { 
+	    		removeInputAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeInputAttributes")); 
+	    	}
+	    	if(htmlCompressionOptions.containsKey("removeIntertagSpaces")) { 
+	    		removeIntertagSpaces = Boolean.valueOf(htmlCompressionOptions.get("removeIntertagSpaces")); 
+	    	}
+	    	if(htmlCompressionOptions.containsKey("removeJavascriptProtocol")) { 
+	    		removeJavascriptProtocol = Boolean.valueOf(htmlCompressionOptions.get("removeJavascriptProtocol")); 
+	    	}    	
+	    	if(htmlCompressionOptions.containsKey("removeLinkAttributes")) { 
+	    		removeLinkAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeLinkAttributes")); 
+	    	}
+	    	if(htmlCompressionOptions.containsKey("removeQuotes")) { 
+	    		removeQuotes = Boolean.valueOf(htmlCompressionOptions.get("removeQuotes")); 
+	    	}
+	    	if(htmlCompressionOptions.containsKey("removeScriptAttributes")) { 
+	    		removeScriptAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeScriptAttributes")); 
+	    	}    	
+	    	if(htmlCompressionOptions.containsKey("removeStyleAttributes")) { 
+	    		removeStyleAttributes = Boolean.valueOf(htmlCompressionOptions.get("removeStyleAttributes")); 
+	    	}
+	    	if(htmlCompressionOptions.containsKey("simpleBooleanAttributes")) { 
+	    		simpleBooleanAttributes = Boolean.valueOf(htmlCompressionOptions.get("simpleBooleanAttributes")); 
+	    	}
+	    	if(htmlCompressionOptions.containsKey("simpleDocType")) { 
+	    		simpleDocType = Boolean.valueOf(htmlCompressionOptions.get("simpleDocType")); 
+	    	}
     	}	
     	
     	htmlCompressor.setPreserveLineBreaks(preserveLineBreak);
@@ -239,7 +270,9 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static String humanReadableByteCount(long bytes, boolean si) {
         int unit = si ? 1000 : 1024;
-        if (bytes < unit) { return bytes + " B"; }
+        if (bytes < unit) { 
+        	return bytes + " B"; 
+        }
         int exp = (int) (Math.log(bytes) / Math.log(unit));
         String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);

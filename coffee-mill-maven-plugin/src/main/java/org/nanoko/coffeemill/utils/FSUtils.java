@@ -39,8 +39,7 @@ public class FSUtils {
 		    			    return true;
 		    			}
 	    		    }
-	    	    }
-	     
+	    	    }	     
 	    	 }
         }
     	return false;     
@@ -111,11 +110,15 @@ public class FSUtils {
     public static File resolveFile(final String name, File workDir, File libDir, String extension) {
         // 1) Check for the file in the workDir with a direct name
         File file = new File(workDir, name);
-        if (file.isFile()) { return file; }
+        if (file.isFile()) { 
+        	return file; 
+        }
 
         // 2) Try to append the extension
         file = new File(workDir, name + "." + extension);
-        if (file.isFile()) { return file; }
+        if (file.isFile()) { 
+        	return file; 
+        }
 
         // 3) Search in the libDir as prefix
         if (libDir != null  && libDir.exists()) {
@@ -124,7 +127,9 @@ public class FSUtils {
                     return s.startsWith(name);
                 }
             });
-            if (files.length > 0) { return files[0]; }
+            if (files.length > 0) { 
+            	return files[0]; 
+            }
         }
         return null;
     }

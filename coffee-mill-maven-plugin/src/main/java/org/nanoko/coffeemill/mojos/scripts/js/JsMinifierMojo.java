@@ -38,7 +38,10 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     
 
     public void execute() throws MojoExecutionException {
-    	if(isSkipped()) { return; }    				
+    	
+    	if(isSkipped()) { 
+    		return; 
+    	}    				
 
     	ugly = npm(new MavenLoggerWrapper(this.getLog()), PKG_NPM_NAME, PKG_NPM_VERSION);
         try {

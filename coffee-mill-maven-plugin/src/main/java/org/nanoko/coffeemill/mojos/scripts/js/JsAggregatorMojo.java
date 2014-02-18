@@ -44,7 +44,9 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
     	try {
-    		if(isSkipped()){ return; }
+    		if(isSkipped()) { 
+    			return; 
+    			}
     		
     		if (!this.getWorkDirectory().isDirectory()){
             	getLog().warn("JavaScript aggregation skipped - " + this.getWorkDirectory() + " does not exist !");
