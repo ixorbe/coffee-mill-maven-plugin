@@ -21,8 +21,14 @@ import java.util.List;
  */
 public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
 
-	
+    
 	// MAVEN
+    /**
+     * Maven ProjectHelper.
+     */
+    @Component
+    public MavenProjectHelper projectHelper;
+	
     /**
      * The maven project.
      */
@@ -30,40 +36,42 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     public MavenProject project;
     
     /**
-     * Maven ProjectHelper.
-     */
-    @Component
-    public MavenProjectHelper projectHelper;
-    
-    /**
      * The current build session instance.
      */
     @Component
-    public MavenSession session;    
+    public MavenSession session;  
     
-    // NODE
-    public NodeManager node =  NodeManager.getInstance();
-    
+    // DEPENDENCIES
     /**
      * The plugin dependencies.
      */
     @Parameter(defaultValue = "${plugin.artifacts}")
     public List<Artifact> pluginDependencies;
     
-    
-    // DIRECTORY
-    /**
-     * The target directory of the compiler if fork is true.
-     */
-    @Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
-    public File targetDirectory = new File("./target");
-    
     /**
      * The directory to run the compiler from if fork is true.
      */
     @Parameter(defaultValue = "${basedir}", required = true, readonly = true)
-    public File basedir;
+    public File basedir;    
+    
+    
+    // NODE
+    private NodeManager node =  NodeManager.getInstance();
+    
+    
+    // EXTENSIONS
+    /**
+     * Default extensions authorized for script files
+     */
+    private static final String[] scriptExtensions = {"js","coffee"};    
+   
+	/**
+     * Default extensions autorized for stylesheet files
+     */
+    private static final String[] stylesheetsExtensions = {"css","less","scss"};
 
+    
+    // DIRECTORY
     /**
      * Where are JavaScript files. 
      */
@@ -87,6 +95,12 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      */
     @Parameter(defaultValue= "src/main/stylesheets", required = true, readonly = true)
     private File stylesheetsDir;
+    
+    /**
+     * The target directory of the compiler if fork is true.
+     */
+    @Parameter(defaultValue = "${project.build.directory}", required = true, readonly = true)
+    private File targetDirectory = new File("./target");
 
     /**
      * Where are the OUTPUT WIP files written.
@@ -112,19 +126,8 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     @Parameter(defaultValue= "target/www/libs", required = true, readonly = true)
     private File libDir;
     
-    /**
-     * Default extensions authorized for script files
-     */
-    public String[] scriptExtensions = {"js","coffee"};
     
-    /**
-     * Default extensions autorized for stylesheets files
-     */
-    public String[] stylesheetsExtensions = {"css","less","scss"};
-    
-   
-    
-    // SKIP BOOLEAN
+	// SKIP BOOLEAN
     /**
      * Enables / disables JsCompilation
      */
@@ -180,7 +183,6 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
 	protected boolean skipPicturesOptimization;
     
     
-    
     // ACCESSORS
     public File getTarget() {
         return new File(project.getBuild().getDirectory());
@@ -188,7 +190,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     public NodeManager getNodeManager() {
         return this.node;
-    } 
+    }
     
     
     // TARGET-DIR
@@ -209,7 +211,6 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     public void setWorkDirectory(File work){
     	this.workDir = work;
-    	this.workDir.mkdirs();
     }
     
     // WORK-TEST-DIR
@@ -256,15 +257,14 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
     public void setStylesheetsDir(File stylesheetsDir){
     	this.stylesheetsDir = stylesheetsDir;
-    }
-    
-    
+    }    
 
     // LIB-DIR
     public File getLibDirectory() {
     	this.libDir.mkdirs();
         return this.libDir;
     }
+    
     public void setLibDirectory(File libs) {
     	this.libDir = libs;
     }
@@ -278,7 +278,14 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     public void setAssetsDir(File assets){
     	this.assetsDir = assets;
     }
-   
-       
+    
+    // EXTENSIONS
+    public static String[] getScriptextensions() {
+		return scriptExtensions;
+	}
+    
+    public static String[] getStylesheetsextensions() {
+		return stylesheetsExtensions;
+	} 
     
 }

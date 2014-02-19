@@ -26,7 +26,7 @@ import java.io.IOException;
         defaultPhase = LifecyclePhase.PACKAGE)
 public class PackagerMojo extends AbstractCoffeeMillMojo  {
 	
-    public String outputFileName = "release.zip";
+    protected String outputFileName = "release.zip";
     
     public void execute() throws MojoExecutionException {
     	

@@ -60,7 +60,7 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
+        return !isSkipped() && FSUtils.hasExtension(file, getStylesheetsextensions());
     }
     
     public boolean fileCreated(File file) throws WatchingException {

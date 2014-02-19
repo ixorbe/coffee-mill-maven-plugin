@@ -56,7 +56,7 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     }
 
     public boolean accept(File file) {
-        return  !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
+        return  !isSkipped() && FSUtils.hasExtension(file, getScriptextensions());
     }
 
     private void compile() throws WatchingException {

@@ -56,7 +56,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return !isSkipped() && FSUtils.hasExtension(file, stylesheetsExtensions);
+        return !isSkipped() && FSUtils.hasExtension(file, getStylesheetsextensions());
     }
     
     public boolean fileCreated(File file) throws WatchingException {
