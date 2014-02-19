@@ -2,7 +2,6 @@ package org.nanoko.coffeemill.mojos.processResources;
 
 
 import org.apache.commons.io.FileUtils;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -13,6 +12,7 @@ import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
 import org.nanoko.maven.WatchingException;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collection;
@@ -83,7 +83,7 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     private HtmlCompressor htmlCompressor;    
     
 
-    public void execute() throws MojoExecutionException {
+    public void execute() {
     	if(isSkipped()) { 
     		return; 
     	}
@@ -118,7 +118,7 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
             out.getParentFile().mkdirs();
             FileUtils.write(out, result);
             writeStatistics(htmlCompressor, file);
-        } catch(Exception e) {
+        } catch(IOException e) {
             throw new WatchingException("Error during Html compression on file "+file.getName() + " : " + e.getMessage());
         }
 
@@ -259,9 +259,29 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
         NumberFormat formatter = new DecimalFormat("#0.00");
         String eol = "\n";
         String hr = "+-----------------------------+-----------------------------+-----------------------------+";
+        
+        StringBuilder sb2 = new StringBuilder().append(eol);
+        sb2.append(file.getName() + " - HTML compression statistics:").append(eol);
+        sb2.append(hr).append(eol);
+        sb2.append(String.format(format, "| Category", "| Original", "| Compressed", "|")).append(eol);
+        sb2.append(hr).append(eol);
+        sb2.append(String.format(format, "| Filesize", "| " + origFilesize, "| " + compFilesize, "|")).append(eol);
+        sb2.append(String.format(format, "| Empty Chars", "| " + origEmptyChars, "| " + compEmptyChars, "|")).append(eol);
+        sb2.append(String.format(format, "| Script Size", "| " + origInlineScriptSize, "| " + compInlineScriptSize, "|")).append(eol);
+        sb2.append(String.format(format, "| Style Size", "| " + origInlineStyleSize, "| " + compInlineStyleSize, "|")).append(eol);
+        sb2.append(String.format(format, "| Event Handler Size", "| " + origInlineEventSize, "| " + compInlineEventSize, "|")).append(eol);
+        sb2.append(hr).append(eol);
+        sb2.append(
+        	String.format("%-90s%-2s",
+            String.format("| Time: %s, Preserved: %s, Compression Ratio: %s, Savings: %s%%",
+                        elapsedTime, preservedSize, formatter.format(compressionRatio), formatter.format(spaceSavings*100)),
+        				"|")).append(eol);
+        sb2.append(hr).append(eol);
+        String statistics = sb2.toString();
+        
+        /*
         String sb = "";
-        sb.concat(file.getName() + " - HTML compression statistics:").concat(eol);
-        //StringBuilder sb = new StringBuilder().append(eol);
+        sb.concat(file.getName() + " - HTML compression statistics:").concat(eol);       
         sb.concat(hr).concat(eol);
         sb.concat(String.format(format, "| Category", "| Original", "| Compressed", "|")).concat(eol);
         sb.concat(hr).concat(eol);
@@ -277,7 +297,7 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
                 "|")).concat(eol);
         sb.concat(hr).concat(eol);
 
-        String statistics = sb.toString();
+        String statistics = sb.toString();*/
         getLog().info(statistics);
     }
 
