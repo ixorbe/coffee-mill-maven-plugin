@@ -29,11 +29,11 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String SASS_NPM_NAME = "node-sass";
     public static final String SASS_NPM_VERSION = "0.8.1";
+    
     private NPM sass;
 
 
-    public void execute() throws MojoExecutionException {
-    	
+    public void execute() throws MojoExecutionException {    	
     	if(isSkipped()) { 
     		return; 
     	}
@@ -50,7 +50,7 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
                 }
             }
         } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException("Error during execute() on SassCompilerMojo : cannot compile", e);
         }
     }
 
@@ -61,30 +61,11 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         	&& file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
         	&& FSUtils.hasExtension(file, "scss");
     }
-
-    private File getOutputCSSFile(File input) {
-        String cssFileName = input.getName().substring(0, input.getName().length() - ".scss".length()) + ".css";
-        String path = input.getParentFile().getAbsolutePath().substring(getStylesheetsDir().getAbsolutePath().length());
-        return new File(this.getWorkDirectory(), path + "/" + cssFileName);
-    }
-
-    public void compile(File file) throws WatchingException {
-        File out = getOutputCSSFile(file);
-        getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
-        int exit = sass.execute("node-sass", file.getAbsolutePath(), out.getAbsolutePath());
-		getLog().debug("Sass execution exiting with " + exit + " status");
-
-        if (!out.isFile()) {
-            throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + " check log");
-        }
-    }
-
-
+    
     public boolean fileCreated(File file) throws WatchingException {
         compile(file);
         return true;
     }
-
 
     public boolean fileUpdated(File file) throws WatchingException {
         compile(file);
@@ -97,6 +78,25 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         return true;
     }
     
+    
+
+    private File getOutputCSSFile(File input) {
+        String cssFileName = input.getName().substring(0, input.getName().length() - ".scss".length()) + ".css";
+        String path = input.getParentFile().getAbsolutePath().substring(getStylesheetsDir().getAbsolutePath().length());
+        return new File(this.getWorkDirectory(), path + "/" + cssFileName);
+    }
+
+    private void compile(File file) throws WatchingException {
+        File out = getOutputCSSFile(file);
+        getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
+        int exit = sass.execute("node-sass", file.getAbsolutePath(), out.getAbsolutePath());
+		getLog().debug("Sass execution exiting with " + exit + " status");
+
+        if (!out.isFile()) {
+            throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + " check log");
+        }
+    }
+
     private boolean isSkipped(){
     	if (skipCssCompilation) {
             getLog().info("\033[31m Sass Compilation skipped \033[37m");

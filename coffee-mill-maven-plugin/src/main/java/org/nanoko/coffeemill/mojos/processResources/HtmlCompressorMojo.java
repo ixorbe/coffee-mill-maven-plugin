@@ -97,7 +97,7 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     			compress(file);
             }        
     	} catch (WatchingException e) {
-    		throw new MojoExecutionException("Error during execution to compress html files", e);
+    		throw new MojoExecutionException("Error during execute() on HtmlCompressorMojo", e);
 		}        
     }    
 

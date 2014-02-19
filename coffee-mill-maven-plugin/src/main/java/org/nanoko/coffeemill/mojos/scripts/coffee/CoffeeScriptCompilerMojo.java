@@ -40,22 +40,7 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeScriptCompilerMojo i
         	&& file.getParent().contains( this.coffeeScriptDir.getAbsolutePath() )
         	&& FSUtils.hasExtension(file, "coffee");
     }
-
     
-    private void compile(File file) throws WatchingException {
-        if (file == null) { return; }
-        
-        //File out = new File(getWorkDirectory(), file.getName());
-        getLog().info("Compiling CoffeeScript " + file.getAbsolutePath() + " to " + getWorkDirectory().getAbsolutePath());
-
-        try {
-            invokeCoffeeScriptCompiler(file, getWorkDirectory());
-        } catch (MojoExecutionException e) { //NOSONAR
-            throw new WatchingException("Error during the compilation of " + file.getName() + " : " + e.getMessage());
-        }
-    }
-
-
     public boolean fileCreated(File file) throws WatchingException {
         compile(file);
         return true;
@@ -74,6 +59,20 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeScriptCompilerMojo i
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;
+    }
+
+    
+    private void compile(File file) throws WatchingException {
+        if (file == null) { return; }
+        
+        //File out = new File(getWorkDirectory(), file.getName());
+        getLog().info("Compiling CoffeeScript " + file.getAbsolutePath() + " to " + getWorkDirectory().getAbsolutePath());
+
+        try {
+            invokeCoffeeScriptCompiler(file, getWorkDirectory());
+        } catch (MojoExecutionException e) { //NOSONAR
+            throw new WatchingException("Error during the compilation of " + file.getName() + " : " + e.getMessage());
+        }
     }
     
     private boolean isSkipped(){

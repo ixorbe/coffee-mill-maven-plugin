@@ -2,7 +2,6 @@ package org.nanoko.coffeemill.mojos.scripts.js;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -31,8 +30,7 @@ import java.util.Collection;
 public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
 	
 	
-    public void execute() throws MojoExecutionException {
-    	
+    public void execute() throws MojoExecutionException {    	
 		if(isSkipped()) { 
 			return; 
 		}
@@ -51,16 +49,20 @@ public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
 		}
     	
     	for(File file : files) {
-			copy(file);    		
+			try {
+				copy(file);
+			} catch (WatchingException e) {
+				throw new MojoExecutionException("Error during execute() on JsTestCompilerMojo : cannot copy", e);
+			}    		
 		}   
     }        
 
-    private void copy(File f) {
+    private void copy(File f) throws WatchingException {
     	getLog().info("Copy JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());
     	try {
 			FileUtils.copyFileToDirectory(f, this.getWorkTestDirectory());
 		} catch (IOException e) { 
-			this.getLog().error("Error during copy JavaScript files.", e); 
+			throw new WatchingException("Error during copy JavaScript files.", e); 
 		}
     }    
     

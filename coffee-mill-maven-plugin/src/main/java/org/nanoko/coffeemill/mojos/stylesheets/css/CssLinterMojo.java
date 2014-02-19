@@ -38,49 +38,35 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
     
     private NPM lint;
 
+    // Constructor
     public CssLinterMojo() {
     	defaultLogger = new MavenLoggerWrapper(this.getLog());
-    }
+    }    
     
-    
-    public void execute() throws MojoExecutionException {
-		
+    public void execute() throws MojoExecutionException {		
     	if(isSkipped()) { 
     		return; 
     	}
 		
     	lint = npm(defaultLogger, PKG_NPM_NAME, PKG_NPM_VERSION);
-        try {
-        	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
-            for(File file : files) {
-            	compile(file);
-            }
-
-        } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
-        }
+    	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
+    	for(File file : files) {
+	    	try {
+	            compile(file);
+	        } catch (WatchingException e) {
+	            throw new MojoExecutionException("Error during execute() on CssLinterMojo : cannot compile", e);
+	        }
+    	}
     }
 
     public boolean accept(File file) {
         return !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
-
-    public void compile(File f) throws WatchingException {
-    	String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".css";
-    	File input = new File( this.getWorkDirectory(), name);
-    	if(!input.exists()) {
-    		return;
-    	}
-
-        getLog().info("Linting " + input.getAbsolutePath());
-        int exit = lint.execute("csslint", "--format=compact", input.getAbsolutePath());
-    }
-
+    
     public boolean fileCreated(File file) throws WatchingException {
         compile(file);
         return true;
     }
-
 
     public boolean fileUpdated(File file) throws WatchingException {
         compile(file);
@@ -89,6 +75,18 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
 
     public boolean fileDeleted(File file) throws WatchingException{
         return true;
+    }
+
+    
+    private void compile(File f) throws WatchingException {
+    	String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".css";
+    	File input = new File( this.getWorkDirectory(), name);
+    	if(!input.exists()) {
+    		return;
+    	}
+
+        getLog().info("Linting " + input.getAbsolutePath());
+        lint.execute("csslint", "--format=compact", input.getAbsolutePath());
     }
     
     private boolean isSkipped() {

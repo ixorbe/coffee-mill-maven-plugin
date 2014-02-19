@@ -33,16 +33,16 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     public static final String PKG_NPM_NAME = "jsdoc";
     public static final String PKG_NPM_VERSION = "3.3.0-alpha4";
     
+    public String inputFilename = null;
+    public String outputDir = null;
+    
     @Parameter(defaultValue="false")
 	protected boolean skipJsDocumentation;
     
     private NPM jsdoc;
     
-    public String inputFilename = null;
-    public String outputDir = null;
     
-    public void execute() throws MojoExecutionException {
-    	
+    public void execute() throws MojoExecutionException {    	
     	if(isSkipped()) { 
     		return; 
     	}
@@ -51,7 +51,7 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
         try {
         	compile();
         } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException("Error during execute() on JsDocMojo : cannot compile", e);
         }
     }
 
@@ -59,7 +59,7 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
         return  !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
 
-    public void compile() throws WatchingException {
+    private void compile() throws WatchingException {
     	if(inputFilename == null) {
     		inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
     	}
@@ -77,7 +77,6 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
         getLog().info("Make Js Doc for " + input.getAbsolutePath() );
         int exit = jsdoc.execute("jsdoc", input.getAbsolutePath(), "-d",  output.getAbsolutePath() );
 		getLog().debug("Js Doc generation execution exiting with " + exit + " status");
-
     }
     
     private boolean isSkipped(){

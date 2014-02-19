@@ -22,7 +22,6 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
@@ -31,9 +30,10 @@ import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
 @Mojo( name = "resolve-dependencies", requiresDependencyResolution = ResolutionScope.TEST) 
 public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
 
+	private File outputDirectory = null;
 
-	File outputDirectory=null;
-    public void execute() throws MojoExecutionException, MojoFailureException {   
+	
+    public void execute() throws MojoExecutionException {   
     	if(outputDirectory  == null){
     		outputDirectory = this.getLibDirectory();
     	}
@@ -51,11 +51,15 @@ public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
         	}
         }
         if(keepers.size()>0) {
-        	copyDependencies(keepers);
+        	try {
+				copyDependencies(keepers);
+			} catch (IOException e) {
+				throw new MojoExecutionException("Error during execute() on ResolveAssetsDependenciesMojo", e);
+			}
         }
     }
     
-    public void copyDependencies(Set<Artifact> artifacts){
+    private void copyDependencies(Set<Artifact> artifacts) throws IOException{
     	if(!outputDirectory.exists()) {
     		outputDirectory.mkdirs();
     	}
@@ -67,7 +71,7 @@ public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
 	    		getLog().info("	Copy " + f.getAbsolutePath() + " to " + outputDirectory);
 				FileUtils.copyFile(f, out);
 	    	} catch (IOException e) {
-	    		this.getLog().error(e.getMessage(), e);
+	    		throw new IOException("Error during copy artifact dependencies", e);
 	    	}
     	}
     }

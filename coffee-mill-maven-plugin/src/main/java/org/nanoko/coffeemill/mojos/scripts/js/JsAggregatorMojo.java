@@ -39,24 +39,23 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     protected List<String> jsAggregationFiles;
 	
 	@Parameter(defaultValue="true")
-	private boolean failedOnMissingFile;
+	protected boolean failedOnMissingFile;
 	
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+		if(isSkipped()) { 
+			return; 
+		}
+		
+		if (!this.getWorkDirectory().isDirectory()){
+        	getLog().warn("JavaScript aggregation skipped - " + this.getWorkDirectory() + " does not exist !");
+        	return;
+        }   
+		
     	try {
-    		if(isSkipped()) { 
-    			return; 
-    			}
-    		
-    		if (!this.getWorkDirectory().isDirectory()){
-            	getLog().warn("JavaScript aggregation skipped - " + this.getWorkDirectory() + " does not exist !");
-            	return;
-            }    		
-    		
-            this.aggregate();
-            
+            this.aggregate();            
         } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException("Error during execute() on JsAggregatorMojo : cannot aggregate", e);
         }
     }
 
@@ -64,8 +63,25 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     public boolean accept(File file) {
     	return !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
+    
+    public boolean fileCreated(File file) throws WatchingException {
+    	this.aggregate();
+        return true;
+    }
 
-    public void aggregate() throws WatchingException {
+
+    public boolean fileUpdated(File file) throws WatchingException {
+    	this.aggregate();
+        return true;
+    }
+
+    public boolean fileDeleted(File file) throws WatchingException {
+    	this.aggregate();
+        return true;
+    }
+    
+
+    private void aggregate() throws WatchingException {
     	if(this.outputFileName == null) {
     		this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
     	}
@@ -76,17 +92,13 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	}
     	
     	// Classic Aggregation (app + ext. libs)
-    	if (jsAggregationFiles == null || jsAggregationFiles.isEmpty()) {
-    		
+    	if (jsAggregationFiles == null || jsAggregationFiles.isEmpty()) {    		
     		if(aggregateAppOnly(output)) {
-    				aggregateAppWithLibs(output);
+    			aggregateAppWithLibs(output);
         	}    		
-        } 
-    	// Aggregation from pom.xml JsAggregationFiles list
-    	else {
+        } else { // Aggregation from pom.xml JsAggregationFiles list
         	aggregateFromListFiles(output);        	
-        }
-    	
+        }    	
     }
     
     
@@ -109,8 +121,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	
     	joinFiles(output, files);
         return true;
-    }
-    
+    }    
 
     private boolean aggregateAppOnly(File output) throws WatchingException {
     	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
@@ -137,7 +148,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         	try {
 				FileUtils.copyFile(in, output);
 			} catch (IOException e) {
-				this.getLog().error(e.getMessage(), e);
+				throw new WatchingException("Error during copy file to build directory "+this.getBuildDirectory(), e);
 			}
         	return;
         }
@@ -146,36 +157,18 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	getLog().info("Aggregate Js files from " + this.getLibDirectory().getAbsolutePath());
     	  
     	joinFiles(output, files);
-    }
-    
+    }    
     
     private void joinFiles(File output, Collection<File> files) throws WatchingException{
     	try {
  			FileAggregation.joinFiles( output, files);
  		} catch (IOException e) {
- 			this.getLog().error(e.getMessage(), e);
+ 			throw new WatchingException("Error during joinFiles", e);
  		}
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the Js aggregation check log");
         }
-    }
-    
-    
-    public boolean fileCreated(File file) throws WatchingException {
-    	this.aggregate();
-        return true;
-    }
-
-
-    public boolean fileUpdated(File file) throws WatchingException {
-    	this.aggregate();
-        return true;
-    }
-
-    public boolean fileDeleted(File file) throws WatchingException {
-    	this.aggregate();
-        return true;
     }
     
     private boolean isSkipped(){

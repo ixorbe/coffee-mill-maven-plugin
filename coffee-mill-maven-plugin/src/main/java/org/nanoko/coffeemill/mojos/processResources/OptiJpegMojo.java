@@ -50,22 +50,22 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
     public static String EXECUTABLE_NAME = "jpegtran";
 
     /**
-     * The JpegTran executable.
-     */
-    private File jpegTranExec;
-
-    /**
      * Enables verbose mode.
      */
     @Parameter(defaultValue="false")
-    private boolean verbose;
+    protected boolean verbose;
+    
+    /**
+     * The JpegTran executable.
+     */
+    private File jpegTranExec;
+    
     
     public void setVerbose(Boolean verbose){
     	this.verbose = verbose;
     }
 
-    public void execute() throws MojoExecutionException {
-    	
+    public void execute() throws MojoExecutionException {    	
     	if(isSkipped()) { 
     		return; 
     	}
@@ -88,7 +88,7 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
             try {
 				optimize(file);
 			} catch (WatchingException e) {
-				this.getLog().error(e.getMessage(), e);
+				throw new MojoExecutionException("Error during execute() on OptiJpegMojo", e);
 			}
         }
         //OptionsHelper.getBoolean(options, "verbose", false);
@@ -100,6 +100,25 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
                 && FSUtils.isInDirectory(file.getName(), getWorkDirectory())
                 && (file.getName().endsWith(".jpg") || file.getName().endsWith(".jpeg"));
     }
+    
+    public boolean fileCreated(File file) throws WatchingException {
+        return fileUpdated(file);
+    }
+
+    public boolean fileUpdated(File file) throws WatchingException {
+		File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        optimize(relativeWorkFile);
+    	return true;
+    }
+    
+    public boolean fileDeleted(File file) throws WatchingException {
+    	File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        if (deletedFromWork.isFile()){
+        	getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
+        	FileUtils.deleteQuietly(deletedFromWork); 
+        }
+        return true;
+    } 
     
 
     private void optimize(File file) throws WatchingException {
@@ -146,26 +165,6 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
             throw new WatchingException("Error during JPG optimization of " + file.getAbsolutePath(), e);
         }
     }
-    
-    
-    public boolean fileCreated(File file) throws WatchingException {
-        return fileUpdated(file);
-    }
-
-    public boolean fileUpdated(File file) throws WatchingException {
-		File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
-        optimize(relativeWorkFile);
-    	return true;
-    }
-    
-    public boolean fileDeleted(File file) throws WatchingException {
-    	File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
-        if (deletedFromWork.isFile()){
-        	getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
-        	FileUtils.deleteQuietly(deletedFromWork); 
-        }
-        return true;
-    }  
     
     private boolean isSkipped(){
     	if (skipPicturesOptimization) {

@@ -48,20 +48,13 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
      */
     public static String EXECUTABLE_NAME = "optipng";
 
-    /**
-     * The JpegTran executable.
-     */
-    private File optiPNGExec;
+    
 
     /**
      * Enables verbose mode.
      */
     @Parameter(defaultValue="false")
-    private boolean verbose;
-    
-    public void setVerbose(Boolean verbose){
-    	this.verbose = verbose;
-    }
+    protected boolean verbose;    
     
     /**
      * Optimization level (0-7).
@@ -69,8 +62,19 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
      * Higher values are more optimized, but make the process slower.
      */
     @Parameter(defaultValue="2")
-    private int level = 2;
+    protected int level = 2;
+    
+    /**
+     * The JpegTran executable.
+     */
+    private File optiPNGExec;
+    
 
+    
+    public void setVerbose(Boolean verbose){
+    	this.verbose = verbose;
+    }
+    
     public void execute() throws MojoExecutionException {
     	
     	if(isSkipped()) { 
@@ -95,7 +99,7 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
             try {
 				optimize(file);
 			} catch (WatchingException e) {
-				this.getLog().error(e.getMessage(), e);
+				throw new MojoExecutionException("Error during execute() on OptiPngMojo", e);
 			}
         }
         //OptionsHelper.getBoolean(options, "verbose", false);
@@ -108,6 +112,25 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
                 && FSUtils.isInDirectory(file.getName(), getWorkDirectory())
                 && (file.getName().endsWith(".png") );
     }
+    
+    public boolean fileCreated(File file) throws WatchingException {
+        return fileUpdated(file);
+    }
+
+    public boolean fileUpdated(File file) throws WatchingException {
+		File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        optimize(relativeWorkFile);
+    	return true;
+    }
+    
+    public boolean fileDeleted(File file) throws WatchingException {
+    	File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        if (deletedFromWork.isFile()){
+        	getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
+        	FileUtils.deleteQuietly(deletedFromWork); 
+        }
+        return true;
+    } 
     
 
     private void optimize(File file) throws WatchingException {
@@ -132,29 +155,9 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
             executor.execute(cmdLine);
             getLog().info(file.getName() + " optimized");
         } catch (IOException e) {
-        	throw new WatchingException("Error during PNG optimization of " + file.getAbsolutePath() + " : "+e.getMessage(), e);
+        	throw new WatchingException("Error during PNG optimization of " + file.getAbsolutePath(), e);
         }
     }
-    
-    
-    public boolean fileCreated(File file) throws WatchingException {
-        return fileUpdated(file);
-    }
-
-    public boolean fileUpdated(File file) throws WatchingException {
-		File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
-        optimize(relativeWorkFile);
-    	return true;
-    }
-    
-    public boolean fileDeleted(File file) throws WatchingException {
-    	File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
-        if (deletedFromWork.isFile()){
-        	getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
-        	FileUtils.deleteQuietly(deletedFromWork); 
-        }
-        return true;
-    }    
     
     private boolean isSkipped(){
     	if (skipPicturesOptimization) {

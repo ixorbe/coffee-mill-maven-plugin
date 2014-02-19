@@ -18,7 +18,6 @@ package org.nanoko.coffeemill.mojos.scripts.coffee;
 import java.io.File;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -37,27 +36,27 @@ requiresProject = true,
 defaultPhase = LifecyclePhase.TEST)
 public class CoffeeScriptTestCompilerMojo extends AbstractCoffeeScriptCompilerMojo {
     
-    /**
-     * Where are CoffeeScript files implementing tests.
-     */
-    @Parameter(defaultValue="src/test/coffee", required = true, readonly = true)
-    private File coffeeScriptTestDir;
-    
-    
-    /**
+	/**
      * Enables / Disables the coffeescript test compilation.
      * Be aware that this property disables the compilation of test sources only.
      */
     @Parameter(defaultValue="false")
     protected boolean skipCoffeeScriptTestCompilation;
     
+    /**
+     * Where are CoffeeScript files implementing tests.
+     */
+    @Parameter(defaultValue="src/test/coffee", required = true, readonly = true)
+    protected File coffeeScriptTestDir;
+    
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
     	this.setCoffeeScriptDir(coffeeScriptTestDir);
     	super.execute();
     }
     
-    private boolean isSkipped(){
+    @SuppressWarnings("unused")
+	private boolean isSkipped(){
     	if (skipCoffeeScriptTestCompilation) {
             getLog().info("\033[31m CoffeeScript Test Compilation skipped \033[37m");
             return true;

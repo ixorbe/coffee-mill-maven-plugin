@@ -24,24 +24,22 @@ import java.util.Collection;
         defaultPhase = LifecyclePhase.PACKAGE)
 public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
-    public void execute() throws MojoExecutionException {
-    	
+    public void execute() throws MojoExecutionException {    	
     	if(isSkipped()) { 
     		return; 
     	}
     	
-        try {
-            if ( getStylesheetsDir().isDirectory()) {
-            	Collection<File> files = FileUtils.listFiles(getStylesheetsDir(), new String[]{"css"}, true);
-                for(File f: files) {
-        			copy(f);
-                }
+    	if ( getStylesheetsDir().isDirectory()) {
+        	Collection<File> files = FileUtils.listFiles(getStylesheetsDir(), new String[]{"css"}, true);
+            for(File f: files) {
+            	try {
+            		copy(f);
+                } catch (WatchingException e) {
+                    throw new MojoExecutionException("Error during execute() on CssCompilerMojo : cannot copy css files", e);
+                }    			
             }
-        } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
         }
     }
-
 
     public boolean accept(File file) {
         return !isSkipped() 
@@ -49,22 +47,11 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         	&& file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
         	&& FSUtils.hasExtension(file, "css");
     }
-
-    public void copy(File f) throws WatchingException {
-    	getLog().info("Copy css files from " + getStylesheetsDir().getAbsolutePath());
-    	try {
-			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
-		} catch (IOException e) { 
-			this.getLog().error(e); 
-		}
-    }
-
-
+    
     public boolean fileCreated(File file) throws WatchingException {
     	this.copy(file);
         return true;
     }
-
 
     public boolean fileUpdated(File file) throws WatchingException {
     	if(fileDeleted(file)) {
@@ -82,6 +69,16 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;
+    }
+    
+
+    private void copy(File f) throws WatchingException {
+    	getLog().info("Copy css files from " + getStylesheetsDir().getAbsolutePath());
+    	try {
+			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
+		} catch (IOException e) { 
+			throw new WatchingException("Error during copy css files to workDirectory "+this.getWorkDirectory().getAbsolutePath(), e); 
+		}
     }
     
     private boolean isSkipped(){

@@ -38,11 +38,10 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     protected List<String> cssAggregationFiles;
 	
 	@Parameter(defaultValue="true")
-	private boolean failedOnMissingFile;
+	protected boolean failedOnMissingFile;
 	
 	
-    public void execute() throws MojoExecutionException {
-    	
+    public void execute() throws MojoExecutionException {    	
     	if(isSkipped()) { 
     		return; 
     	}
@@ -52,16 +51,31 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
                 this.aggregate();
             }
         } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException("Error during execute() on CssAggregatorMojo : cannot aggregate", e);
         }
     }
-
 
     public boolean accept(File file) {
         return !isSkipped() && FSUtils.hasExtension(file, stylesheetsExtensions);
     }
+    
+    public boolean fileCreated(File file) throws WatchingException {
+    	this.aggregate();
+        return true;
+    }
 
-    public void aggregate() throws WatchingException {
+    public boolean fileUpdated(File file) throws WatchingException {
+    	this.aggregate();
+        return true;
+    }
+
+    public boolean fileDeleted(File file) throws WatchingException {
+    	this.aggregate();
+        return true;
+    }
+    
+
+    private void aggregate() throws WatchingException {
     	if(this.outputFileName == null) {
     		this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
     	}
@@ -77,14 +91,13 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     			try {
 					aggregateAppWithLibs(output);
 				} catch (IOException e) {
-					getLog().error("Error during aggregation files", e);
+					throw new WatchingException("Error during aggregation files", e);
 				}
         	}    
     	// else aggregate from pom.xml CssAggregationFiles list
         } else {
         	aggregateFromListFiles(output);        	
-        }
-    	
+        }    	
     }
     
     private boolean aggregateFromListFiles(File output) throws WatchingException {
@@ -143,29 +156,12 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	try {
  			FileAggregation.joinFiles( output, files);
  		} catch (IOException e) {
- 			this.getLog().error("Error during aggregation files", e);
+ 			throw new WatchingException("Error during aggregation files", e);
  		}
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the Css aggregation check log");
         }
-    }
-
-
-    public boolean fileCreated(File file) throws WatchingException {
-    	this.aggregate();
-        return true;
-    }
-
-
-    public boolean fileUpdated(File file) throws WatchingException {
-    	this.aggregate();
-        return true;
-    }
-
-    public boolean fileDeleted(File file) throws WatchingException {
-    	this.aggregate();
-        return true;
     }
     
     private boolean isSkipped(){

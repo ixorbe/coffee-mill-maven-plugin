@@ -2,7 +2,6 @@ package org.nanoko.coffeemill.mojos.scripts.js;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -32,49 +31,37 @@ import java.util.Collection;
 public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 	
 	
-    public void execute() throws MojoExecutionException, MojoFailureException {        
-    	try {
-    		if(isSkipped()) { 
-    			return; 
-    		}
-    		
-    		if (!this.getJavaScriptDir().isDirectory()) {
-    			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptDir().getAbsolutePath() + " does not exist !");
-            	return;
-    		}
-    		
-    		getLog().info("Get JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
-        	Collection<File> files = FileUtils.listFiles(this.getJavaScriptDir(), new String[]{"js"}, true);
+    public void execute() throws MojoExecutionException {    	
+		if(isSkipped()) { 
+			return; 
+		}
+		
+		if (!this.getJavaScriptDir().isDirectory()) {
+			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptDir().getAbsolutePath() + " does not exist !");
+        	return;
+		}
+		
+		getLog().info("Get JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
+    	Collection<File> files = FileUtils.listFiles(this.getJavaScriptDir(), new String[]{"js"}, true);
+    	
+    	if(files.isEmpty()){
+			getLog().warn("JavaScript sources directory "+this.getJavaScriptDir().getAbsolutePath()+" is empty !");
+			return;
+		}
         	
-        	if(files.isEmpty()){
-    			getLog().warn("JavaScript sources directory "+this.getJavaScriptDir().getAbsolutePath()+" is empty !");
-    			return;
-    		}
-        	
+        try {	
             for(File file : files){
             	copy(file);   
-            }
-            
+            }            
     	} catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException("Error during execute() on JsCompilerMojo : cannot copy", e);
         }        
     }
     
     public boolean accept(File file) {
-    	return !isSkipped() 
-    		//&& FSUtils.isInDirectory(file.getName(), this.getJavaScriptDir()) 
+    	return !isSkipped()
     		&& file.getParent().contains( getJavaScriptDir().getAbsolutePath() )
     		&& FSUtils.hasExtension(file, "js");
-    }
-    
-
-    private void copy(File f) throws WatchingException {
-    	getLog().info("Copy JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
-    	try {
-			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
-		} catch (IOException e) { 
-			this.getLog().error(e.getMessage(), e); 
-		}
     }
     
     public boolean fileCreated(File file) throws WatchingException {
@@ -97,6 +84,16 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         	FileUtils.deleteQuietly(deleted); 
         }
         return true;
+    }
+    
+
+    private void copy(File f) throws WatchingException {
+    	getLog().info("Copy JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
+    	try {
+			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
+		} catch (IOException e) { 
+			throw new WatchingException("Error during copy files to workDirectory "+this.getWorkDirectory().getAbsolutePath(), e); 
+		}
     }
     
     private boolean isSkipped(){

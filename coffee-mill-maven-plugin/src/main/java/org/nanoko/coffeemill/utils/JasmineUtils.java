@@ -124,7 +124,8 @@ public class JasmineUtils {
 
     }
 
-    public static void extendJasmineMojoForIT(AbstractCoffeeMillMojo mill, AbstractJasmineMojo mojo,
+    @SuppressWarnings("unchecked")
+	public static void extendJasmineMojoForIT(AbstractCoffeeMillMojo mill, AbstractJasmineMojo mojo,
                                                String reportName) {
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "jasmineTargetDir",
                 getJasmineITDirectory(mill.project));

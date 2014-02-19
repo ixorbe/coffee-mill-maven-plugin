@@ -51,7 +51,7 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 	    		}
 	    	}
     	} catch (IOException e) {
-    		throw new MojoExecutionException("Error during copy assets from source directory : "+e.getMessage(), e);
+    		throw new MojoExecutionException("Error during execute() on CopyAssetsMojo", e);
 		}
     }
 
@@ -74,7 +74,7 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
             }
 			
 		} catch (IOException e) {
-			throw new WatchingException(e.getMessage(), e); 
+			throw new WatchingException("Error during copy asset file", e); 
 		}
     }
 

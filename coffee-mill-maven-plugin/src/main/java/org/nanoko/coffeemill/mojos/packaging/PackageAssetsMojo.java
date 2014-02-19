@@ -66,7 +66,7 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 	    		}
 	    	}
     	} catch (IOException e) {
-    		throw new MojoExecutionException("Error during packaging assets from work directory : "+e.getMessage(), e);
+    		throw new MojoExecutionException("Error during execute() on PackageAssetsMojo", e);
 		}
        
     }
@@ -91,7 +91,7 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
             }
 			
 		} catch (IOException e) {
-			throw new WatchingException(e.getMessage(), e); 
+			throw new WatchingException("Error during trying packageAssetFile", e); 
 		}
     }
     

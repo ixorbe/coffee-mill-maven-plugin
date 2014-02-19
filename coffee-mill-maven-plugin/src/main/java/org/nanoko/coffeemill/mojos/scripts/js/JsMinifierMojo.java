@@ -32,13 +32,12 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String PKG_NPM_NAME = "uglify-js";
     public static final String PKG_NPM_VERSION = "2.4.12";
     
-    private NPM ugly;
-    
     public String inputFileName;
     
+    private NPM ugly;
+    
 
-    public void execute() throws MojoExecutionException {
-    	
+    public void execute() throws MojoExecutionException {    	
     	if(isSkipped()) { 
     		return; 
     	}    				
@@ -47,15 +46,31 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         try {
         	compile();
         } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException("Error during execute() on JsMinifierMojo : cannot compile", e);
         }
     }
 
     public boolean accept(File file) {
         return !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
+    
+    public boolean fileCreated(File file) throws WatchingException {
+        compile();
+        return true;
+    }
 
-    public boolean compile() throws WatchingException {
+    public boolean fileUpdated(File file) throws WatchingException {
+        compile();
+        return true;
+    }
+
+    public boolean fileDeleted(File file) throws WatchingException{
+    	compile();
+        return true;
+    }
+
+    
+    private boolean compile() throws WatchingException {
     	getLog().info("Js Minification Compilation");
 		
     	if(this.inputFileName == null) {
@@ -87,23 +102,6 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
         }
-        return true;
-    }
-
-
-    public boolean fileCreated(File file) throws WatchingException {
-        compile();
-        return true;
-    }
-
-
-    public boolean fileUpdated(File file) throws WatchingException {
-        compile();
-        return true;
-    }
-
-    public boolean fileDeleted(File file) throws WatchingException{
-    	compile();
         return true;
     }
     

@@ -37,7 +37,9 @@ requiresProject = true,
 defaultPhase = LifecyclePhase.TEST)
 public class JasmineMojo extends AbstractCoffeeMillMojo {
 
-	
+	/*
+	 * Enables/Disables Jasmine test
+	 */
 	@Parameter(defaultValue="false")
     protected boolean skipJasmineTest;
 
@@ -50,8 +52,7 @@ public class JasmineMojo extends AbstractCoffeeMillMojo {
 
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (skipJasmineTest) {
-            getLog().debug("Skipping Jasmine Tests");
+        if (isSkipped()) {
             return;
         }
         
@@ -91,6 +92,15 @@ public class JasmineMojo extends AbstractCoffeeMillMojo {
         } finally {
             File report = new File(JasmineUtils.getJasmineDirectory(project), JasmineUtils.TEST_JASMINE_XML);
             JasmineUtils.copyJunitReport(this, report, "jasmine.test");
+        }
+    }
+    
+    private boolean isSkipped(){
+    	if (skipJasmineTest) {
+            getLog().info("\033[31m Jasmine Tests skipped \033[37m");
+            return true;
+        } else {
+        	return false;
         }
     }
 }

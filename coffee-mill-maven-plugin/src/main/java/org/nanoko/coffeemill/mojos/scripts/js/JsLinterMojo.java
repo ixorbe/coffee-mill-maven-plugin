@@ -38,9 +38,11 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
    
     private NPM lint;
 
+    // Constructor
     public JsLinterMojo() {
     	defaultLogger = new MavenLoggerWrapper(this.getLog());
     }
+    
     public void execute() throws MojoExecutionException {
     	
 		if(isSkipped()) { 
@@ -55,31 +57,18 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
             }
 
         } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException("Error during execute() on JsLinterMojo : cannot compile", e);
         }
     }
 
     public boolean accept(File file) {
         return !isSkipped() && FSUtils.hasExtension(file, scriptExtensions);
     }
-
-    public void compile(File f) throws WatchingException {
-    	String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".js";
-    	File input = new File( this.getWorkDirectory(), name);
-    	if(!input.exists()){
-    		return;
-    	}
-
-        getLog().info("Linting " + input.getAbsolutePath());
-        int exit = lint.execute("jslint", input.getAbsolutePath());
-    }
-
-
+    
     public boolean fileCreated(File file) throws WatchingException {
         compile(file);
         return true;
     }
-
 
     public boolean fileUpdated(File file) throws WatchingException {
         compile(file);
@@ -88,6 +77,17 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
 
     public boolean fileDeleted(File file) throws WatchingException{
         return true;
+    }
+
+    private void compile(File f) throws WatchingException {
+    	String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".js";
+    	File input = new File( this.getWorkDirectory(), name);
+    	if(!input.exists()){
+    		return;
+    	}
+
+        getLog().info("Linting " + input.getAbsolutePath());
+        lint.execute("jslint", input.getAbsolutePath());
     }
     
     private boolean isSkipped() {

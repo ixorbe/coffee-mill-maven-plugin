@@ -32,12 +32,12 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String CLEANCSS_NPM_NAME = "clean-css";
     public static final String CLEANCSS_NPM_VERSION = "2.0.7";
     
+    public String inputFilename = null;
+    
     private NPM cleancss;
     
-    public String inputFilename = null;
 
-    public void execute() throws MojoExecutionException {
-    	
+    public void execute() throws MojoExecutionException {    	
     	if(isSkipped()) { 
     		return; 
     	}
@@ -46,16 +46,31 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         try {
         	compile();
         } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException("Error during execute() on CssMinifierMojo : cannot compile", e);
         }
     }
 
     public boolean accept(File file) {
         return !isSkipped() && FSUtils.hasExtension(file, stylesheetsExtensions);
     }
+    
+    public boolean fileCreated(File file) throws WatchingException {
+        compile();
+        return true;
+    }
 
-    public boolean compile() throws WatchingException {
- 
+    public boolean fileUpdated(File file) throws WatchingException {
+        compile();
+        return true;
+    }
+
+    public boolean fileDeleted(File file) throws WatchingException{
+    	compile();
+        return true;
+    }
+    
+
+    private boolean compile() throws WatchingException { 
     	if(this.inputFilename == null) {
     		this.inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
     	}
@@ -85,22 +100,6 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
         }
-        return true;
-    }
-
-    public boolean fileCreated(File file) throws WatchingException {
-        compile();
-        return true;
-    }
-
-
-    public boolean fileUpdated(File file) throws WatchingException {
-        compile();
-        return true;
-    }
-
-    public boolean fileDeleted(File file) throws WatchingException{
-    	compile();
         return true;
     }
     

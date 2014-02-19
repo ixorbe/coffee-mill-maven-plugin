@@ -30,25 +30,25 @@ import java.io.IOException;
         )
 @Execute(phase = LifecyclePhase.PACKAGE)
 public class WatchmodeMojo extends AbstractCoffeeMillMojo {
-
-    private Pipeline pipeline;        
     
     @Parameter(defaultValue="true")
     protected boolean watchRunServer;
     
     @Parameter(defaultValue="8234")
-    protected int watchJettyServerPort;
-   
+    protected int watchJettyServerPort;   
     
     //The Jetty Server
-    protected Server server;
+    private Server server;
+    
+    private Pipeline pipeline; 
+    
 
     public void execute() throws MojoExecutionException {
        
     	try {
             init();
         } catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
+            throw new MojoExecutionException("Cannot init watchers on WatchmodeMojo", e);
         }
     	
 		if (watchRunServer) {
@@ -64,21 +64,17 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
             	// Pretty long
                 Thread.sleep(1000000000); 
             } catch (InterruptedException e) { 
-            	this.getLog().error(e.getMessage(), e); 
+            	throw new MojoExecutionException("InterruptedException", e);
             }
-
         }
 
         pipeline.shutdown();
     }
-    
-    
 
-    public void init() throws MojoExecutionException, WatchingException {
+    private void init() throws WatchingException {
         // Expand if needed.
         pipeline = Pipelines.watchers(session, new MavenLoggerWrapper(getLog()),basedir).watch();
     }
-    
     
     
     private void addHandlersToServer() {
@@ -93,13 +89,11 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] { resource_handler, new DefaultHandler() });
         server.setHandler(handlers);
-    }
-    
+    }    
 
     private void startServer() throws Exception {
         server.start();
         server.join();
     }
-
 
 }

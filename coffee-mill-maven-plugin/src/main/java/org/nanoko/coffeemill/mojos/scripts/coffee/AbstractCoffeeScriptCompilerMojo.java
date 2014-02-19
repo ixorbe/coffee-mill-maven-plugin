@@ -2,7 +2,6 @@ package org.nanoko.coffeemill.mojos.scripts.coffee;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.nanoko.java.NPM;
 
@@ -25,15 +24,16 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     public static final String COFFEE_SCRIPT_NPM_VERSION = "1.6.3";
     public static final String COFFEE_SCRIPT_COMMAND = "coffee";
     
-    private NPM coffee;
-    
-    
     /**
      * Where are CoffeeScript files.
      */
     @Parameter(defaultValue= "src/main/coffee", required = true, readonly = true)
     protected File coffeeScriptDir;
     
+    
+    private NPM coffee;
+    
+    // Getters / Setters
     public File getCoffeeScriptDir() {
     	this.coffeeScriptDir.mkdirs();
         return this.coffeeScriptDir;
@@ -41,12 +41,10 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     
     public void setCoffeeScriptDir(File coffeescriptDir){
     	this.coffeeScriptDir = coffeescriptDir;
-    	this.coffeeScriptDir.mkdirs();
     }
 
     
-    public void execute() throws MojoExecutionException, MojoFailureException {
-    	
+    public void execute() throws MojoExecutionException {    	
     	if(isSkipped()) { 
     		return; 
     	}
