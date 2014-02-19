@@ -79,7 +79,7 @@ public class JasmineUtils {
         	 try {
                  FileUtils.copyFileToDirectory(file, getJasmineDirectory(project));
              } catch (IOException e) {
-                mill.getLog().error(e);
+                mill.getLog().error("Error during copy files to Jasmine directory "+getJasmineDirectory(project).getAbsolutePath(), e);
              }
              deps.add(file.getName()); 
         }
@@ -150,7 +150,7 @@ public class JasmineUtils {
                     try {
                         FileUtils.copyFileToDirectory(file, getJasmineITDirectory(mill.project));
                     } catch (IOException e) {
-                    	mill.getLog().error(e);
+                    	mill.getLog().error("Error during copy files to Jasmine directory "+getJasmineITDirectory(mill.project).getAbsolutePath(), e);
                     }
                     deps.add(filename);
                 }

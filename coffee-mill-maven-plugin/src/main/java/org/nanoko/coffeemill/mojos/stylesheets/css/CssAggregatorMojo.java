@@ -74,11 +74,11 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	// Classic Aggregation (app + ext. libs)
     	if (cssAggregationFiles == null || cssAggregationFiles.isEmpty()) {    		
     		if(aggregateAppOnly(output)) {
-        		try {
-    				aggregateAppWithLibs(output);
-    			} catch (IOException e) {
-    				this.getLog().error(e);
-    			}
+    			try {
+					aggregateAppWithLibs(output);
+				} catch (IOException e) {
+					getLog().error("Error during aggregation files", e);
+				}
         	}    
     	// else aggregate from pom.xml CssAggregationFiles list
         } else {
@@ -143,7 +143,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     	try {
  			FileAggregation.joinFiles( output, files);
  		} catch (IOException e) {
- 			this.getLog().error(e);
+ 			this.getLog().error("Error during aggregation files", e);
  		}
 
         if (!output.isFile()) {

@@ -31,46 +31,38 @@ import java.util.Collection;
 public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
 	
 	
-    public void execute() throws MojoExecutionException, MojoFailureException {        
-    	try {
-    		if(isSkipped()) { 
-    			return; 
-    		}
-    		
-    		if (!this.getJavaScriptTestDir().isDirectory()) {
-    			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptTestDir().getAbsolutePath() + " does not exist !");
-            	return;
-    		}
-    		
-    		getLog().info("Get JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());
-        	Collection<File> files = FileUtils.listFiles(this.getJavaScriptTestDir(), new String[]{"js"}, true);
-        	
-        	if(files.isEmpty()){
-    			getLog().warn("JavaScript sources directory "+this.getJavaScriptTestDir().getAbsolutePath()+" is empty !");
-    			return;
-    		}
-        	
-            for(File file : files) {
-            	copy(file);    		
-            }
-            
-    	} catch (WatchingException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
-        }        
-    }
-    
-    
+    public void execute() throws MojoExecutionException {
+    	
+		if(isSkipped()) { 
+			return; 
+		}
+		
+		if (!this.getJavaScriptTestDir().isDirectory()) {
+			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptTestDir().getAbsolutePath() + " does not exist !");
+        	return;
+		}
+		
+		getLog().info("Get JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());
+    	Collection<File> files = FileUtils.listFiles(this.getJavaScriptTestDir(), new String[]{"js"}, true);
+    	
+    	if(files.isEmpty()){
+			getLog().warn("JavaScript sources directory "+this.getJavaScriptTestDir().getAbsolutePath()+" is empty !");
+			return;
+		}
+    	
+    	for(File file : files) {
+			copy(file);    		
+		}   
+    }        
 
-    private void copy(File f) throws WatchingException {
+    private void copy(File f) {
     	getLog().info("Copy JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());
     	try {
 			FileUtils.copyFileToDirectory(f, this.getWorkTestDirectory());
 		} catch (IOException e) { 
-			this.getLog().error(e); 
+			this.getLog().error("Error during copy JavaScript files.", e); 
 		}
-    }
-    
-    
+    }    
     
     private boolean isSkipped(){
     	if (skipJsTestCompilation) {

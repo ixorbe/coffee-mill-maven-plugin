@@ -2,6 +2,7 @@ package org.nanoko.coffeemill.mojos.processResources;
 
 
 import org.apache.commons.io.FileUtils;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -29,6 +30,21 @@ import com.googlecode.htmlcompressor.compressor.HtmlCompressor;
         defaultPhase = LifecyclePhase.COMPILE)
 public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
 	
+	public String inputFilename = null;
+	
+	/**
+     * Enables html compression.
+     */
+    @Parameter
+    protected Map<String,String> htmlCompressionOptions;  
+	
+	/**
+     * Enables/Disables html compression.
+     */
+    @Parameter(defaultValue="false")
+    protected boolean skipHtmlCompression;
+    
+    private HtmlCompressor htmlCompressor;    
 	
 	private static final String PRESERVELINEBREAK = "preserveLineBreak" ;
 	private static final String REMOVECOMMENTS = "removeComments" ;
@@ -45,23 +61,8 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
 	private static final String REMOVESTYLEATTRIBUTES = "removeStyleAttributes" ;
 	private static final String SIMPLEBOOLEANATTRIBUTES = "simpleBooleanAttributes" ;	
 	private static final String SIMPLEDOCTYPE = "simpleDocType" ;
-	/**
-     * Enables html compression.
-     */
-    @Parameter(defaultValue="false")
-    private boolean skipHtmlCompression;
-    
-    public void setSkipHtmlCompression(Boolean skip){
-    	this.skipHtmlCompression = skip;
-    }
 	
-    /**
-     * Enables html compression.
-     */
-    @Parameter
-    protected Map<String,String> htmlCompressionOptions;    
-    
-    //private List<Pattern> preservePatterns = new ArrayList<Pattern>();
+	//private List<Pattern> preservePatterns = new ArrayList<Pattern>();
     private boolean preserveLineBreak = true;
     private boolean removeComments = false;
     private boolean removeMultispaces = false;
@@ -77,13 +78,13 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     private boolean removeStyleAttributes = false;
     private boolean simpleBooleanAttributes = false;
     private boolean simpleDocType = false;
+	
     
-    public String inputFilename = null;
-    
-    private HtmlCompressor htmlCompressor;    
-    
+    public void setSkipHtmlCompression(Boolean skip){
+    	this.skipHtmlCompression = skip;
+    }    
 
-    public void execute() {
+    public void execute() throws MojoExecutionException {
     	if(isSkipped()) { 
     		return; 
     	}
@@ -91,20 +92,35 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     	this.configure();
     	
     	try {
-	    	Collection<File> files = FileUtils.listFiles(getAssetsDir(), new String[]{"html", "htm"}, true);
-	        for (File file : files) {          
-				compress(file);
-	        }        
+    		Collection<File> files = FileUtils.listFiles(getAssetsDir(), new String[]{"html", "htm"}, true);
+            for (File file : files) {          
+    			compress(file);
+            }        
     	} catch (WatchingException e) {
-    		this.getLog().error(e);
-		}
-        
+    		throw new MojoExecutionException("Error during execution to compress html files", e);
+		}        
     }    
 
     public boolean accept(File file) {
         return  !isSkipped() 
         		 && ( FSUtils.hasExtension(file, "html") || FSUtils.hasExtension(file, "htm") );
     }
+    
+    public boolean fileCreated(File file) throws WatchingException {
+    	compress(file);
+        return true;
+    }
+
+    public boolean fileUpdated(File file) throws WatchingException {
+    	compress(file);
+        return true;
+    }
+
+    public boolean fileDeleted(File file) throws WatchingException{
+    	compress(file);
+        return true;
+    }
+    
     
     private boolean compress(File file) throws WatchingException {
     	getLog().info("Compress Html file "+file.getName() +" from " + this.getAssetsDir().getAbsolutePath());
@@ -119,26 +135,10 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
             FileUtils.write(out, result);
             writeStatistics(htmlCompressor, file);
         } catch(IOException e) {
-            throw new WatchingException("Error during Html compression on file "+file.getName() + " : " + e.getMessage());
+            throw new WatchingException("Error during Html compression on file "+file.getName(), e);
         }
 
         getLog().info("HTML compression completed.");
-        return true;
-    }
-
-    public boolean fileCreated(File file) throws WatchingException {
-    	compress(file);
-        return true;
-    }
-
-
-    public boolean fileUpdated(File file) throws WatchingException {
-    	compress(file);
-        return true;
-    }
-
-    public boolean fileDeleted(File file) throws WatchingException{
-    	compress(file);
         return true;
     }
     
@@ -155,7 +155,7 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
     /**
      * Configure method to define HtmlCompressor and set all compression options
      */
-    public void configure(){
+    private void configure(){
     	htmlCompressor = new HtmlCompressor();
 
     	if(htmlCompressionOptions!=null && !htmlCompressionOptions.isEmpty() ){	    		
@@ -231,8 +231,6 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
         	htmlCompressor.setPreservePatterns(preservePatterns);*/
     }
     
-    
-    
     private void writeStatistics(HtmlCompressor htmlCompressor, File file) {
         boolean si = true;
 
@@ -278,35 +276,10 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
         				"|")).append(eol);
         sb2.append(hr).append(eol);
         String statistics = sb2.toString();
-        
-        /*
-        String sb = "";
-        sb.concat(file.getName() + " - HTML compression statistics:").concat(eol);       
-        sb.concat(hr).concat(eol);
-        sb.concat(String.format(format, "| Category", "| Original", "| Compressed", "|")).concat(eol);
-        sb.concat(hr).concat(eol);
-        sb.concat(String.format(format, "| Filesize", "| " + origFilesize, "| " + compFilesize, "|")).concat(eol);
-        sb.concat(String.format(format, "| Empty Chars", "| " + origEmptyChars, "| " + compEmptyChars, "|")).concat(eol);
-        sb.concat(String.format(format, "| Script Size", "| " + origInlineScriptSize, "| " + compInlineScriptSize, "|")).concat(eol);
-        sb.concat(String.format(format, "| Style Size", "| " + origInlineStyleSize, "| " + compInlineStyleSize, "|")).concat(eol);
-        sb.concat(String.format(format, "| Event Handler Size", "| " + origInlineEventSize, "| " + compInlineEventSize, "|")).concat(eol);
-        sb.concat(hr).concat(eol);
-        sb.concat(String.format("%-90s%-2s",
-                String.format("| Time: %s, Preserved: %s, Compression Ratio: %s, Savings: %s%%",
-                        elapsedTime, preservedSize, formatter.format(compressionRatio), formatter.format(spaceSavings*100)),
-                "|")).concat(eol);
-        sb.concat(hr).concat(eol);
-
-        String statistics = sb.toString();*/
         getLog().info(statistics);
     }
 
-    /*private File getOutputHtmlFile(File input) {
-        String path = input.getParentFile().getAbsolutePath().substring(getAssetsDir().getAbsolutePath().length());
-        return new File(getWorkDirectory(), path + "/" + input.getName());
-    }*/
-
-    public static String humanReadableByteCount(long bytes, boolean si) {
+    private static String humanReadableByteCount(long bytes, boolean si) {
         int unit = si ? 1000 : 1024;
         if (bytes < unit) { 
         	return bytes + " B"; 
@@ -316,7 +289,7 @@ public class HtmlCompressorMojo extends AbstractCoffeeMillWatcherMojo {
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
-    public static String getElapsedHMSTime(long elapsedTime) {
+    private static String getElapsedHMSTime(long elapsedTime) {
         String format = String.format("%%0%dd", 2);
         long newElapsedTime = elapsedTime / 1000;
         String seconds = String.format(format, newElapsedTime % 60);
