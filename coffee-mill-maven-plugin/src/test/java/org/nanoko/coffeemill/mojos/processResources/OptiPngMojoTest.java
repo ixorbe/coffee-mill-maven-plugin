@@ -21,8 +21,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.nanoko.coffeemill.mojos.processresources.CopyAssetsMojo;
-import org.nanoko.coffeemill.mojos.processresources.OptiPngMojo;
+import org.nanoko.coffeemill.mojos.processresource.CopyAssetsMojo;
+import org.nanoko.coffeemill.mojos.processresource.OptiPngMojo;
 
 import java.io.File;
 

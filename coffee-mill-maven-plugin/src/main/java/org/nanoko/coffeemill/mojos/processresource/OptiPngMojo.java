@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.mojos.processresources;
+package org.nanoko.coffeemill.mojos.processresource;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -32,17 +32,17 @@ import java.io.IOException;
 import java.util.Iterator;
 
 /**
- * A processor optimizing JPEG files using JpegTran.
- * JpegTran must be installed on the system and available from the path.
- * -> to install : http://saralinux.blogspot.fr/2013/12/installing-jpegtran-on-mac-or-unixlinux.html
- * -> with brew : brew install jpegtran
+ * A processor optimizing PNG files using OptiPNG.
+ * OptiPNG must be installed on the system and available from the path.
+ * -> to install : with brew : brew install optipng 
  */
-@Mojo(name = "optimize-jpeg", threadSafe = false,
+@Mojo(name = "optimize-png", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,
 requiresProject = true,
 defaultPhase = LifecyclePhase.COMPILE)
-public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
+public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
 
+	
 	/**
      * Enables verbose mode.
      */
@@ -50,17 +50,26 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
     protected boolean verbose;    
     
     /**
+     * Optimization level (0-7).
+     * 2 by default.
+     * Higher values are more optimized, but make the process slower.
+     */
+    @Parameter(defaultValue="2")
+    protected int level = 2;
+    
+    
+    /**
      * The JpegTran executable file name without extension.
      * This field is not final for testing purpose.
      */
-    private static String EXECUTABLE_NAME = "jpegtran";    
+    private static String EXECUTABLE_NAME = "optipng";
     
-
-	/**
+    /**
      * The JpegTran executable.
      */
-    private File jpegTranExec;
+    private File optiPNGExec;
     
+
     
     public void setVerbose(Boolean verbose){
     	this.verbose = verbose;
@@ -74,16 +83,17 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
 		EXECUTABLE_NAME = exec_name;
 	}
     
-
-    public void execute() throws MojoExecutionException {    	
+    
+    public void execute() throws MojoExecutionException {
+    	
     	if(isSkipped()) { 
     		return; 
     	}
 
-        jpegTranExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
+    	optiPNGExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
-        if (jpegTranExec == null) {
-            getLog().error("Cannot optimize JPEG files - "+EXECUTABLE_NAME+" not installed.");
+        if (optiPNGExec == null) {
+            getLog().error("Cannot optimize PNG files - optipng not installed.");
             return;
         } 
         
@@ -91,23 +101,23 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
         	return; 
         }
         
-        getLog().info("Invoking jpegtran : " + jpegTranExec.getAbsolutePath());
-        Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"jpg", "jpeg"}, true);
+        getLog().info("Invoking optipng : " + optiPNGExec.getAbsolutePath());
+        Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"png"}, true);
         while (files.hasNext()) {
             File file = files.next();
             try {
 				optimize(file);
 			} catch (WatchingException e) {
-				throw new MojoExecutionException("Error during execute() on OptiJpegMojo", e);
+				throw new MojoExecutionException("Error during execute() on OptiPngMojo", e);
 			}
         }
     }
     
     public boolean accept(File file) {
         return !isSkipped() 
-        		&& jpegTranExec != null
+        		&& optiPNGExec != null
                 && FSUtils.isInDirectory(file.getName(), getWorkDirectory())
-                && (file.getName().endsWith(".jpg") || file.getName().endsWith(".jpeg"));
+                && (file.getName().endsWith(".png") );
     }
     
     public boolean fileCreated(File file) throws WatchingException {
@@ -131,24 +141,17 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
     
 
     private void optimize(File file) throws WatchingException {
-        File dir = file.getParentFile();
+    	File dir = file.getParentFile();
 
         // Build command line
-        CommandLine cmdLine = CommandLine.parse(jpegTranExec.getAbsolutePath());
+        CommandLine cmdLine = CommandLine.parse(optiPNGExec.getAbsolutePath());
+        cmdLine.addArgument(file.getName());
 
         if (verbose) {
-            cmdLine.addArgument("-verbose");
+            cmdLine.addArgument("-v");
         }
 
-        cmdLine.addArgument("-copy");
-        cmdLine.addArgument("none");
-
-        cmdLine.addArgument("-optimize");
-
-        cmdLine.addArgument("-outfile");
-        cmdLine.addArgument("__out.jpeg");
-
-        cmdLine.addArgument(file.getName());
+        cmdLine.addArgument("-o" + level);
 
         DefaultExecutor executor = new DefaultExecutor();
 
@@ -157,27 +160,15 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
         try {
             getLog().info("Executing " + cmdLine.toString());
             executor.execute(cmdLine);
-
-            // Overwrite the original file
-            File out = new File(dir, "__out.jpeg");
-            
-            getLog().info("output jpeg file : "+out.getAbsolutePath());
-            if (out.exists()) {
-                FileUtils.copyFile(out, file);
-                FileUtils.deleteQuietly(out);
-            } else {
-                throw new IOException("Output file not found : " + out.getAbsolutePath());
-            }
-
             getLog().info(file.getName() + " optimized");
         } catch (IOException e) {
-            throw new WatchingException("Error during JPG optimization of " + file.getAbsolutePath(), e);
+        	throw new WatchingException("Error during PNG optimization of " + file.getAbsolutePath(), e);
         }
     }
     
     private boolean isSkipped(){
     	if (skipPicturesOptimization) {
-            getLog().info("\033[31m JPEG Optimization skipped \033[37m");
+            getLog().info("\033[31m PNG Optimization skipped \033[37m");
             return true;
         } else {
         	return false;
