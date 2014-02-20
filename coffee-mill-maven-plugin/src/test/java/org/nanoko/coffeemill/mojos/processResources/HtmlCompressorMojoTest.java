@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.mojos.processResources;
+package org.nanoko.coffeemill.mojos.processresources;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -21,11 +21,12 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.nanoko.coffeemill.mojos.processResources.CopyAssetsMojo;
-import org.nanoko.coffeemill.mojos.processResources.HtmlCompressorMojo;
+import org.nanoko.coffeemill.mojos.processresources.CopyAssetsMojo;
+import org.nanoko.coffeemill.mojos.processresources.HtmlCompressorMojo;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 
@@ -56,23 +57,26 @@ public class HtmlCompressorMojoTest {
     	
     	mojo.setSkipHtmlCompression(false);
     	
-    	mojo.htmlCompressionOptions = new HashMap<>();
-    	mojo.htmlCompressionOptions.put("preserveLineBreak", "false");
-    	mojo.htmlCompressionOptions.put("generateStatistics", "true");
-    	mojo.htmlCompressionOptions.put("removeComments", "true");
-    	mojo.htmlCompressionOptions.put("removeFormAttributes", "true");
-    	mojo.htmlCompressionOptions.put("removeHttpProtocol", "true");
-    	mojo.htmlCompressionOptions.put("removeHttpsProtocol", "true");
-    	mojo.htmlCompressionOptions.put("removeInputAttributes", "true");
-    	mojo.htmlCompressionOptions.put("removeIntertagSpaces", "true");
-    	mojo.htmlCompressionOptions.put("removeJavaScriptProtocol", "true");
-    	mojo.htmlCompressionOptions.put("removeLinkAttributes", "true");
-    	mojo.htmlCompressionOptions.put("removeMultiSpaces", "true");
-    	mojo.htmlCompressionOptions.put("removeQuotes", "true");
-    	mojo.htmlCompressionOptions.put("removeScriptAttributes", "true");
-    	mojo.htmlCompressionOptions.put("removeStyleAttributes", "true");
-    	mojo.htmlCompressionOptions.put("simpleBooleanAttributes", "true");
-    	mojo.htmlCompressionOptions.put("simpleDoctype", "true");
+    	Map<String,String> options = new HashMap<>();
+    	
+    	options.put("preserveLineBreak", "false");
+    	options.put("generateStatistics", "true");
+    	options.put("removeComments", "true");
+    	options.put("removeFormAttributes", "true");
+    	options.put("removeHttpProtocol", "true");
+    	options.put("removeHttpsProtocol", "true");
+    	options.put("removeInputAttributes", "true");
+    	options.put("removeIntertagSpaces", "true");
+    	options.put("removeJavaScriptProtocol", "true");
+    	options.put("removeLinkAttributes", "true");
+    	options.put("removeMultiSpaces", "true");
+    	options.put("removeQuotes", "true");
+    	options.put("removeScriptAttributes", "true");
+    	options.put("removeStyleAttributes", "true");
+    	options.put("simpleBooleanAttributes", "true");
+    	options.put("simpleDoctype", "true");
+    	
+    	mojo.setHtmlCompressionOptions(options); 
 
         File file = new File(mojo.getAssetsDir(), "lemonde/le-monde.html");
         long size = file.length();

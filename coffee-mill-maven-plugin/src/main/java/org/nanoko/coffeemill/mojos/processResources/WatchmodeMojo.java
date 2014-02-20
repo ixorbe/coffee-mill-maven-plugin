@@ -1,4 +1,4 @@
-package org.nanoko.coffeemill.mojos.processResources;
+package org.nanoko.coffeemill.mojos.processresources;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;

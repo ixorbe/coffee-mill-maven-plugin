@@ -71,12 +71,10 @@ public class JasmineITMojo extends AbstractCoffeeMillMojo {
         // Copy the right library to target/it-jasmine/src
         try {
             if (runJasmineTestOnAggregatedVersion) {
-                //File lib = new File(getTarget(), project.getBuild().getFinalName() + ".js");
                 File lib = new File(getBuildDirectory(), project.getBuild().getFinalName() + ".js");
                 FileUtils.copyFileToDirectory(lib, JasmineUtils.getJasmineITSourceDirectory(project));
             }
             if (runJasmineTestOnMinifiedVersion) {
-                //File lib = new File(getTarget(), project.getBuild().getFinalName() + "-min.js");
                 File lib = new File(getBuildDirectory(), project.getBuild().getFinalName() + "-min.js");
                 FileUtils.copyFileToDirectory(lib, JasmineUtils.getJasmineITSourceDirectory(project));
             }
@@ -101,7 +99,9 @@ public class JasmineITMojo extends AbstractCoffeeMillMojo {
                 JasmineUtils.extendJasmineMojoForIT(this, testMojo, reportName);
                 JasmineUtils.configureJasmineToRunOnLibrary(testMojo, library);
                 testMojo.execute();
-            } finally {
+            } catch (MojoFailureException e) {
+				throw new MojoFailureException("Error during TestMojo execution.", e);
+			} finally {
                 File report = new File(JasmineUtils.getJasmineITDirectory(project), reportName);
                 JasmineUtils.copyJunitReport(this, report, "integration-test.jasmine.aggregated");
             }
@@ -117,7 +117,9 @@ public class JasmineITMojo extends AbstractCoffeeMillMojo {
                 JasmineUtils.extendJasmineMojoForIT(this, testMojo, reportName);
                 JasmineUtils.configureJasmineToRunOnLibrary(testMojo, library);
                 testMojo.execute();
-            } finally {
+            } catch (MojoFailureException e) {
+				throw new MojoFailureException("Error during TestMojo execution.", e);
+			} finally {
                 File report = new File(JasmineUtils.getJasmineITDirectory(project), reportName);
                 JasmineUtils.copyJunitReport(this, report, "integration-test.jasmine.minified");
             }

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.mojos.processResources;
+package org.nanoko.coffeemill.mojos.processresources;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -43,19 +43,20 @@ requiresProject = true,
 defaultPhase = LifecyclePhase.COMPILE)
 public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
 
+	/**
+     * Enables verbose mode.
+     */
+    @Parameter(defaultValue="false")
+    protected boolean verbose;    
+    
     /**
      * The JpegTran executable file name without extension.
      * This field is not final for testing purpose.
      */
-    public static String EXECUTABLE_NAME = "jpegtran";
-
-    /**
-     * Enables verbose mode.
-     */
-    @Parameter(defaultValue="false")
-    protected boolean verbose;
+    private static String EXECUTABLE_NAME = "jpegtran";    
     
-    /**
+
+	/**
      * The JpegTran executable.
      */
     private File jpegTranExec;
@@ -64,6 +65,15 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
     public void setVerbose(Boolean verbose){
     	this.verbose = verbose;
     }
+    
+    public static String getExecutableName() {
+		return EXECUTABLE_NAME;
+	}
+
+	public static void setExecutableName(String exec_name) {
+		EXECUTABLE_NAME = exec_name;
+	}
+    
 
     public void execute() throws MojoExecutionException {    	
     	if(isSkipped()) { 
@@ -91,7 +101,6 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
 				throw new MojoExecutionException("Error during execute() on OptiJpegMojo", e);
 			}
         }
-        //OptionsHelper.getBoolean(options, "verbose", false);
     }
     
     public boolean accept(File file) {

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.mojos.processResources;
+package org.nanoko.coffeemill.mojos.processresources;
 
 import java.io.File;
 
@@ -25,8 +25,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.nanoko.coffeemill.mojos.processResources.CopyAssetsMojo;
-import org.nanoko.coffeemill.mojos.processResources.OptiJpegMojo;
+import org.nanoko.coffeemill.mojos.processresources.CopyAssetsMojo;
+import org.nanoko.coffeemill.mojos.processresources.OptiJpegMojo;
 
 /**
  * Test the OptiJpegMojo.
@@ -75,8 +75,8 @@ public class OptiJpegMojoTest {
             MojoFailureException {
     	System.out.println("\n ==> Should not optimize the test jpeg file : should not find \"do_not_exist\" executable.");
     	
-        String name = OptiJpegMojo.EXECUTABLE_NAME;
-        OptiJpegMojo.EXECUTABLE_NAME ="do_not_exist";
+        String name = OptiJpegMojo.getExecutableName();
+        OptiJpegMojo.setExecutableName("do_not_exist");
 
         File file = new File(mojo.getWorkDirectory(), "img/birds.jpeg");
         long size = file.length();
@@ -88,8 +88,7 @@ public class OptiJpegMojoTest {
         // Nothing happens.
         assertTrue(newSize == size);
 
-        OptiJpegMojo.EXECUTABLE_NAME = name;
-
+        OptiJpegMojo.setExecutableName(name);
     }
     
     
