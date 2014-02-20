@@ -47,19 +47,141 @@
 
     <dependencies>
         
-        <!-- Watcher ext. lib -->
+        <!-- This 2 hereafter are not available as ext libraries yet 
+        	so they have been include directly as java class 
+        -->
+        
+        <!-- Watcher ext. lib 
         <dependency>
             <groupId>org.nanoko.maven</groupId>
             <artifactId>watcher</artifactId>
             <version>0.0.6-SNAPSHOT</version>            
+        </dependency> -->
+        
+        <!-- Watcher ext lib dependencies -->
+        <dependency>
+	        <groupId>commons-io</groupId>
+	        <artifactId>commons-io</artifactId>
+	        <version>2.4</version>
+	    </dependency>	    
+	    <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>		
+	    <dependency>
+          <groupId>org.assertj</groupId>
+          <artifactId>assertj-core</artifactId>
+          <version>1.4.0</version>
+          <scope>test</scope>
+        </dependency>        
+	    <dependency>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version>2.0-alpha-1</version>
+            <scope>test</scope>
+        </dependency>        
+	    <dependency>
+		    <groupId>org.apache.directory.studio</groupId>
+		    <artifactId>org.apache.commons.logging</artifactId>
+		    <version>1.1.3</version>
+		</dependency>		
+	    <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>${mavenVersion}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.maven.reporting</groupId>
+                    <artifactId>maven-reporting-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven.wagon</groupId>
+                    <artifactId>wagon-file</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven.wagon</groupId>
+                    <artifactId>wagon-http-lightweight</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven.wagon</groupId>
+                    <artifactId>wagon-ssh</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven.wagon</groupId>
+                    <artifactId>wagon-ssh-external</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-cli</groupId>
+                    <artifactId>commons-cli</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>classworlds</groupId>
+                    <artifactId>classworlds</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-container-default</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-interactivity-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
-        <!-- NodeJS ext. lib -->
+        <!-- NodeJS ext. lib 
         <dependency>
             <groupId>org.nanoko.java</groupId>
             <artifactId>nodejs</artifactId>
             <version>0.0.6-SNAPSHOT</version>            
+        </dependency> -->
+        
+        <!-- NodeJS ext lib dependencies -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-archiver</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-exec</artifactId>
+            <version>1.1</version>
+        </dependency>        
+        <dependency>
+		    <groupId>org.apache.directory.studio</groupId>
+		    <artifactId>org.apache.commons.logging</artifactId>
+		    <version>1.1.3</version>
+		</dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>        
+        <dependency>
+	      <groupId>org.apache.maven</groupId>
+	      <artifactId>maven-plugin-api</artifactId>
+	      <version>${mavenVersion}</version>
+	    </dependency>	    
+        <dependency>
+          <groupId>org.assertj</groupId>
+          <artifactId>assertj-core</artifactId>
+          <version>1.4.0</version>
+          <scope>test</scope>
+        </dependency>
+        
+         
+        
         
         <!-- Jetty -->		
         <dependency>
