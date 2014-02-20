@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.mojos.processresources;
+package org.nanoko.coffeemill.mojos.processresource;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -22,19 +22,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.processresource.CopyAssetsMojo;
-import org.nanoko.coffeemill.mojos.processresource.OptiPngMojo;
+import org.nanoko.coffeemill.mojos.processresource.HtmlCompressorMojo;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 
-public class OptiPngMojoTest {
+public class HtmlCompressorMojoTest {
 	
 	private final File assetsSourceTestDir = new File("src/test/resources/assets");
-	private final File workDir = new File("target/test/OptiPngMojoTest/www");
-	private OptiPngMojo mojo;
+	private final File workDir = new File("target/test/HtmlCompressorMojoTest/www");
+	private HtmlCompressorMojo mojo;
 	
-	public OptiPngMojoTest() throws MojoExecutionException{
+	public HtmlCompressorMojoTest() throws MojoExecutionException{
 		CopyAssetsMojo copymojo = new CopyAssetsMojo();
 		copymojo.setAssetsDir(assetsSourceTestDir);
 		copymojo.setWorkDirectory(workDir);
@@ -43,48 +45,49 @@ public class OptiPngMojoTest {
 	
 	@Before
 	public void prepareTestDirectory(){
-    	this.mojo = new OptiPngMojo();     
-    	this.mojo.setVerbose(true);
+    	this.mojo = new HtmlCompressorMojo();
     	this.mojo.setWorkDirectory(this.workDir);
     	this.mojo.setAssetsDir(assetsSourceTestDir);
     }
 	
 
     @Test
-    public void testPNGOptimization() throws MojoExecutionException, MojoFailureException {
-		System.out.println("\n ==> Should optimize the png test file (smaller file size).");
+    public void testHTMLCompression() throws MojoExecutionException, MojoFailureException {
+    	System.out.println("\n ==> Should compress the html test file (smaller file size).");
+    	
+    	mojo.setSkipHtmlCompression(false);
+    	
+    	Map<String,String> options = new HashMap<>();
+    	
+    	options.put("preserveLineBreak", "false");
+    	options.put("generateStatistics", "true");
+    	options.put("removeComments", "true");
+    	options.put("removeFormAttributes", "true");
+    	options.put("removeHttpProtocol", "true");
+    	options.put("removeHttpsProtocol", "true");
+    	options.put("removeInputAttributes", "true");
+    	options.put("removeIntertagSpaces", "true");
+    	options.put("removeJavaScriptProtocol", "true");
+    	options.put("removeLinkAttributes", "true");
+    	options.put("removeMultiSpaces", "true");
+    	options.put("removeQuotes", "true");
+    	options.put("removeScriptAttributes", "true");
+    	options.put("removeStyleAttributes", "true");
+    	options.put("simpleBooleanAttributes", "true");
+    	options.put("simpleDoctype", "true");
+    	
+    	mojo.setHtmlCompressionOptions(options); 
 
-        File file = new File(mojo.getWorkDirectory(), "img/demo.png");
+        File file = new File(mojo.getAssetsDir(), "lemonde/le-monde.html");
         long size = file.length();
 
         mojo.execute();
 
-        file = new File(mojo.getWorkDirectory(), "img/demo.png");
+        file = new File(mojo.getWorkDirectory(), "lemonde/le-monde.html");
         long newSize = file.length();
 
         // Optimization, so the new size is smaller.
         assertTrue(newSize < size);
-    }
-
-    @Test
-    public void testPNGOptimizationWhenOptiPNGIsNotInstalled() throws MojoExecutionException,
-            MojoFailureException {
-    	System.out.println("\n ==> Should not optimize the test png file : should not find \"do_not_exist\" executable.");
-
-        String name = OptiPngMojo.getExecutableName();
-        OptiPngMojo.setExecutableName("do_not_exist");
-
-        File file = new File(mojo.getWorkDirectory(), "img/demo.png");
-        long size = file.length();
-
-        mojo.execute();
-
-        long newSize = file.length();
-
-        // Nothing happens.
-        assertTrue(newSize == size);
-
-        OptiPngMojo.setExecutableName(name);
     }
     
     @After
@@ -92,5 +95,5 @@ public class OptiPngMojoTest {
 		if(this.mojo.getWorkDirectory().exists())
 			FileUtils.deleteQuietly(this.mojo.getWorkDirectory());
 	}
-    
+
 }

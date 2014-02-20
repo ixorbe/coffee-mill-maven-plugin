@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.mojos.processresources;
+package org.nanoko.coffeemill.mojos.processresource;
 
 import java.io.File;
 

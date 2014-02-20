@@ -1,4 +1,4 @@
-package org.nanoko.coffeemill.mojos.processresources;
+package org.nanoko.coffeemill.mojos.processresource;
 
 import java.util.Collection;
 import java.util.LinkedList;
