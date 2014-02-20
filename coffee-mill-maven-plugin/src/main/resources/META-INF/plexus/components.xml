@@ -67,7 +67,7 @@
 	                    org.nanoko.coffee-mill:coffee-mill-maven-plugin:build-zip
                     </package>
                     <integration-test>
-						<!-- org.nanoko.coffee-mill:coffee-mill-maven-plugin:jasmine-it-test -->
+						org.nanoko.coffee-mill:coffee-mill-maven-plugin:jasmine-it-test
                     </integration-test>
                     <install>
                         org.apache.maven.plugins:maven-install-plugin:install
