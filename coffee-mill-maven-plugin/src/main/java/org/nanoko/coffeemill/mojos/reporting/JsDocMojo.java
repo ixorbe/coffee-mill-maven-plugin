@@ -34,7 +34,6 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     public static final String PKG_NPM_VERSION = "3.3.0-alpha4";
     
     public String inputFilename = null;
-    public String outputDir = null;
     
     @Parameter(defaultValue="false")
 	protected boolean skipJsDocumentation;
