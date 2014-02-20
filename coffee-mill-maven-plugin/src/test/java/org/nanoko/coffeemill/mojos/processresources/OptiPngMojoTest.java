@@ -13,11 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.mojos.processresource;
-
-import java.io.File;
-
-import static org.junit.Assert.assertTrue;
+package org.nanoko.coffeemill.mojos.processresources;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -25,45 +21,45 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.nanoko.coffeemill.mojos.processresource.CopyAssetsMojo;
-import org.nanoko.coffeemill.mojos.processresource.OptiJpegMojo;
+import org.nanoko.coffeemill.mojos.processresources.CopyAssetsMojo;
+import org.nanoko.coffeemill.mojos.processresources.OptiPngMojo;
 
-/**
- * Test the OptiJpegMojo.
- */
-public class OptiJpegMojoTest {
+import java.io.File;
+
+import static org.junit.Assert.assertTrue;
+
+public class OptiPngMojoTest {
 	
 	private final File assetsSourceTestDir = new File("src/test/resources/assets");
-	private final File workDir = new File("target/test/OptiJpegMojoTest/www");
-	private OptiJpegMojo mojo;
+	private final File workDir = new File("target/test/OptiPngMojoTest/www");
+	private OptiPngMojo mojo;
 	
-	public OptiJpegMojoTest() throws MojoExecutionException{
+	public OptiPngMojoTest() throws MojoExecutionException{
 		CopyAssetsMojo copymojo = new CopyAssetsMojo();
 		copymojo.setAssetsDir(assetsSourceTestDir);
 		copymojo.setWorkDirectory(workDir);
 		copymojo.execute();
-	}
-	
+	}	
 	
 	@Before
 	public void prepareTestDirectory(){
-    	this.mojo = new OptiJpegMojo();     
+    	this.mojo = new OptiPngMojo();     
     	this.mojo.setVerbose(true);
     	this.mojo.setWorkDirectory(this.workDir);
     	this.mojo.setAssetsDir(assetsSourceTestDir);
     }
 	
-	
-	@Test
-    public void testJPEGOptimization() throws MojoExecutionException, MojoFailureException {
-		System.out.println("\n ==> Should optimize the jpeg test file (smaller file size).");
 
-        File file = new File(mojo.getWorkDirectory(), "img/birds.jpeg");
+    @Test
+    public void testPNGOptimization() throws MojoExecutionException, MojoFailureException {
+		System.out.println("\n ==> Should optimize the png test file (smaller file size).");
+
+        File file = new File(mojo.getWorkDirectory(), "img/demo.png");
         long size = file.length();
 
         mojo.execute();
 
-        file = new File(mojo.getWorkDirectory(), "img/birds.jpeg");
+        file = new File(mojo.getWorkDirectory(), "img/demo.png");
         long newSize = file.length();
 
         // Optimization, so the new size is smaller.
@@ -71,14 +67,14 @@ public class OptiJpegMojoTest {
     }
 
     @Test
-    public void testJPEGOptimizationWhenJpegTranIsNotInstalled() throws MojoExecutionException,
+    public void testPNGOptimizationWhenOptiPNGIsNotInstalled() throws MojoExecutionException,
             MojoFailureException {
-    	System.out.println("\n ==> Should not optimize the test jpeg file : should not find \"do_not_exist\" executable.");
-    	
-        String name = OptiJpegMojo.getExecutableName();
-        OptiJpegMojo.setExecutableName("do_not_exist");
+    	System.out.println("\n ==> Should not optimize the test png file : should not find \"do_not_exist\" executable.");
 
-        File file = new File(mojo.getWorkDirectory(), "img/birds.jpeg");
+        String name = OptiPngMojo.getExecutableName();
+        OptiPngMojo.setExecutableName("do_not_exist");
+
+        File file = new File(mojo.getWorkDirectory(), "img/demo.png");
         long size = file.length();
 
         mojo.execute();
@@ -88,14 +84,13 @@ public class OptiJpegMojoTest {
         // Nothing happens.
         assertTrue(newSize == size);
 
-        OptiJpegMojo.setExecutableName(name);
+        OptiPngMojo.setExecutableName(name);
     }
-    
     
     @After
 	public void cleanTestDirectory() {
 		if(this.mojo.getWorkDirectory().exists())
 			FileUtils.deleteQuietly(this.mojo.getWorkDirectory());
 	}
-
+    
 }

@@ -1,4 +1,4 @@
-package org.nanoko.coffeemill.mojos.processresource;
+package org.nanoko.coffeemill.mojos.processresources;
 
 
 import org.apache.commons.io.FileUtils;

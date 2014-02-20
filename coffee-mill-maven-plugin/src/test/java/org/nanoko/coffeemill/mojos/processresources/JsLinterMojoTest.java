@@ -1,4 +1,4 @@
-package org.nanoko.coffeemill.mojos.processresource;
+package org.nanoko.coffeemill.mojos.processresources;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;

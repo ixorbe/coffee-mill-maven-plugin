@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.nanoko.coffeemill.mojos.processresource;
+package org.nanoko.coffeemill.mojos.processresources;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -21,8 +21,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.nanoko.coffeemill.mojos.processresource.CopyAssetsMojo;
-import org.nanoko.coffeemill.mojos.processresource.HtmlCompressorMojo;
+import org.nanoko.coffeemill.mojos.processresources.CopyAssetsMojo;
+import org.nanoko.coffeemill.mojos.processresources.HtmlCompressorMojo;
 
 import java.io.File;
 import java.util.HashMap;
