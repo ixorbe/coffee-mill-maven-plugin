@@ -25,83 +25,83 @@ import java.util.Collection;
  * when it is executed.
  */
 @Mojo(name = "compile-javascript", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.COMPILE,
-        requiresProject = true,
-        defaultPhase = LifecyclePhase.COMPILE)
+requiresDependencyResolution = ResolutionScope.COMPILE,
+requiresProject = true,
+defaultPhase = LifecyclePhase.COMPILE)
 public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
-	
-	
+
+
     public void execute() throws MojoExecutionException {    	
-		if(isSkipped()) { 
-			return; 
-		}
-		
-		if (!this.getJavaScriptDir().isDirectory()) {
-			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptDir().getAbsolutePath() + " does not exist !");
-        	return;
-		}
-		
-		getLog().info("Get JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
-    	Collection<File> files = FileUtils.listFiles(this.getJavaScriptDir(), new String[]{"js"}, true);
-    	
-    	if(files.isEmpty()){
-			getLog().warn("JavaScript sources directory "+this.getJavaScriptDir().getAbsolutePath()+" is empty !");
-			return;
-		}
-        	
+        if(isSkipped()) { 
+            return; 
+        }
+
+        if (!this.getJavaScriptDir().isDirectory()) {
+            getLog().warn("JavaScript copy skipped - " + this.getJavaScriptDir().getAbsolutePath() + " does not exist !");
+            return;
+        }
+
+        getLog().info("Get JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
+        Collection<File> files = FileUtils.listFiles(this.getJavaScriptDir(), new String[]{"js"}, true);
+
+        if(files.isEmpty()){
+            getLog().warn("JavaScript sources directory "+this.getJavaScriptDir().getAbsolutePath()+" is empty !");
+            return;
+        }
+
         try {	
             for(File file : files){
-            	copy(file);   
+                copy(file);   
             }            
-    	} catch (WatchingException e) {
+        } catch (WatchingException e) {
             throw new MojoExecutionException("Error during execute() on JsCompilerMojo : cannot copy", e);
         }        
     }
-    
+
     public boolean accept(File file) {
-    	return !isSkipped()
-    		&& file.getParent().contains( getJavaScriptDir().getAbsolutePath() )
-    		&& FSUtils.hasExtension(file, "js");
+        return !isSkipped()
+                && file.getParent().contains( getJavaScriptDir().getAbsolutePath() )
+                && FSUtils.hasExtension(file, "js");
     }
-    
+
     public boolean fileCreated(File file) throws WatchingException {
-    	this.copy(file);
+        this.copy(file);
         return true;
     }
 
     public boolean fileUpdated(File file) throws WatchingException {
-    	if(fileDeleted(file)) {
-    		return this.fileCreated(file);
-    	} else {
-    		return false;
-    	}
+        if(fileDeleted(file)) {
+            return this.fileCreated(file);
+        } else {
+            return false;
+        }
     }
 
     public boolean fileDeleted(File file) {
-    	File deleted = new File(this.getWorkDirectory(), file.getName());
+        File deleted = new File(this.getWorkDirectory(), file.getName());
         if (deleted.isFile()){
-        	getLog().info("Deleting File : "+file.getName());    	
-        	FileUtils.deleteQuietly(deleted); 
+            getLog().info("Deleting File : "+file.getName());    	
+            FileUtils.deleteQuietly(deleted); 
         }
         return true;
     }
-    
+
 
     private void copy(File f) throws WatchingException {
-    	getLog().info("Copy JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
-    	try {
-			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
-		} catch (IOException e) { 
-			throw new WatchingException("Error during copy files to workDirectory "+this.getWorkDirectory().getAbsolutePath(), e); 
-		}
+        getLog().info("Copy JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
+        try {
+            FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
+        } catch (IOException e) { 
+            throw new WatchingException("Error during copy files to workDirectory "+this.getWorkDirectory().getAbsolutePath(), e); 
+        }
     }
-    
+
     private boolean isSkipped(){
-    	if (skipJsCompilation) {
+        if (skipJsCompilation) {
             getLog().info("\033[31m JS Compilation skipped \033[37m");
             return true;
         } else {
-        	return false;
+            return false;
         }
     }
 

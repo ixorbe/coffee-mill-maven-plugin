@@ -24,54 +24,54 @@ import java.util.Collection;
  * when it is executed.
  */
 @Mojo(name = "test-compile-javascript", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.COMPILE,
-        requiresProject = true,
-        defaultPhase = LifecyclePhase.COMPILE)
+requiresDependencyResolution = ResolutionScope.COMPILE,
+requiresProject = true,
+defaultPhase = LifecyclePhase.COMPILE)
 public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
-	
-	
+
+
     public void execute() throws MojoExecutionException {    	
-		if(isSkipped()) { 
-			return; 
-		}
-		
-		if (!this.getJavaScriptTestDir().isDirectory()) {
-			getLog().warn("JavaScript copy skipped - " + this.getJavaScriptTestDir().getAbsolutePath() + " does not exist !");
-        	return;
-		}
-		
-		getLog().info("Get JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());
-    	Collection<File> files = FileUtils.listFiles(this.getJavaScriptTestDir(), new String[]{"js"}, true);
-    	
-    	if(files.isEmpty()){
-			getLog().warn("JavaScript sources directory "+this.getJavaScriptTestDir().getAbsolutePath()+" is empty !");
-			return;
-		}
-    	
-    	for(File file : files) {
-			try {
-				copy(file);
-			} catch (WatchingException e) {
-				throw new MojoExecutionException("Error during execute() on JsTestCompilerMojo : cannot copy", e);
-			}    		
-		}   
+        if(isSkipped()) { 
+            return; 
+        }
+
+        if (!this.getJavaScriptTestDir().isDirectory()) {
+            getLog().warn("JavaScript copy skipped - " + this.getJavaScriptTestDir().getAbsolutePath() + " does not exist !");
+            return;
+        }
+
+        getLog().info("Get JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());
+        Collection<File> files = FileUtils.listFiles(this.getJavaScriptTestDir(), new String[]{"js"}, true);
+
+        if(files.isEmpty()){
+            getLog().warn("JavaScript sources directory "+this.getJavaScriptTestDir().getAbsolutePath()+" is empty !");
+            return;
+        }
+
+        for(File file : files) {
+            try {
+                copy(file);
+            } catch (WatchingException e) {
+                throw new MojoExecutionException("Error during execute() on JsTestCompilerMojo : cannot copy", e);
+            }    		
+        }   
     }        
 
     private void copy(File f) throws WatchingException {
-    	getLog().info("Copy JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());
-    	try {
-			FileUtils.copyFileToDirectory(f, this.getWorkTestDirectory());
-		} catch (IOException e) { 
-			throw new WatchingException("Error during copy JavaScript files.", e); 
-		}
+        getLog().info("Copy JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());
+        try {
+            FileUtils.copyFileToDirectory(f, this.getWorkTestDirectory());
+        } catch (IOException e) { 
+            throw new WatchingException("Error during copy JavaScript files.", e); 
+        }
     }    
-    
+
     private boolean isSkipped(){
-    	if (skipJsTestCompilation) {
+        if (skipJsTestCompilation) {
             getLog().info("\033[31m JS Test Compilation skipped \033[37m");
             return true;
         } else {
-        	return false;
+            return false;
         }
     }
 

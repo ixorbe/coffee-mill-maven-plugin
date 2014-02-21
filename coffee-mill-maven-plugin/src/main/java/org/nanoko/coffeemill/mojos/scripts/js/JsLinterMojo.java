@@ -26,42 +26,43 @@ import static org.nanoko.java.NPM.npm;
  * Optimize Js files.
  */
 @Mojo(name = "lint-javascript", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.COMPILE,
-        requiresProject = true,
-        defaultPhase = LifecyclePhase.PACKAGE)
+requiresDependencyResolution = ResolutionScope.COMPILE,
+requiresProject = true,
+defaultPhase = LifecyclePhase.PACKAGE)
 public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String PKG_NPM_NAME = "jslint";
     public static final String PKG_NPM_VERSION = "0.2.10";
-    
+
     private static Log defaultLogger;
-   
+
+    private NPM lint;
+
+
+    // Constructor
+    public JsLinterMojo() {
+        defaultLogger = new MavenLoggerWrapper(this.getLog());
+    }
+
     public Log getDefaultLogger() {
         return defaultLogger;
     }
 
-    public void setDefaultLogger(Log defaultLogger) {
-        JsLinterMojo.defaultLogger = defaultLogger;
+    public static void setDefaultLogger(Log log) {
+        defaultLogger = log;
     }
 
-    private NPM lint;
-
-    // Constructor
-    public JsLinterMojo() {
-    	defaultLogger = new MavenLoggerWrapper(this.getLog());
-    }
-    
     public void execute() throws MojoExecutionException {
-    	
-		if(isSkipped()) { 
-			return; 
-		}
-		
-    	lint = npm(defaultLogger, PKG_NPM_NAME, PKG_NPM_VERSION);
+
+        if(isSkipped()) { 
+            return; 
+        }
+
+        lint = npm(defaultLogger, PKG_NPM_NAME, PKG_NPM_VERSION);
         try {
-        	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
+            Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
             for(File file : files) {
-            	compile(file);
+                compile(file);
             }
 
         } catch (WatchingException e) {
@@ -72,7 +73,7 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
     public boolean accept(File file) {
         return !isSkipped() && FSUtils.hasExtension(file, getScriptextensions());
     }
-    
+
     public boolean fileCreated(File file) throws WatchingException {
         compile(file);
         return true;
@@ -88,22 +89,22 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     private void compile(File f) throws WatchingException {
-    	String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".js";
-    	File input = new File( this.getWorkDirectory(), name);
-    	if(!input.exists()){
-    		return;
-    	}
+        String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".js";
+        File input = new File( this.getWorkDirectory(), name);
+        if(!input.exists()){
+            return;
+        }
 
         getLog().info("Linting " + input.getAbsolutePath());
-        lint.execute("jslint", input.getAbsolutePath());
+        lint.execute(PKG_NPM_NAME, input.getAbsolutePath());
     }
-    
+
     private boolean isSkipped() {
-    	if (skipJsLint || skipJsCompilation) {
+        if (skipJsLint || skipJsCompilation) {
             getLog().info("\033[31m JS Lint Optimizer skipped \033[37m");
             return true;
         } else {
-        	return false;   	
+            return false;   	
         }
     }
 

@@ -24,33 +24,33 @@ import java.util.List;
  * Compiles Js files.
  */
 @Mojo(name = "aggregate-javascript", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.TEST,
-        requiresProject = true,
-        defaultPhase = LifecyclePhase.PACKAGE)
+requiresDependencyResolution = ResolutionScope.TEST,
+requiresProject = true,
+defaultPhase = LifecyclePhase.PACKAGE)
 public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
-	
-	/**
+
+    /**
      * Define ordered Js files list to aggregate
      */
-	@Parameter
+    @Parameter
     protected List<String> jsAggregationFiles;
-	
-	@Parameter(defaultValue="true")
-	protected boolean failedOnMissingFile;
-	
+
+    @Parameter(defaultValue="true")
+    protected boolean failedOnMissingFile;
+
 
     public void execute() throws MojoExecutionException {
-		if(isSkipped()) { 
-			return; 
-		}
-		
-		if (!this.getWorkDirectory().isDirectory()){
-        	getLog().warn("JavaScript aggregation skipped - " + this.getWorkDirectory() + " does not exist !");
-        	return;
+        if(isSkipped()) { 
+            return; 
+        }
+
+        if (!this.getWorkDirectory().isDirectory()){
+            getLog().warn("JavaScript aggregation skipped - " + this.getWorkDirectory() + " does not exist !");
+            return;
         }   
-		
-    	try {
+
+        try {
             this.aggregate();            
         } catch (WatchingException e) {
             throw new MojoExecutionException("Error during execute() on JsAggregatorMojo : cannot aggregate", e);
@@ -59,51 +59,51 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-    	return !isSkipped() && FSUtils.hasExtension(file, getScriptextensions());
+        return !isSkipped() && FSUtils.hasExtension(file, getScriptextensions());
     }
-    
+
     public boolean fileCreated(File file) throws WatchingException {
-    	this.aggregate();
+        this.aggregate();
         return true;
     }
 
 
     public boolean fileUpdated(File file) throws WatchingException {
-    	this.aggregate();
+        this.aggregate();
         return true;
     }
 
     public boolean fileDeleted(File file) throws WatchingException {
-    	this.aggregate();
+        this.aggregate();
         return true;
     }
-    
+
 
     private void aggregate() throws WatchingException {
-    	if(this.project!=null){
-    		this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
-    	}
-    	
-    	File output = new File( this.getBuildDirectory(), this.getDefaultOutputFilename() + ".js");
-    	if(output.exists()) {
-    		FileUtils.deleteQuietly(output); 
-    	}
-    	
-    	// Classic Aggregation (app + ext. libs)
-    	if (jsAggregationFiles == null || jsAggregationFiles.isEmpty()) {    		
-    		if(aggregateAppOnly(output)) {
-    			aggregateAppWithLibs(output);
-        	}    		
+        if(this.project!=null){
+            this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
+        }
+
+        File output = new File( this.getBuildDirectory(), this.getDefaultOutputFilename() + ".js");
+        if(output.exists()) {
+            FileUtils.deleteQuietly(output); 
+        }
+
+        // Classic Aggregation (app + ext. libs)
+        if (jsAggregationFiles == null || jsAggregationFiles.isEmpty()) {    		
+            if(aggregateAppOnly(output)) {
+                aggregateAppWithLibs(output);
+            }    		
         } else { // Aggregation from pom.xml JsAggregationFiles list
-        	aggregateFromListFiles(output);        	
+            aggregateFromListFiles(output);        	
         }    	
     }
-    
-    
+
+
     private boolean aggregateFromListFiles(File output) throws WatchingException {
-    	Collection<File> files = new ArrayList<File>();
-    	
-    	for (String filename : jsAggregationFiles) {
+        Collection<File> files = new ArrayList<File>();
+
+        for (String filename : jsAggregationFiles) {
             File file = FSUtils.resolveFile(filename, getWorkDirectory(), getLibDirectory(), "js");
             if (file == null) {
                 if (failedOnMissingFile) {
@@ -116,65 +116,65 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
                 files.add(file);
             }
         }
-    	
-    	joinFiles(output, files);
+
+        joinFiles(output, files);
         return true;
     }    
 
     private boolean aggregateAppOnly(File output) throws WatchingException {
-    	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
+        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
         if(files.isEmpty()){
-        	getLog().warn("JavaScript work directory "+this.getWorkDirectory().getAbsolutePath()+" is empty !");
-        	return false;
+            getLog().warn("JavaScript work directory "+this.getWorkDirectory().getAbsolutePath()+" is empty !");
+            return false;
         }
-    	getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
-    	
-    	joinFiles(output, files);
+        getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
+
+        joinFiles(output, files);
         return true;
     }
-    
+
     private void aggregateAppWithLibs(File in) throws WatchingException{
-    	File output = new File(this.getBuildDirectory(),  this.getDefaultOutputFilename()+"-all.js");
-    	if(output.exists()){
-    		FileUtils.deleteQuietly(output);
-    	}
-    	
-    	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"js"}, true);
+        File output = new File(this.getBuildDirectory(),  this.getDefaultOutputFilename()+"-all.js");
+        if(output.exists()){
+            FileUtils.deleteQuietly(output);
+        }
+
+        Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"js"}, true);
 
         if(files.isEmpty()){
-        	getLog().warn("JavaScript External libraries directory "+this.getLibDirectory().getAbsolutePath()+" is empty !");
-        	try {
-				FileUtils.copyFile(in, output);
-			} catch (IOException e) {
-				throw new WatchingException("Error during copy file to build directory "+this.getBuildDirectory(), e);
-			}
-        	return;
+            getLog().warn("JavaScript External libraries directory "+this.getLibDirectory().getAbsolutePath()+" is empty !");
+            try {
+                FileUtils.copyFile(in, output);
+            } catch (IOException e) {
+                throw new WatchingException("Error during copy file to build directory "+this.getBuildDirectory(), e);
+            }
+            return;
         }
-        
+
         files.add(in);
-    	getLog().info("Aggregate Js files from " + this.getLibDirectory().getAbsolutePath());
-    	  
-    	joinFiles(output, files);
+        getLog().info("Aggregate Js files from libs directory " + this.getLibDirectory().getAbsolutePath());
+
+        joinFiles(output, files);
     }    
-    
+
     private void joinFiles(File output, Collection<File> files) throws WatchingException{
-    	try {
- 			FileAggregation.joinFiles( output, files);
- 		} catch (IOException e) {
- 			throw new WatchingException("Error during joinFiles", e);
- 		}
+        try {
+            FileAggregation.joinFiles( output, files);
+        } catch (IOException e) {
+            throw new WatchingException("Error during joinFiles", e);
+        }
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the Js aggregation check log");
         }
     }
-    
+
     private boolean isSkipped(){
-    	if (skipJsAggregation || skipJsCompilation) {
+        if (skipJsAggregation || skipJsCompilation) {
             getLog().info("\033[31m JS Aggregation skipped \033[37m");
             return true;
         } else {
-        	return false;
+            return false;
         }
     }
 
