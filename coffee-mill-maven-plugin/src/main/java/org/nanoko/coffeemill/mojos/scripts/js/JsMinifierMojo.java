@@ -35,7 +35,8 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     private NPM ugly;
 
 
-    public void execute() throws MojoExecutionException {    	
+    public void execute() throws MojoExecutionException {   
+        getLog().info("JsMinifierMojo - execute");
         if(isSkipped()) { 
             return; 
         }    				
@@ -71,7 +72,7 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     private boolean compile() throws WatchingException {
         getLog().info("Js Minification Compilation");
 
-        if(this.project == null) {
+        if(this.project.getArtifactId() != null) {
             this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
         }
 

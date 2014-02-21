@@ -1,7 +1,5 @@
 package org.nanoko.java;
 
-import org.apache.commons.io.FileUtils;
-
 import org.apache.commons.logging.Log;
 
 import org.json.simple.parser.ParseException;
@@ -32,7 +30,7 @@ public class NodeManagerTest {
     public void setUp() {
         nodeDirectory = new File(System.getProperty("user.home"));
         nodeDirectory.mkdirs();
-        NodeManager.log = log;
+        NodeManager.setLog(log);
         manager = NodeManager.getInstance(nodeDirectory);
     }
 
