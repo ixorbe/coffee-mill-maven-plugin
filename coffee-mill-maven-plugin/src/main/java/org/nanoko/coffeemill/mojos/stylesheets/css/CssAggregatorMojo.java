@@ -23,29 +23,29 @@ import java.util.List;
  * Compiles less files.
  */
 @Mojo(name = "aggregate-stylesheets", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.TEST,
-        requiresProject = true,
-        defaultPhase = LifecyclePhase.PACKAGE)
+requiresDependencyResolution = ResolutionScope.TEST,
+requiresProject = true,
+defaultPhase = LifecyclePhase.PACKAGE)
 public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
-	
-	
-	public String outputFileName = null;
-	
-	/**
+
+
+    public String outputFileName = null;
+
+    /**
      * Define ordered Css files list to aggregate
      */
-	@Parameter
+    @Parameter
     protected List<String> cssAggregationFiles;
-	
-	@Parameter(defaultValue="true")
-	protected boolean failedOnMissingFile;
-	
-	
+
+    @Parameter(defaultValue="true")
+    protected boolean failedOnMissingFile;
+
+
     public void execute() throws MojoExecutionException {    	
-    	if(isSkipped()) { 
-    		return; 
-    	}
-    	
+        if(isSkipped()) { 
+            return; 
+        }
+
         try {
             if ( this.getWorkDirectory().isDirectory()) {
                 this.aggregate();
@@ -58,52 +58,52 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     public boolean accept(File file) {
         return !isSkipped() && FSUtils.hasExtension(file, getStylesheetsextensions());
     }
-    
+
     public boolean fileCreated(File file) throws WatchingException {
-    	this.aggregate();
+        this.aggregate();
         return true;
     }
 
     public boolean fileUpdated(File file) throws WatchingException {
-    	this.aggregate();
+        this.aggregate();
         return true;
     }
 
     public boolean fileDeleted(File file) throws WatchingException {
-    	this.aggregate();
+        this.aggregate();
         return true;
     }
-    
+
 
     private void aggregate() throws WatchingException {
-    	if(this.outputFileName == null) {
-    		this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
-    	}
-    	
-    	File output = new File( this.getBuildDirectory(), this.outputFileName + ".css");
-    	if(output.exists()) {
-    		FileUtils.deleteQuietly(output);   
-    	}    	
-    	
-    	// Classic Aggregation (app + ext. libs)
-    	if (cssAggregationFiles == null || cssAggregationFiles.isEmpty()) {    		
-    		if(aggregateAppOnly(output)) {
-    			try {
-					aggregateAppWithLibs(output);
-				} catch (IOException e) {
-					throw new WatchingException("Error during aggregation files", e);
-				}
-        	}    
-    	// else aggregate from pom.xml CssAggregationFiles list
+        if(this.outputFileName == null) {
+            this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+        }
+
+        File output = new File( this.getBuildDirectory(), this.outputFileName + ".css");
+        if(output.exists()) {
+            FileUtils.deleteQuietly(output);   
+        }    	
+
+        // Classic Aggregation (app + ext. libs)
+        if (cssAggregationFiles == null || cssAggregationFiles.isEmpty()) {    		
+            if(aggregateAppOnly(output)) {
+                try {
+                    aggregateAppWithLibs(output);
+                } catch (IOException e) {
+                    throw new WatchingException("Error during aggregation files", e);
+                }
+            }    
+            // else aggregate from pom.xml CssAggregationFiles list
         } else {
-        	aggregateFromListFiles(output);        	
+            aggregateFromListFiles(output);        	
         }    	
     }
-    
+
     private boolean aggregateFromListFiles(File output) throws WatchingException {
-    	Collection<File> files = new ArrayList<File>();
-    	
-    	for (String filename : cssAggregationFiles) {
+        Collection<File> files = new ArrayList<File>();
+
+        for (String filename : cssAggregationFiles) {
             File file = FSUtils.resolveFile(filename, getWorkDirectory(), getLibDirectory(), "css");
             if (file == null) {
                 if (failedOnMissingFile) {
@@ -116,60 +116,60 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
                 files.add(file);
             }
         }
-    	
-    	joinFiles(output, files);
+
+        joinFiles(output, files);
         return true;
     }
-    
+
     private boolean aggregateAppOnly(File output) throws WatchingException {
-    	Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
+        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
         if(files.isEmpty()){
-        	getLog().warn("No Css files in work directory "+this.getWorkDirectory().getAbsolutePath());
-        	return false;
+            getLog().warn("No Css files in work directory "+this.getWorkDirectory().getAbsolutePath());
+            return false;
         }
-    	getLog().info("Aggregate Css files from " + this.getWorkDirectory().getAbsolutePath());
-    	
-    	joinFiles(output, files);
+        getLog().info("Aggregate Css files from " + this.getWorkDirectory().getAbsolutePath());
+
+        joinFiles(output, files);
         return true;
     }
-    
+
     private void aggregateAppWithLibs(File in) throws WatchingException, IOException {
-    	File output = new File(this.getBuildDirectory(),  this.outputFileName+"-all.css");
-    	if(output.exists()) {
-    		FileUtils.deleteQuietly(output);    
-    	}
-    	
-    	Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"css"}, true);
-        if(files.isEmpty()){
-        	getLog().warn("JavaScript External libraries directory "+this.getLibDirectory().getAbsolutePath()+" is empty !");
-        	FileUtils.copyFile(in, output);
-        	return;
+        File output = new File(this.getBuildDirectory(),  this.outputFileName+"-all.css");
+        if(output.exists()) {
+            FileUtils.deleteQuietly(output);    
         }
-        
+
+        Collection<File> files = FileUtils.listFiles(this.getLibDirectory(), new String[]{"css"}, true);
+        if(files.isEmpty()){
+            getLog().warn("JavaScript External libraries directory "+this.getLibDirectory().getAbsolutePath()+" is empty !");
+            FileUtils.copyFile(in, output);
+            return;
+        }
+
         files.add(in);
-    	getLog().info("Aggregate Css files from " + this.getLibDirectory().getAbsolutePath());
-    	  
-    	joinFiles(output, files);        
+        getLog().info("Aggregate Css files from " + this.getLibDirectory().getAbsolutePath());
+
+        joinFiles(output, files);        
     }
-    
+
     private void joinFiles(File output, Collection<File> files) throws WatchingException{
-    	try {
- 			FileAggregation.joinFiles( output, files);
- 		} catch (IOException e) {
- 			throw new WatchingException("Error during aggregation files", e);
- 		}
+        try {
+            FileAggregation.joinFiles( output, files);
+        } catch (IOException e) {
+            throw new WatchingException("Error during aggregation files", e);
+        }
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the Css aggregation check log");
         }
     }
-    
+
     private boolean isSkipped(){
-    	if (skipCssAggregation || skipCssCompilation) {
+        if (skipCssAggregation || skipCssCompilation) {
             getLog().info("\033[31m CSS Aggregation skipped \033[37m");
             return true;
         } else {
-        	return false;
+            return false;
         }
     }
 
