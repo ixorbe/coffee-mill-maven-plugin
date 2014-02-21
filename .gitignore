@@ -6,3 +6,4 @@ target/
 .classpath
 .settings/
 .project
+/coffee-mill-maven-plugin/node/
