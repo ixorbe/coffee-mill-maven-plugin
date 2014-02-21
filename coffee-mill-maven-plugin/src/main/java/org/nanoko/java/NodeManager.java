@@ -19,53 +19,63 @@ import java.net.URL;
  */
 public class NodeManager {
 
-    public static final String NODE_DIST = "http://nodejs.org/dist/v";
-    public static final String NPM_DIST = "http://nodejs.org/dist/npm/npm-";
+    private static final String NODE_DIST = "http://nodejs.org/dist/v";
+    private static final String NPM_DIST = "http://nodejs.org/dist/npm/npm-";
+    private static String NODE_VERSION = "0.10.24";
+    private static String NPM_VERSION = "1.3.23";    
 
-    public static Log log = new org.apache.commons.logging.impl.SimpleLog("default");    
-    
+    private static NodeManager singleton= null;
+
+    private static Log log = new org.apache.commons.logging.impl.SimpleLog("default");       
+
     private final File nodeDirectory;
     private final File npmDirectory;
     private final File nodeModulesDirectory;
     private final File nodeLibDirectory;
-    private File nodeExecutable;
     
-    private  static String NODE_VERSION = "0.10.24";
-    private  static String NPM_VERSION = "1.3.23";    
-    
-    private static NodeManager singleton= null;
+    private static File userHomeNodeFile = new File(System.getProperty("user.home") + "/.node/" + NODE_VERSION);
 
+    private File nodeExecutable;
+
+
+    public static Log getLog() {
+        return log;
+    }
+
+    public static void setLog(Log log) {
+        NodeManager.log = log;
+    }
     
     public static NodeManager getInstance(){
-		return getSingleton(new File(System.getProperty("user.home") + "/.node/" + NODE_VERSION));
-	}
-    
+        return getSingleton(userHomeNodeFile);
+    }
+
     public static NodeManager getInstance(File nodeDirectory){
-		return getSingleton(nodeDirectory);
-	}
-    
-	public static NodeManager getInstance(String NODE_VER, String NPM_VER){
-		setVersion(NODE_VER,NPM_VER);
-		return getSingleton(new File(System.getProperty("user.home") + "/.node/" + NODE_VERSION));
-	}
-	
-	public static NodeManager getInstance(String NODE_VER, String NPM_VER,File nodeDirectory){
-		setVersion(NODE_VER,NPM_VER);
-		return getSingleton(nodeDirectory);
-	}
-	
-	public static void setVersion(String NODE_VER, String NPM_VER) {
-		NODE_VERSION = NODE_VER;
-		NPM_VERSION = NPM_VER;
-	}
-	
-	private static NodeManager getSingleton(File nodeDirectory) {
-		if(singleton == null)
-			singleton = new NodeManager(nodeDirectory);
-		return singleton;
-	}
-	
-	
+        return getSingleton(nodeDirectory);
+    }
+
+    public static NodeManager getInstance(String NODE_VER, String NPM_VER){
+        setVersion(NODE_VER,NPM_VER);
+        return getSingleton(userHomeNodeFile);
+    }
+
+    public static NodeManager getInstance(String NODE_VER, String NPM_VER,File nodeDirectory){
+        setVersion(NODE_VER,NPM_VER);
+        return getSingleton(nodeDirectory);
+    }
+
+    public static void setVersion(String NODE_VER, String NPM_VER) {
+        NODE_VERSION = NODE_VER;
+        NPM_VERSION = NPM_VER;
+    }
+
+    private static NodeManager getSingleton(File nodeDirectory) {
+        if(singleton == null)
+            singleton = new NodeManager(nodeDirectory);
+        return singleton;
+    }
+
+
     public NodeManager( File nodeDirectory) {
         this.nodeDirectory = nodeDirectory;
         this.npmDirectory = new File(nodeDirectory, "lib/node_modules/npm/");
@@ -73,7 +83,7 @@ public class NodeManager {
         if (!nodeDirectory.exists()) {
             nodeDirectory.mkdirs();
         }
-        
+
         if (ExecUtils.isWindows()) {
             this.nodeExecutable = new File(nodeDirectory + "/bin", "node.exe");
             nodeLibDirectory = nodeExecutable.getParentFile();
@@ -136,7 +146,7 @@ public class NodeManager {
         try {
             ua.extract();
         } catch (ArchiverException e) {
-        	log.error("Cannot unzip NPM", e);
+            log.error("Cannot unzip NPM", e);
             throw new IOException(e);
         }
 
@@ -145,6 +155,7 @@ public class NodeManager {
     private void downloadAndInstallNode() throws IOException {
         URL url;
         String path;
+        String suffixName;
         if (ExecUtils.isWindows()) {
             if (ExecUtils.is64bit()) {
                 url = new URL(NODE_DIST + NODE_VERSION + "/x64/node.exe");
@@ -166,45 +177,41 @@ public class NodeManager {
             return;
         } else if (ExecUtils.isMac()) {
             if (!ExecUtils.is64bit()) {
-                path = "node-v" + NODE_VERSION + "-darwin-x86";
-                url = new URL(NODE_DIST + NODE_VERSION + "/node-v" + NODE_VERSION + "-darwin-x86" +
-                        ".tar.gz");
+                suffixName = "-darwin-x86";                
             } else {
-                path = "node-v" + NODE_VERSION + "-darwin-x64";
-                url = new URL(NODE_DIST + NODE_VERSION + "/node-v" + NODE_VERSION + "-darwin-x64" +
-                        ".tar.gz");
-            }
+                suffixName = "-darwin-x64";  
+            }            
         } else if (ExecUtils.isLinux()) {
             if (!ExecUtils.is64bit()) {
-                path = "node-v" + NODE_VERSION + "-linux-x86";
-                url = new URL(NODE_DIST + NODE_VERSION + "/node-v" + NODE_VERSION + "-linux-x86.tar.gz");
+                suffixName = "-linux-x86";                
             } else {
-                path = "node-v" + NODE_VERSION + "-linux-x64";
-                url = new URL(NODE_DIST + NODE_VERSION + "/node-v" + NODE_VERSION + "-linux-x64.tar.gz");
-            }
+                suffixName = "-linux-x64";
+            }            
         } else {
             throw new UnsupportedOperationException("Operating system `" + System.getProperty("os.name") + "` not " +
                     "supported");
         }
+        path = "node-v" + NODE_VERSION + suffixName;
+        url = new URL(NODE_DIST + NODE_VERSION + "/node-v" + NODE_VERSION + suffixName +".tar.gz");
 
         File tmp = File.createTempFile("nodejs", ".tar.gz");
         log.debug("Downloading nodejs-" + NODE_VERSION + " from " + url.toExternalForm());
         FileUtils.copyURLToFile(url, tmp);
         log.debug("nodejs downloaded - " + tmp.length() + " bytes");
-        
+
         File tmpDir = Files.createTempDir();
         tmpDir.mkdirs();
-        
+
         final TarGZipUnArchiver ua = new TarGZipUnArchiver();
         ua.enableLogging(new PlexusLoggerWrapper(NodeManager.log));
         ua.setSourceFile(tmp);
         ua.setDestDirectory(tmpDir);
-        
+
         log.debug("Expanding nodejs");
         try {
             ua.extract();
         } catch (Exception e) {
-        	log.error("Cannot unzip node.js ", e);
+            log.error("Cannot unzip node.js ", e);
             throw new IOException(e);
         }
 

@@ -8,9 +8,14 @@ import java.util.List;
 
 /**
  * Some helper methods related to command execution.
- * TODO Merge with Executable Finder.
  */
 public class ExecUtils {
+    // TODO Merge with Executable Finder.
+
+    public static final String OS_NAME = "os.name";
+
+    private ExecUtils(){
+    }
 
     public static File findExecutableInPath(String exec) {
         // Build candidates
@@ -53,15 +58,15 @@ public class ExecUtils {
      * @return <code>true</code> if the os is windows, <code>false</code> otherwise.
      */
     public static boolean isWindows() {
-        return System.getProperty("os.name").toLowerCase().contains("win");
+        return System.getProperty(OS_NAME).toLowerCase().contains("win");
     }
 
     public static boolean isMac() {
-        return System.getProperty("os.name").toLowerCase().contains("mac");
+        return System.getProperty(OS_NAME).toLowerCase().contains("mac");
     }
 
     public static boolean isLinux() {
-        String os = System.getProperty("os.name");
+        String os = System.getProperty(OS_NAME);
         return os.contains("nix") || os.contains("nux")  || os.contains("aix");
     }
 

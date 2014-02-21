@@ -29,7 +29,7 @@ public class NPM {
     private final String npmVersion;
 
     private final NodeManager node;
-    
+
     public static Log log;
 
     /**
@@ -43,7 +43,7 @@ public class NPM {
         this.node = manager;
         this.npmName = name;
         this.npmVersion = version;
-        log = NodeManager.log;
+        log = NodeManager.getLog();
         ensureNodeInstalled();
     }
 
@@ -51,7 +51,7 @@ public class NPM {
         try {
             node.installIfNotInstalled();
         } catch (IOException e) {
-        	log.error("Cannot install node", e);
+            log.error("Cannot install node", e);
         }
     }
 
@@ -86,7 +86,7 @@ public class NPM {
         try {
             npmExec = findExecutable(binary);
         } catch (IOException | ParseException e) { //NOSONAR
-        	log.error("NPM::execute::findExecutable ", e);
+            log.error("NPM::execute::findExecutable ", e);
         }
         if (npmExec == null) {
             throw new IllegalStateException("Cannot execute NPM " + this.npmName + " - cannot find the JavaScript file " +
@@ -95,10 +95,8 @@ public class NPM {
 
         // NPM is launched using the main file.
         cmdLine.addArgument(npmExec.getAbsolutePath(), false);
-        for (String arg : args) {
-            //cmdLine.addArgument(arg,true);
-        	// escape whitespaces in files path
-        	cmdLine.addArgument(arg.replaceAll(" ","\\ "), false);
+        for (String arg : args) {            
+            cmdLine.addArgument(arg.replaceAll(" ","\\ "), false);// escape whitespaces in files path
         }
 
         DefaultExecutor executor = new DefaultExecutor();
@@ -114,8 +112,8 @@ public class NPM {
             log.info(bos.toString());
             return res;
         } catch (IOException e) {
-        	log.error("NPM::execute::execute ", e);
-        	return -1;
+            log.error("NPM::execute::execute ", e);
+            return -1;
         }
 
     }
@@ -137,18 +135,18 @@ public class NPM {
         JSONObject json = (JSONObject) JSONValue.parseWithException(new FileReader(packageFile));
         JSONObject bin = (JSONObject) json.get("bin");
         if (bin == null) {
-        	log.error("No `bin` object in " + packageFile.getAbsolutePath());
+            log.error("No `bin` object in " + packageFile.getAbsolutePath());
             return null;
         } else {
             String exec = (String) bin.get(binary);
             if (exec == null) {
-            	log.error("No `" + binary + "` object in the `bin` object from " + packageFile
+                log.error("No `" + binary + "` object in the `bin` object from " + packageFile
                         .getAbsolutePath());
                 return null;
             }
             File file = new File(npmDirectory, exec);
             if (! file.isFile()) {
-            	log.error("A matching javascript file was found for " + binary + " but the file does " +
+                log.error("A matching javascript file was found for " + binary + " but the file does " +
                         "not exist - " + file.getAbsolutePath());
                 return null;
             }
@@ -166,26 +164,24 @@ public class NPM {
         if (directory.isDirectory()) {
             // Check the version
             String version = getVersionFromNPM(directory);
+            String warnMessage = "NPM " + npmName + " already installed in " + directory.getAbsolutePath() + " (" + version + ")";
             // Are we looking for a specific version ?
             if (npmVersion != null) {
                 // Yes
                 if (! npmVersion.equals(version)) {
-                	log.warn("The NPM " + npmName + " is already installed but not in the requested version" +
-                            " (requested: " + npmVersion + " - current: " + version + ") - uninstall it");
+                    log.warn(warnMessage+"but not in the requested version (requested: " + npmVersion + ") - uninstall it");
                     try {
                         FileUtils.deleteDirectory(directory);
                     } catch (IOException e) { //NOSONAR
                         // ignore it.
                     }
                 } else {
-                	log.warn("NPM " + npmName + " already installed in " + directory.getAbsolutePath() +
-                            " (" + version + ")");
+                    log.warn(warnMessage);
                     return;
                 }
             } else {
                 // No
-            	log.warn("NPM " + npmName + " already installed in " + directory.getAbsolutePath() + " " +
-                        "(" + version + ")");
+                log.warn(warnMessage);
                 return;
             }
         }
@@ -205,14 +201,14 @@ public class NPM {
         DefaultExecutor executor = new DefaultExecutor();
         executor.setExitValue(0);
 
-       
+
 
         log.debug("Executing " + cmdLine.toString());
 
         try {
             executor.execute(cmdLine);
         } catch (IOException e) {
-        	log.error("Error during the installation of the NPM " + npmName + " - check log", e);
+            log.error("Error during the installation of the NPM " + npmName + " - check log", e);
         }
     }
 
@@ -228,7 +224,7 @@ public class NPM {
             JSONObject json = (JSONObject) JSONValue.parseWithException(reader);
             return (String) json.get("version");
         } catch (IOException | ParseException e) {
-        	log.error("Cannot extract version from " + packageFile.getAbsolutePath(), e);
+            log.error("Cannot extract version from " + packageFile.getAbsolutePath(), e);
         } finally {
             IOUtils.closeQuietly(reader);
         }
@@ -246,7 +242,7 @@ public class NPM {
      * @return the NPM object. The NPM may have been installed if it was not installed or installed in another version.
      */
     public static NPM npm( Log customLog, String name, String version) {
-    	NodeManager.log = customLog;
+        NodeManager.setLog(customLog);
         NPM npm = new NPM( NodeManager.getInstance(), name, version);
         npm.install();
         return npm;
@@ -254,8 +250,12 @@ public class NPM {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
 
         NPM npm = (NPM) o;
 
