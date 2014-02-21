@@ -22,30 +22,30 @@ import static org.nanoko.java.NPM.npm;
  * Compiles less files.
  */
 @Mojo(name = "compile-less", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.COMPILE,
-        requiresProject = true,
-        defaultPhase = LifecyclePhase.COMPILE)
+requiresDependencyResolution = ResolutionScope.COMPILE,
+requiresProject = true,
+defaultPhase = LifecyclePhase.COMPILE)
 public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String LESS_NPM_NAME = "less";
     public static final String LESS_NPM_VERSION = "1.6.2";
-    
+
     private NPM less;
 
 
     public void execute() throws MojoExecutionException {    	
-    	if(isSkipped()) { 
-    		return; 
-    	}
-    	
+        if(isSkipped()) { 
+            return; 
+        }
+
         less = npm(new MavenLoggerWrapper(this.getLog()), LESS_NPM_NAME, LESS_NPM_VERSION);
         if ( getStylesheetsDir().isDirectory()) {
             getLog().info("Compiling less files from " + getStylesheetsDir().getAbsolutePath());
             Collection<File> files = FileUtils.listFiles(getStylesheetsDir(), new String[]{"less"}, true);
             for (File file : files) {
                 if (file.isFile()) {
-                	try {
-                		compile(file);
+                    try {
+                        compile(file);
                     } catch (WatchingException e) {
                         throw new MojoExecutionException("Error during execute() on LessCompilerMojo : cannot compile", e);
                     }                    
@@ -57,10 +57,10 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public boolean accept(File file) {
         return !isSkipped()
-        	&& file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
-        	&& FSUtils.hasExtension(file, "less");
+                && file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
+                && FSUtils.hasExtension(file, "less");
     }
-    
+
     public boolean fileCreated(File file) throws WatchingException {
         compile(file);
         return true;
@@ -76,7 +76,7 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         FileUtils.deleteQuietly(theFile);
         return true;
     }
-    
+
 
     private File getOutputCSSFile(File input) {
         String cssFileName = input.getName().substring(0, input.getName().length() - ".less".length()) + ".css";
@@ -88,19 +88,19 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         File out = getOutputCSSFile(file);
         getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
         int exit = less.execute("lessc", file.getAbsolutePath(), out.getAbsolutePath());
-		getLog().debug("Less execution exiting with " + exit + " status");
+        getLog().debug("Less execution exiting with " + exit + " status");
 
         if (!out.isFile()) {
             throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + " check log");
         }
     }
-    
+
     private boolean isSkipped(){
-    	if (skipCssCompilation) {
+        if (skipCssCompilation) {
             getLog().info("\033[31m LESS Compilation skipped \033[37m");
             return true;
         } else {
-        	return false;
+            return false;
         }
     }
 

@@ -19,21 +19,21 @@ import java.util.Collection;
  * Compiles less files.
  */
 @Mojo(name = "compile-css", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.TEST,
-        requiresProject = true,
-        defaultPhase = LifecyclePhase.PACKAGE)
+requiresDependencyResolution = ResolutionScope.TEST,
+requiresProject = true,
+defaultPhase = LifecyclePhase.PACKAGE)
 public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException {    	
-    	if(isSkipped()) { 
-    		return; 
-    	}
-    	
-    	if ( getStylesheetsDir().isDirectory()) {
-        	Collection<File> files = FileUtils.listFiles(getStylesheetsDir(), new String[]{"css"}, true);
+        if(isSkipped()) { 
+            return; 
+        }
+
+        if ( getStylesheetsDir().isDirectory()) {
+            Collection<File> files = FileUtils.listFiles(getStylesheetsDir(), new String[]{"css"}, true);
             for(File f: files) {
-            	try {
-            		copy(f);
+                try {
+                    copy(f);
                 } catch (WatchingException e) {
                     throw new MojoExecutionException("Error during execute() on CssCompilerMojo : cannot copy css files", e);
                 }    			
@@ -43,50 +43,50 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public boolean accept(File file) {
         return !isSkipped() 
-        	//&& FSUtils.isInDirectory(file.getName(), this.stylesheetsDir)
-        	&& file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
-        	&& FSUtils.hasExtension(file, "css");
+                //&& FSUtils.isInDirectory(file.getName(), this.stylesheetsDir)
+                && file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
+                && FSUtils.hasExtension(file, "css");
     }
-    
+
     public boolean fileCreated(File file) throws WatchingException {
-    	this.copy(file);
+        this.copy(file);
         return true;
     }
 
     public boolean fileUpdated(File file) throws WatchingException {
-    	if(fileDeleted(file)) {
-    		this.copy(file);
-        	return true;
-    	} else { 
-    		return false;
-    	}
+        if(fileDeleted(file)) {
+            this.copy(file);
+            return true;
+        } else { 
+            return false;
+        }
     }
 
     public boolean fileDeleted(File file) throws WatchingException {        
         File deleted = new File(this.getWorkDirectory(), file.getName());
         if (deleted.isFile()){
-        	getLog().info("deleting File : "+file.getName());    	
-        	FileUtils.deleteQuietly(deleted); 
+            getLog().info("deleting File : "+file.getName());    	
+            FileUtils.deleteQuietly(deleted); 
         }
         return true;
     }
-    
+
 
     private void copy(File f) throws WatchingException {
-    	getLog().info("Copy css files from " + getStylesheetsDir().getAbsolutePath());
-    	try {
-			FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
-		} catch (IOException e) { 
-			throw new WatchingException("Error during copy css files to workDirectory "+this.getWorkDirectory().getAbsolutePath(), e); 
-		}
+        getLog().info("Copy css files from " + getStylesheetsDir().getAbsolutePath());
+        try {
+            FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
+        } catch (IOException e) { 
+            throw new WatchingException("Error during copy css files to workDirectory "+this.getWorkDirectory().getAbsolutePath(), e); 
+        }
     }
-    
+
     private boolean isSkipped(){
-    	if (skipCssCompilation) {
+        if (skipCssCompilation) {
             getLog().info("\033[31m CSS Compilation skipped \033[37m");
             return true;
         } else {
-        	return false;
+            return false;
         }
     }
 
