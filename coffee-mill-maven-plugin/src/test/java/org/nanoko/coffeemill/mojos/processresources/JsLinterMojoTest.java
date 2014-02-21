@@ -1,22 +1,17 @@
 package org.nanoko.coffeemill.mojos.processresources;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.nanoko.coffeemill.mojos.scripts.js.JsLinterMojo;
 import org.nanoko.maven.WatchingException;
@@ -31,7 +26,7 @@ public class JsLinterMojoTest {
 
 	private JsLinterMojo mojo;
 	
-	private TestableLoggerWrapper  mylog;
+	private TestableLoggerWrapper mylog;
 	
 	
 	@Before
@@ -40,7 +35,7 @@ public class JsLinterMojoTest {
     	this.mojo.setWorkDirectory(testDir);
     	this.mojo.setBuildDirectory(testDir);
     	mylog = new TestableLoggerWrapper(this.mojo.getLog());
-    	this.mojo.defaultLogger = mylog;
+    	this.mojo.setDefaultLogger(mylog);
     }
 	
 	@Test

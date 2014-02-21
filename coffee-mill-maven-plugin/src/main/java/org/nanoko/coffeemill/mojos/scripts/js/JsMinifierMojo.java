@@ -31,9 +31,7 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String PKG_NPM_NAME = "uglify-js";
     public static final String PKG_NPM_VERSION = "2.4.12";
-    
-    public String inputFileName;
-    
+        
     private NPM ugly;
     
 
@@ -73,12 +71,12 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     private boolean compile() throws WatchingException {
     	getLog().info("Js Minification Compilation");
 		
-    	if(this.inputFileName == null) {
-    		this.inputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	if(this.project == null) {
+    		this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
     	}
     	
-    	boolean res = minify(this.inputFileName+"-all");
-    	boolean res2 = minify(this.inputFileName);
+    	boolean res = minify(this.getDefaultOutputFilename()+"-all");
+    	boolean res2 = minify(this.getDefaultOutputFilename());
     	return res || res2;
     }
     

@@ -34,8 +34,16 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String PKG_NPM_NAME = "jslint";
     public static final String PKG_NPM_VERSION = "0.2.10";
     
-    public static Log defaultLogger;
+    private static Log defaultLogger;
    
+    public Log getDefaultLogger() {
+        return defaultLogger;
+    }
+
+    public void setDefaultLogger(Log defaultLogger) {
+        JsLinterMojo.defaultLogger = defaultLogger;
+    }
+
     private NPM lint;
 
     // Constructor

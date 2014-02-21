@@ -3,7 +3,6 @@ package org.nanoko.coffeemill.mojos.scripts.js;
 import org.apache.commons.io.FileUtils;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -29,8 +28,7 @@ import java.util.List;
         requiresProject = true,
         defaultPhase = LifecyclePhase.PACKAGE)
 public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
-	
-	public String outputFileName;
+
 	
 	/**
      * Define ordered Js files list to aggregate
@@ -42,7 +40,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 	protected boolean failedOnMissingFile;
 	
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
 		if(isSkipped()) { 
 			return; 
 		}
@@ -82,11 +80,11 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     
 
     private void aggregate() throws WatchingException {
-    	if(this.outputFileName == null) {
-    		this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	if(this.project!=null){
+    		this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
     	}
     	
-    	File output = new File( this.getBuildDirectory(), this.outputFileName + ".js");
+    	File output = new File( this.getBuildDirectory(), this.getDefaultOutputFilename() + ".js");
     	if(output.exists()) {
     		FileUtils.deleteQuietly(output); 
     	}
@@ -136,7 +134,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
     
     private void aggregateAppWithLibs(File in) throws WatchingException{
-    	File output = new File(this.getBuildDirectory(),  this.outputFileName+"-all.js");
+    	File output = new File(this.getBuildDirectory(),  this.getDefaultOutputFilename()+"-all.js");
     	if(output.exists()){
     		FileUtils.deleteQuietly(output);
     	}

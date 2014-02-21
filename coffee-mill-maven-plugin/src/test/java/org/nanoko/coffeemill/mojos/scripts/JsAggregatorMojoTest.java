@@ -23,7 +23,6 @@ import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,35 +43,37 @@ public class JsAggregatorMojoTest {
 	
 	
 	@Before
-	public void prepareTestDirectory(){
+	public void prepareTestDirectory() throws MojoExecutionException{
     	this.mojo = new JsAggregatorMojo();     
     	this.mojo.setJavaScriptDir( this.jsSourceTestDir );
     	this.mojo.setWorkDirectory(this.workDir);
     	this.mojo.setBuildDirectory(this.buildDir);
     	this.mojo.setLibDirectory(this.libDir);
-    	this.mojo.outputFileName = "test-js-aggregation";
         
         Collection<File> files = FileUtils.listFiles(this.mojo.getJavaScriptDir(), new String[]{"js"}, true);    	
-        for(File file : files)
+        for(File file : files){
 			try {
 				FileUtils.copyFileToDirectory(file, this.workDir);
-			} catch (IOException e) { e.printStackTrace(); }        
+			} catch (IOException e) { 
+				throw new MojoExecutionException("Cannot copy file to prepare JsAggregatorMojoTest", e); 
+			}        
+        }
     }
 	
 	
     @Test
-    public void testJavaScriptAggregation() throws MojoExecutionException, MojoFailureException {
+    public void testJavaScriptAggregation() throws MojoExecutionException {
     	System.out.println("\n ==> Should aggregate 2 files \"test.js\" and \"test2.js\" from "+this.workDir +" to "+this.buildDir);
 
     	this.mojo.execute();    	
     	assertTrue(new File(this.mojo.getWorkDirectory(), "test.js").exists());
     	assertTrue(new File(this.mojo.getWorkDirectory(), "test2.js").exists());
-    	assertTrue(new File(this.mojo.getBuildDirectory(), "test-js-aggregation.js").exists());
+    	assertTrue(new File(this.mojo.getBuildDirectory(), this.mojo.getDefaultOutputFilename()+".js").exists());
     }
     
     
     @Test
-    public void testSkippedJavaScriptAggregationBecauseOfEmptyFolder() throws MojoExecutionException, MojoFailureException {
+    public void testSkippedJavaScriptAggregationBecauseOfEmptyFolder() throws MojoExecutionException {
     	System.out.println("\n ==> Should aggregate nothing : Empty Folder.");
     	
     	this.mojo.setWorkDirectory( new File(this.testDir, "empty") );
@@ -85,10 +86,12 @@ public class JsAggregatorMojoTest {
     
     @After
 	public void cleanTestDirectory() {
-		if(this.mojo.getWorkDirectory().exists())
+		if(this.mojo.getWorkDirectory().exists()){
 			FileUtils.deleteQuietly(this.mojo.getWorkDirectory());
-		if(this.mojo.getBuildDirectory().exists())
+		}
+		if(this.mojo.getBuildDirectory().exists()){
 			FileUtils.deleteQuietly(this.mojo.getBuildDirectory());
+		}
 	}
 
 }

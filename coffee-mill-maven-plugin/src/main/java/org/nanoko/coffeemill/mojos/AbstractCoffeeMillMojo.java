@@ -72,7 +72,9 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
 
     
     // DIRECTORY
-    /**
+    private String defaultOutputFilename = "default-output-filename";
+
+	/**
      * Where are JavaScript files. 
      */
     @Parameter(defaultValue= "src/main/js", required = true, readonly = true)
@@ -118,7 +120,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      * Where are the output test files written.
      */
     @Parameter(defaultValue= "target/www-test", required = true, readonly = true)
-    public File workTestDir;
+    private File workTestDir;
 
     /**
      * Where are the dependencies copies.
@@ -183,7 +185,16 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
 	protected boolean skipPicturesOptimization;
     
     
-    // ACCESSORS
+    // ACCESSORS	
+
+    public String getDefaultOutputFilename() {
+		return defaultOutputFilename;
+	}
+
+	public void setDefaultOutputFilename(String defaultOutputFilename) {
+		this.defaultOutputFilename = defaultOutputFilename;
+	}
+	
     public File getTarget() {
         return new File(project.getBuild().getDirectory());
     }
