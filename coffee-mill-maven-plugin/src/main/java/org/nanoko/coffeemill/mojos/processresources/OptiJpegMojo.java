@@ -70,8 +70,8 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
 		return EXECUTABLE_NAME;
 	}
 
-	public static void setExecutableName(String exec_name) {
-		EXECUTABLE_NAME = exec_name;
+	public static void setExecutableName(String execName) {
+		EXECUTABLE_NAME = execName;
 	}
     
 

@@ -78,22 +78,27 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
     
     
     private void addHandlersToServer() {
-        ResourceHandler resource_handler = new ResourceHandler();
-        resource_handler.setDirectoriesListed(true);
-        resource_handler.setWelcomeFiles(new String[]{ "index.html" });
+        ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.setDirectoriesListed(true);
+        resourceHandler.setWelcomeFiles(new String[]{ "index.html" });
         try {
-			resource_handler.setResourceBase(this.getWorkDirectory().getCanonicalPath());
+            resourceHandler.setResourceBase(this.getWorkDirectory().getCanonicalPath());
 		} catch (IOException e) {
 			this.getLog().error(e.getMessage(), e);
 		}
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { resource_handler, new DefaultHandler() });
+        handlers.setHandlers(new Handler[] { resourceHandler, new DefaultHandler() });
         server.setHandler(handlers);
     }    
 
-    private void startServer() throws Exception {
-        server.start();
-        server.join();
+    private void startServer() throws WatchingException  {        
+        try {
+            server.start();
+            server.join();
+        } catch ( Exception e) {
+            // TODO Auto-generated catch block
+            throw new WatchingException("Error during start server on watchmode.", e);
+        }
     }
 
 }

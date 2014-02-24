@@ -54,19 +54,19 @@ public class NodeManager {
         return getSingleton(nodeDirectory);
     }
 
-    public static NodeManager getInstance(String NODE_VER, String NPM_VER){
-        setVersion(NODE_VER,NPM_VER);
+    public static NodeManager getInstance(String nodeVersion, String npmVersion){
+        setVersion(nodeVersion, npmVersion);
         return getSingleton(userHomeNodeFile);
     }
 
-    public static NodeManager getInstance(String NODE_VER, String NPM_VER,File nodeDirectory){
-        setVersion(NODE_VER,NPM_VER);
+    public static NodeManager getInstance(String nodeVersion, String npmVersion,File nodeDirectory){
+        setVersion(nodeVersion, npmVersion);
         return getSingleton(nodeDirectory);
     }
 
-    public static void setVersion(String NODE_VER, String NPM_VER) {
-        NODE_VERSION = NODE_VER;
-        NPM_VERSION = NPM_VER;
+    public static void setVersion(String nodeVersion, String npmVersion) {
+        NODE_VERSION = nodeVersion;
+        NPM_VERSION = npmVersion;
     }
 
     private static NodeManager getSingleton(File nodeDirectory) {
