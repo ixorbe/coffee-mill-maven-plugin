@@ -21,15 +21,15 @@ import java.io.IOException;
  * The mojo packaging the application.
  */
 @Mojo(name = "build-zip", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.COMPILE,
-        requiresProject = true,
-        defaultPhase = LifecyclePhase.PACKAGE)
+requiresDependencyResolution = ResolutionScope.COMPILE,
+requiresProject = true,
+defaultPhase = LifecyclePhase.PACKAGE)
 public class PackagerMojo extends AbstractCoffeeMillMojo  {
-	
+
     protected String outputFileName = "release.zip";
-    
+
     public void execute() throws MojoExecutionException {
-    	
+
         try {
             createApplicationDistribution();
         } catch (Exception e) {
@@ -38,12 +38,12 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
     }
 
     private void createApplicationDistribution() throws IOException {
-    	this.getLog().info("createApplicationDistribution");
-    	if( this.project != null ){
-    		this.outputFileName =  this.project.getArtifactId() + "-" + this.project.getVersion() + ".zip";
-    	}
+        this.getLog().info("createApplicationDistribution");
+        if( this.project != null ){
+            this.outputFileName =  this.project.getArtifactId() + "-" + this.project.getVersion() + ".zip";
+        }
 
-    	File distFile = new File(this.getTargetDirectory(), this.outputFileName);
+        File distFile = new File(this.getTargetDirectory(), this.outputFileName);
         ZipArchiver archiver = new ZipArchiver();
         archiver.enableLogging(new PlexusLoggerWrapper(new MavenLoggerWrapper(this.getLog())));
         archiver.addDirectory(getBuildDirectory());
@@ -51,10 +51,10 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
         archiver.createArchive();
         this.getLog().info("getDirectory="+getBuildDirectory());
         if(projectHelper != null ){
-        	projectHelper.attachArtifact(project, "zip", distFile);
+            projectHelper.attachArtifact(project, "zip", distFile);
         }
     }
-    
-    
+
+
 
 }

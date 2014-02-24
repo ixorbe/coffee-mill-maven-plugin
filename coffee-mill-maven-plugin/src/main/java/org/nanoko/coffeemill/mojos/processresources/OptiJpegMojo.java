@@ -43,42 +43,42 @@ requiresProject = true,
 defaultPhase = LifecyclePhase.COMPILE)
 public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
 
-	/**
+    /**
      * Enables verbose mode.
      */
     @Parameter(defaultValue="false")
     protected boolean verbose;    
-    
+
     /**
      * The JpegTran executable file name without extension.
      * This field is not final for testing purpose.
      */
     private static String EXECUTABLE_NAME = "jpegtran";    
-    
 
-	/**
+
+    /**
      * The JpegTran executable.
      */
     private File jpegTranExec;
-    
-    
-    public void setVerbose(Boolean verbose){
-    	this.verbose = verbose;
-    }
-    
-    public static String getExecutableName() {
-		return EXECUTABLE_NAME;
-	}
 
-	public static void setExecutableName(String execName) {
-		EXECUTABLE_NAME = execName;
-	}
-    
+
+    public void setVerbose(Boolean verbose){
+        this.verbose = verbose;
+    }
+
+    public static String getExecutableName() {
+        return EXECUTABLE_NAME;
+    }
+
+    public static void setExecutableName(String execName) {
+        EXECUTABLE_NAME = execName;
+    }
+
 
     public void execute() throws MojoExecutionException {    	
-    	if(isSkipped()) { 
-    		return; 
-    	}
+        if(isSkipped()) { 
+            return; 
+        }
 
         jpegTranExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
@@ -86,49 +86,49 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
             getLog().error("Cannot optimize JPEG files - "+EXECUTABLE_NAME+" not installed.");
             return;
         } 
-        
+
         if(!getWorkDirectory().exists()) { 
-        	return; 
+            return; 
         }
-        
+
         getLog().info("Invoking jpegtran : " + jpegTranExec.getAbsolutePath());
         Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"jpg", "jpeg"}, true);
         while (files.hasNext()) {
             File file = files.next();
             try {
-				optimize(file);
-			} catch (WatchingException e) {
-				throw new MojoExecutionException("Error during execute() on OptiJpegMojo", e);
-			}
+                optimize(file);
+            } catch (WatchingException e) {
+                throw new MojoExecutionException("Error during execute() on OptiJpegMojo", e);
+            }
         }
     }
-    
+
     public boolean accept(File file) {
         return !isSkipped() 
-        		&& jpegTranExec != null
+                && jpegTranExec != null
                 && FSUtils.isInDirectory(file.getName(), getWorkDirectory())
                 && (file.getName().endsWith(".jpg") || file.getName().endsWith(".jpeg"));
     }
-    
+
     public boolean fileCreated(File file) throws WatchingException {
         return fileUpdated(file);
     }
 
     public boolean fileUpdated(File file) throws WatchingException {
-		File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
         optimize(relativeWorkFile);
-    	return true;
+        return true;
     }
-    
+
     public boolean fileDeleted(File file) throws WatchingException {
-    	File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
         if (deletedFromWork.isFile()){
-        	getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
-        	FileUtils.deleteQuietly(deletedFromWork); 
+            getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
+            FileUtils.deleteQuietly(deletedFromWork); 
         }
         return true;
     } 
-    
+
 
     private void optimize(File file) throws WatchingException {
         File dir = file.getParentFile();
@@ -160,7 +160,7 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
 
             // Overwrite the original file
             File out = new File(dir, "__out.jpeg");
-            
+
             getLog().info("output jpeg file : "+out.getAbsolutePath());
             if (out.exists()) {
                 FileUtils.copyFile(out, file);
@@ -174,13 +174,13 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
             throw new WatchingException("Error during JPG optimization of " + file.getAbsolutePath(), e);
         }
     }
-    
+
     private boolean isSkipped(){
-    	if (skipPicturesOptimization) {
+        if (skipPicturesOptimization) {
             getLog().info("\033[31m JPEG Optimization skipped \033[37m");
             return true;
         } else {
-        	return false;
+            return false;
         }
     }
 }
