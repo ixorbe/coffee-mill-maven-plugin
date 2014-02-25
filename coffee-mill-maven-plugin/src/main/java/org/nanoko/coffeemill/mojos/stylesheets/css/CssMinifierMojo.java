@@ -21,7 +21,7 @@ import java.io.File;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Minifying Css files.
+ * Minifying CSS files.
  */
 @Mojo(name = "minify-stylesheets", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,

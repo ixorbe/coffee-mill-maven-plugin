@@ -27,6 +27,9 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
 
+/**
+ * Resolve Js and Css external dependencies
+ */
 @Mojo( name = "resolve-dependencies", requiresDependencyResolution = ResolutionScope.TEST) 
 public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
 

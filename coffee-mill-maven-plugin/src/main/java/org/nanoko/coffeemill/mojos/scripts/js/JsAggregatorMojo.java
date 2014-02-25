@@ -21,7 +21,7 @@ import java.util.List;
 
 
 /**
- * Compiles Js files.
+ * Aggregate Js files.
  */
 @Mojo(name = "aggregate-javascript", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.TEST,

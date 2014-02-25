@@ -19,7 +19,7 @@ import java.util.Collection;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Compiles less files.
+ * Compiles SASS files.
  */
 @Mojo(name = "compile-sass", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,

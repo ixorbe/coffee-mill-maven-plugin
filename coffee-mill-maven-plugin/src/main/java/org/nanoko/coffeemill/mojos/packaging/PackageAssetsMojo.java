@@ -30,9 +30,7 @@ import org.nanoko.coffeemill.utils.FSUtils;
 import org.nanoko.maven.WatchingException;
 
 /**
- * A processor optimizing JPEG files using JpegTran.
- * JpegTran must be installed on the system and available from the path.
- * -> to install : http://saralinux.blogspot.fr/2013/12/installing-jpegtran-on-mac-or-unixlinux.html
+ * Copy the non js/css files to Build Directory
  */
 @Mojo(name = "package-assets", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,

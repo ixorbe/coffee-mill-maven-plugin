@@ -20,7 +20,7 @@ import java.util.List;
 
 
 /**
- * Compiles less files.
+ * Aggregate CSS files.
  */
 @Mojo(name = "aggregate-stylesheets", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.TEST,

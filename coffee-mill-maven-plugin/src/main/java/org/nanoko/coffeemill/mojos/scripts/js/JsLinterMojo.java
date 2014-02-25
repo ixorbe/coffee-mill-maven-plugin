@@ -23,7 +23,7 @@ import java.util.Collection;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Optimize Js files.
+ * Quality Check Js files.
  */
 @Mojo(name = "lint-javascript", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,

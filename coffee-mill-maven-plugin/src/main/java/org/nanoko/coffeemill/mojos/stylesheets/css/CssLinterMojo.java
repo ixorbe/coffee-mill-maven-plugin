@@ -23,7 +23,7 @@ import java.util.Collection;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Optimize Js files.
+ * Quality-Check CSS files.
  */
 @Mojo(name = "lint-css", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,
