@@ -4,7 +4,7 @@ Working with JavaScript and CoffeeScript
 Validating JavaScript files
 ---------------------------
 
-JavaScript files from `src/main/js` are validated against JSLint and JSHint. This step is automatically luanch during
+JavaScript files from `src/main/js` are validated against JSLint. This step is automatically luanch during
 the _compile_ phase, however you can launch it using:
 
     mvn ${project.groupId}:${project.artifactId}:compile-javascript
@@ -25,16 +25,6 @@ The plugin also support compile _test_ sources with:
 
     mvn ${project.groupId}:${project.artifactId}:test-compile-coffeescript
 
-Compiling Dust Templates
--------------------------
-
-The plugin is able to compile [Dust templates (linkedIn version)](http://linkedin.github.com/dustjs/) sources from the
-`src/main/js` to JavaScript. The output files are in the `target/www` directory. Dust templates must use the _.dust_
-extension.
-
-The compilation is part of the _js_ packaging lifecycle and happens automatically during JavaScript compilation (i.e.
-validation).
-
 Testing JavaScript and CoffeeScript code
 ---------------------------------------
 
@@ -54,10 +44,11 @@ using CoffeeScript).
 During the _test_ phase, all specs are executed againt your CoffeeScript and JavaScript code.
 
 The JavaScript files are loaded in the following order:
-    * Maven dependencies using the _js_ type are preloaded.
-    * JavaScript / CoffeeScript files are loaded using the order defined in the `javascriptAggregation` parameter. If
+
+* Maven dependencies using the _js_ type are preloaded.
+* JavaScript / CoffeeScript files are loaded using the order defined in the `javascriptAggregation` parameter (as below). If
 not defined, the sources are loaded in the alphabetical order.
-    * The specifications are loaded
+* The specifications are loaded
 
     <plugin>
         <groupId>${project.groupId}</groupId>
@@ -77,7 +68,7 @@ not defined, the sources are loaded in the alphabetical order.
 Test can be run using `mvn test`.
 
 Aggregating JavaScript files
-----------------------------
+------------------------------------------------
 
 JavaScript files and CoffeeScript files can be aggregated into one file. Dependencies can also be included too.
 Generally, the order is important, so has to be specified using the `javascriptAggregation` parameter.
@@ -100,11 +91,8 @@ Dependencies are included using their `artifactId`:
 Minification
 ------------
 
-Once aggregated, the file can be minified using either Google Closure (default) and YUI Compressor.
-
-** Using Google Closure **
-
-Google Closure is used by default. So `mvn package` produces the minified artifact. With the following configuration:
+Once aggregated, the file can be minified using `uglify-js` with `npm`.
+Minification is not skipped by default. So `mvn package` produces the minified artifact. With the following configuration:
 
     <plugin>
         <groupId>${project.groupId}</groupId>
@@ -119,63 +107,19 @@ Google Closure is used by default. So `mvn package` produces the minified artifa
         </configuration>
     </plugin>
 
-You can configure the `compilation level` among: _SIMPLE_OPTIMIZATIONS_ (default),
-_WHITESPACE_ONLY_ and _ADVANCED_OPTIMIZATIONS_. Be aware that _ADVANCED_OPTIMIZATIONS_ may modify the API.
 
-    <plugin>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>${project.artifactId}</artifactId>
-        <version>${project.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-            <javascriptAggregation>
-                <file>syndication-service</file> <!-- This is a dependency, we use the artifact id -->
-                <file>FeedReaderImpl.js</file>
-            </javascriptAggregation>
-            <minifierGoogleCompilationLevel>ADVANCED_OPTIMIZATIONS</minifierGoogleCompilationLevel>
-        </configuration>
-    </plugin>
+SkipVariables
+-------------
 
-** Using Yahoo Compressor **
+By default the packaging process isn't skipped, so it's launch compilation, aggregation and minification. But variables exist to escape those process :
 
-To use Yahoo Compressor, you need to set `minifier` to `YUI_COMPRESSOR`:
+* skipCompilation
+* skipAggregation
+* skipMinification
 
-    <plugin>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>${project.artifactId}</artifactId>
-        <version>${project.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-            <javascriptAggregation>
-                <file>syndication-service</file> <!-- This is a dependency, we use the artifact id -->
-                <file>FeedReaderImpl.js</file>
-            </javascriptAggregation>
-            <minifier>YUI_COMPRESSOR</minifier>
-        </configuration>
-    </plugin>
 
-You can configure the minification with:
 
-* `minifierYUIPreserveSemiColumn` : to preserve the semi-column (`false` by default)
-* `minifierYUIMunge` : to enable munge (`true` by default)
-* `minifierYUIDisableOptimizations` : to disable the optimizations (`false` by default, so optimizations are enabled)
 
-    <plugin>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>${project.artifactId}</artifactId>
-        <version>${project.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-            <javascriptAggregation>
-                <file>syndication-service</file> <!-- This is a dependency, we use the artifact id -->
-                <file>FeedReaderImpl.js</file>
-            </javascriptAggregation>
-            <minifier>YUI_COMPRESSOR</minifier>
-            <minifierYUIPreserveSemiColumn>true</minifierYUIPreserveSemiColumn>
-            <minifierYUIMunge>true</minifierYUIMunge>
-            <minifierYUIDisableOptimizations>true</minifierYUIDisableOptimizations>
-        </configuration>
-    </plugin>
 
 Integration Tests
 -----------------
