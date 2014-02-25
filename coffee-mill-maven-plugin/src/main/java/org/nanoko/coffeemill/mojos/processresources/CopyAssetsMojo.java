@@ -44,10 +44,8 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
             for(File file : sourceAssets){
                 if(file.isDirectory()){
                     FileUtils.copyDirectoryToDirectory(file, getWorkDirectory());					
-                }else{
-                    if(file.isFile() && !FSUtils.hasExtension(file, "js","css")){
-                        FileUtils.copyFileToDirectory(file, getWorkDirectory());
-                    }
+                }else if(file.isFile() && !FSUtils.hasExtension(file, "js","css")) {                    
+                    FileUtils.copyFileToDirectory(file, getWorkDirectory());                    
                 }
             }
         } catch (IOException e) {

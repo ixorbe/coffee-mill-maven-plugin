@@ -30,7 +30,7 @@ public class NPM {
 
     private final NodeManager node;
 
-    public static Log log;
+    private static Log log;
 
     /**
      * Constructor used to install an NPM.

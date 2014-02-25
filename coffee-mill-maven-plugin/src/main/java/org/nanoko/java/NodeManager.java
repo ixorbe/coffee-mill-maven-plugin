@@ -37,7 +37,28 @@ public class NodeManager {
 
     private File nodeExecutable;
 
+    public NodeManager( File nodeDirectory) {
+        this.nodeDirectory = nodeDirectory;
+        this.npmDirectory = new File(nodeDirectory, "lib/node_modules/npm/");
 
+        if (!nodeDirectory.exists()) {
+            nodeDirectory.mkdirs();
+        }
+
+        if (ExecUtils.isWindows()) {
+            this.nodeExecutable = new File(nodeDirectory + "/bin", "node.exe");
+            nodeLibDirectory = nodeExecutable.getParentFile();
+            nodeLibDirectory.mkdirs();
+        } else {
+            this.nodeExecutable = new File(nodeDirectory + "/bin", "node");
+            File nodePrefix = nodeExecutable.getParentFile().getParentFile();
+            nodeLibDirectory = new File(nodePrefix, "lib");
+            nodeLibDirectory.mkdirs();
+        }
+
+        nodeModulesDirectory = new File(nodeLibDirectory, "node_modules");
+    }
+    
     public static Log getLog() {
         return log;
     }
@@ -70,33 +91,12 @@ public class NodeManager {
     }
 
     private static NodeManager getSingleton(File nodeDirectory) {
-        if(singleton == null)
+        if(singleton == null){
             singleton = new NodeManager(nodeDirectory);
+        }
         return singleton;
     }
 
-
-    public NodeManager( File nodeDirectory) {
-        this.nodeDirectory = nodeDirectory;
-        this.npmDirectory = new File(nodeDirectory, "lib/node_modules/npm/");
-
-        if (!nodeDirectory.exists()) {
-            nodeDirectory.mkdirs();
-        }
-
-        if (ExecUtils.isWindows()) {
-            this.nodeExecutable = new File(nodeDirectory + "/bin", "node.exe");
-            nodeLibDirectory = nodeExecutable.getParentFile();
-            nodeLibDirectory.mkdirs();
-        } else {
-            this.nodeExecutable = new File(nodeDirectory + "/bin", "node");
-            File nodePrefix = nodeExecutable.getParentFile().getParentFile();
-            nodeLibDirectory = new File(nodePrefix, "lib");
-            nodeLibDirectory.mkdirs();
-        }
-
-        nodeModulesDirectory = new File(nodeLibDirectory, "node_modules");
-    }
 
     /**
      * Installs node in ~/.wisdom/node/$version.
