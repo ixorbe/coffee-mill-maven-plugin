@@ -30,53 +30,52 @@ import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
 @Mojo( name = "resolve-dependencies", requiresDependencyResolution = ResolutionScope.TEST) 
 public class ResolveAssetsDependenciesMojo extends AbstractCoffeeMillMojo {
 
-	private File outputDirectory = null;
+    private File outputDirectory = null;
 
-	
+
     public void execute() throws MojoExecutionException {   
-    	if(outputDirectory  == null){
-    		outputDirectory = this.getLibDirectory();
-    	}
-    	
-    	@SuppressWarnings("unchecked")
-		Set<Artifact> dependencies = this.project.getArtifacts();
+        if(outputDirectory  == null){
+            outputDirectory = this.getLibDirectory();
+        }
+
+        Set<Artifact> dependencies = this.project.getArtifacts();
         Set<Artifact> keepers = new LinkedHashSet<Artifact>();
-        
+
         // Only retrieve JS & CSS dependencies
         for(Artifact a : dependencies) {
-        	if(a.getType().equals("js") || a.getType().equals("css")){
-        		keepers.add(a);
-        	} else {
-        		getLog().warn(a.getFile().getName() + " dependency can't be resolved");
-        	}
+            if(a.getType().equals("js") || a.getType().equals("css")){
+                keepers.add(a);
+            } else {
+                getLog().warn(a.getFile().getName() + " dependency can't be resolved");
+            }
         }
         if(keepers.size()>0) {
-        	try {
-				copyDependencies(keepers);
-			} catch (IOException e) {
-				throw new MojoExecutionException("Error during execute() on ResolveAssetsDependenciesMojo", e);
-			}
+            try {
+                copyDependencies(keepers);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Error during execute() on ResolveAssetsDependenciesMojo", e);
+            }
         }
     }
-    
+
     private void copyDependencies(Set<Artifact> artifacts) throws IOException{
-    	if(!outputDirectory.exists()) {
-    		outputDirectory.mkdirs();
-    	}
-    	
-    	for( Artifact a : artifacts) {
-	    	try {
-				File f = a.getFile();
-				File out  = new File(outputDirectory, a.getArtifactId()+"."+a.getType());
-				if (a.getClassifier() != null  && ! a.getClassifier().equals("min")) {
-					out  = new File(outputDirectory, a.getArtifactId()+"-"+a.getClassifier()+"."+a.getType());
-				}
-	    		getLog().info("	Copy " + f.getAbsolutePath() + " to " + outputDirectory);
-				FileUtils.copyFile(f, out);
-	    	} catch (IOException e) {
-	    		throw new IOException("Error during copy artifact dependencies", e);
-	    	}
-    	}
+        if(!outputDirectory.exists()) {
+            outputDirectory.mkdirs();
+        }
+
+        for( Artifact a : artifacts) {
+            try {
+                File f = a.getFile();
+                File out  = new File(outputDirectory, a.getArtifactId()+"."+a.getType());
+                if (a.getClassifier() != null  && ! a.getClassifier().equals("min")) {
+                    out  = new File(outputDirectory, a.getArtifactId()+"-"+a.getClassifier()+"."+a.getType());
+                }
+                getLog().info("	Copy " + f.getAbsolutePath() + " to " + outputDirectory);
+                FileUtils.copyFile(f, out);
+            } catch (IOException e) {
+                throw new IOException("Error during copy artifact dependencies", e);
+            }
+        }
     }
-   
+
 }

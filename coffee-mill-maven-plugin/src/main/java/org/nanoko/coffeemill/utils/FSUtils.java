@@ -10,8 +10,10 @@ import org.apache.commons.io.FilenameUtils;
 
 public class FSUtils {
 
-	
-	/**
+    private FSUtils(){
+    }
+
+    /**
      * Checks whether the given file is inside the given directory.
      * @param file the file
      * @param directory the directory
@@ -24,27 +26,27 @@ public class FSUtils {
             return false;
         }
     }
-    
+
     public static boolean isInDirectory(String filename, File file) {    	
-    	if (file.isDirectory()) {     
-            //do you have permission to read this directory?	
-    	    if (file.canRead()) {
-	    		for (File temp : file.listFiles()) {
-	    		    if (temp.isDirectory()) {
-	    		    	if(isInDirectory(filename, temp)) {
-	    		    		return true;
-	    		    	}
-	    		    } else {
-		    			if (filename.toLowerCase().equals(temp.getName().toLowerCase())) {	
-		    			    return true;
-		    			}
-	    		    }
-	    	    }	     
-	    	 }
+        if (!file.isDirectory() || !file.canRead()) {  //do you have permission to read this directory?
+            return false;
         }
-    	return false;     
-      }
-    
+
+        for (File temp : file.listFiles()) {
+            if (temp.isDirectory()) {
+                if(isInDirectory(filename, temp)) {
+                    return true;
+                }
+            } else {
+                if (filename.equalsIgnoreCase(temp.getName())) {	
+                    return true;
+                }
+            }
+        }
+
+        return false;     
+    }
+
     public static boolean hasExtension(File file, String... extensions) {
         String extension = FilenameUtils.getExtension(file.getName());
         for (String s : extensions) {
@@ -54,8 +56,8 @@ public class FSUtils {
         }
         return false;
     }
-    
-    
+
+
     public static File findExecutableInPath(String exec) {
         // Build candidates
         List<String> candidates = new ArrayList<String>();
@@ -89,9 +91,9 @@ public class FSUtils {
         // Search not successful.
         return null;
     }
-    
-    
-    
+
+
+
     /**
      * Gets a File object representing a File in the directory <tt>dir</tt> which has the same path as the file
      * <tt>file</tt> from the directory <tt>rel</tt>.
@@ -105,19 +107,19 @@ public class FSUtils {
         String relativePath = path.substring(rel.getAbsolutePath().length());
         return new File(dir, relativePath);
     }
-    
-    
+
+
     public static File resolveFile(final String name, File workDir, File libDir, String extension) {
         // 1) Check for the file in the workDir with a direct name
         File file = new File(workDir, name);
         if (file.isFile()) { 
-        	return file; 
+            return file; 
         }
 
         // 2) Try to append the extension
         file = new File(workDir, name + "." + extension);
         if (file.isFile()) { 
-        	return file; 
+            return file; 
         }
 
         // 3) Search in the libDir as prefix
@@ -128,11 +130,11 @@ public class FSUtils {
                 }
             });
             if (files.length > 0) { 
-            	return files[0]; 
+                return files[0]; 
             }
         }
         return null;
     }
-    
-    
+
+
 }

@@ -40,91 +40,91 @@ requiresProject = true,
 defaultPhase = LifecyclePhase.PACKAGE)
 public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 
-	@Parameter(defaultValue="false")
-	protected boolean skipAssetsPackage;
+    @Parameter(defaultValue="false")
+    protected boolean skipAssetsPackage;
 
     public void execute() throws MojoExecutionException {
-    	
-    	if(isSkipped()){ 
-    		return; 
-    	}
-    	
-    	if (!this.getWorkDirectory().exists()){
-        	getLog().warn("/!\\ Packaging assets skipped - " + this.getWorkDirectory().getAbsolutePath() + " does not exist !");
-        	return;
+
+        if(isSkipped()){ 
+            return; 
         }
-    	
-    	File[] workAssets = getWorkDirectory().listFiles();
-    	try {
-	    	for(File file : workAssets){
-	    		if(file.isDirectory()){
-		    		FileUtils.copyDirectoryToDirectory(file, getBuildDirectory());					
-	    		}else{
-	    			if(file.isFile() && !FSUtils.hasExtension(file, "js","css")){
-	    				FileUtils.copyFileToDirectory(file, getBuildDirectory());
-	    			}
-	    		}
-	    	}
-    	} catch (IOException e) {
-    		throw new MojoExecutionException("Error during execute() on PackageAssetsMojo", e);
-		}
-       
+
+        if (!this.getWorkDirectory().exists()){
+            getLog().warn("/!\\ Packaging assets skipped - " + this.getWorkDirectory().getAbsolutePath() + " does not exist !");
+            return;
+        }
+
+        File[] workAssets = getWorkDirectory().listFiles();
+        try {
+            for(File file : workAssets){
+                if(file.isDirectory()){
+                    FileUtils.copyDirectoryToDirectory(file, getBuildDirectory());					
+                }else{
+                    if(file.isFile() && !FSUtils.hasExtension(file, "js","css")){
+                        FileUtils.copyFileToDirectory(file, getBuildDirectory());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new MojoExecutionException("Error during execute() on PackageAssetsMojo", e);
+        }
+
     }
-    
+
     public boolean accept(File file) {
-          return !isSkipped() && file.getParent().contains( getAssetsDir().getAbsolutePath() );
+        return !isSkipped() && file.getParent().contains( getAssetsDir().getAbsolutePath() );
     }
-    
+
 
     private void packageAssetFile(File file) throws WatchingException {
-    	getLog().info("Packaging Asset file "+file.getName()
-    			+" to "+this.getBuildDirectory().getAbsolutePath()  );
-    	try {    		
-    		File relativeWorkFile = FSUtils.computeRelativeFile(file, this.getAssetsDir(), this.getWorkDirectory());
-    		File relativeBuildFile = FSUtils.computeRelativeFile(file, this.getAssetsDir(), this.getBuildDirectory());	
-    		
-    		if (relativeBuildFile.getParentFile() != null) {
-    			relativeBuildFile.getParentFile().mkdirs();
+        getLog().info("Packaging Asset file "+file.getName()
+                +" to "+this.getBuildDirectory().getAbsolutePath()  );
+        try {    		
+            File relativeWorkFile = FSUtils.computeRelativeFile(file, this.getAssetsDir(), this.getWorkDirectory());
+            File relativeBuildFile = FSUtils.computeRelativeFile(file, this.getAssetsDir(), this.getBuildDirectory());	
+
+            if (relativeBuildFile.getParentFile() != null) {
+                relativeBuildFile.getParentFile().mkdirs();
                 FileUtils.copyFileToDirectory(relativeWorkFile, relativeBuildFile.getParentFile());
             } else{ 
                 getLog().error("Cannot copy file - parent directory not accessible for " + relativeBuildFile);
             }
-			
-		} catch (IOException e) {
-			throw new WatchingException("Error during trying packageAssetFile", e); 
-		}
+
+        } catch (IOException e) {
+            throw new WatchingException("Error during trying packageAssetFile", e); 
+        }
     }
-    
-    
+
+
     public boolean fileCreated(File file) throws WatchingException {
-    	packageAssetFile(file);
-    	return true;
+        packageAssetFile(file);
+        return true;
     }
 
     public boolean fileUpdated(File file) throws WatchingException {
-		packageAssetFile(file);
-    	return true;
+        packageAssetFile(file);
+        return true;
     }
-    
+
     public boolean fileDeleted(File file) throws WatchingException {
-    	File deletedFromBuild = FSUtils.computeRelativeFile(file, this.getAssetsDir(), this.getBuildDirectory());
+        File deletedFromBuild = FSUtils.computeRelativeFile(file, this.getAssetsDir(), this.getBuildDirectory());
         if (deletedFromBuild.isFile()){
-        	getLog().info("deleting File : "+file.getName()+" from "+this.getBuildDirectory());    	
-        	FileUtils.deleteQuietly(deletedFromBuild); 
+            getLog().info("deleting File : "+file.getName()+" from "+this.getBuildDirectory());    	
+            FileUtils.deleteQuietly(deletedFromBuild); 
         }
         return true;
     }
-    
+
     private boolean isSkipped(){
-    	if (skipAssetsPackage) {
+        if (skipAssetsPackage) {
             getLog().info("\033[31m Asset packaging skipped \033[37m");
             return true;
         } else{
-        	return false;
+            return false;
         }
     }
-    
-    
-    
-    
+
+
+
+
 }

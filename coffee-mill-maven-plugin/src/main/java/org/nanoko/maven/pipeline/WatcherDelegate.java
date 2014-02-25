@@ -37,9 +37,9 @@ public class WatcherDelegate implements Watcher {
         try {
             return (Boolean) accept.invoke(delegate, file);
         } catch (InvocationTargetException e) { //NOSONAR
-            throw new RuntimeException(e.getTargetException());
+            throw new RuntimeException("InvocationTargetException", e.getTargetException());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("RuntimeException", e);
         }
     }
 
@@ -48,9 +48,9 @@ public class WatcherDelegate implements Watcher {
         try {
             return (Boolean) fileCreated.invoke(delegate, file);
         } catch (InvocationTargetException e) { //NOSONAR
-            throw new WatchingException(e.getTargetException().getMessage(), file, e.getTargetException());
+            throw new WatchingException("InvocationTargetException", file, e.getTargetException());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("RuntimeException", e);
         }
     }
 
@@ -70,9 +70,9 @@ public class WatcherDelegate implements Watcher {
         try {
             return (Boolean) fileDeleted.invoke(delegate, file);
         } catch (InvocationTargetException e) { //NOSONAR
-            throw new WatchingException(e.getTargetException().getMessage(), file, e.getTargetException());
+            throw new WatchingException("InvocationTargetException", file, e.getTargetException());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("RuntimeException", e);
         }
     }
 }

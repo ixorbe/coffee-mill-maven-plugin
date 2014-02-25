@@ -42,13 +42,13 @@ requiresProject = true,
 defaultPhase = LifecyclePhase.COMPILE)
 public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
 
-	
-	/**
+
+    /**
      * Enables verbose mode.
      */
     @Parameter(defaultValue="false")
     protected boolean verbose;    
-    
+
     /**
      * Optimization level (0-7).
      * 2 by default.
@@ -56,92 +56,92 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
      */
     @Parameter(defaultValue="2")
     protected int level = 2;
-    
-    
+
+
     /**
      * The JpegTran executable file name without extension.
      * This field is not final for testing purpose.
      */
     private static String EXECUTABLE_NAME = "optipng";
-    
+
     /**
      * The JpegTran executable.
      */
     private File optiPNGExec;
-    
 
-    
+
+
     public void setVerbose(Boolean verbose){
-    	this.verbose = verbose;
+        this.verbose = verbose;
     }
-    
+
     public static String getExecutableName() {
-		return EXECUTABLE_NAME;
-	}
+        return EXECUTABLE_NAME;
+    }
 
-	public static void setExecutableName(String exec_name) {
-		EXECUTABLE_NAME = exec_name;
-	}
-    
-    
+    public static void setExecutableName(String execName) {
+        EXECUTABLE_NAME = execName;
+    }
+
+
     public void execute() throws MojoExecutionException {
-    	
-    	if(isSkipped()) { 
-    		return; 
-    	}
 
-    	optiPNGExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
+        if(isSkipped()) { 
+            return; 
+        }
+
+        optiPNGExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 
         if (optiPNGExec == null) {
             getLog().error("Cannot optimize PNG files - optipng not installed.");
             return;
         } 
-        
+
         if(!getWorkDirectory().exists()) { 
-        	return; 
+            return; 
         }
-        
+
         getLog().info("Invoking optipng : " + optiPNGExec.getAbsolutePath());
         Iterator<File> files = FileUtils.iterateFiles(getWorkDirectory(), new String[]{"png"}, true);
         while (files.hasNext()) {
             File file = files.next();
             try {
-				optimize(file);
-			} catch (WatchingException e) {
-				throw new MojoExecutionException("Error during execute() on OptiPngMojo", e);
-			}
+                optimize(file);
+            } catch (WatchingException e) {
+                throw new MojoExecutionException("Error during execute() on OptiPngMojo", e);
+            }
         }
     }
-    
+
     public boolean accept(File file) {
         return !isSkipped() 
-        		&& optiPNGExec != null
+                && optiPNGExec != null
                 && FSUtils.isInDirectory(file.getName(), getWorkDirectory())
                 && (file.getName().endsWith(".png") );
     }
-    
+
     public boolean fileCreated(File file) throws WatchingException {
         return fileUpdated(file);
     }
 
     public boolean fileUpdated(File file) throws WatchingException {
-		File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
         optimize(relativeWorkFile);
-    	return true;
+        return true;
     }
-    
+
     public boolean fileDeleted(File file) throws WatchingException {
-    	File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
+        File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), this.getWorkDirectory());
         if (deletedFromWork.isFile()){
-        	getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
-        	FileUtils.deleteQuietly(deletedFromWork); 
+            getLog().info("deleting File : "+file.getName()+" from "+this.getWorkDirectory());    	
+            FileUtils.deleteQuietly(deletedFromWork); 
         }
         return true;
     } 
-    
+
 
     private void optimize(File file) throws WatchingException {
-    	File dir = file.getParentFile();
+        File dir = file.getParentFile();
 
         // Build command line
         CommandLine cmdLine = CommandLine.parse(optiPNGExec.getAbsolutePath());
@@ -162,16 +162,16 @@ public class OptiPngMojo extends AbstractCoffeeMillWatcherMojo {
             executor.execute(cmdLine);
             getLog().info(file.getName() + " optimized");
         } catch (IOException e) {
-        	throw new WatchingException("Error during PNG optimization of " + file.getAbsolutePath(), e);
+            throw new WatchingException("Error during PNG optimization of " + file.getAbsolutePath(), e);
         }
     }
-    
+
     private boolean isSkipped(){
-    	if (skipPicturesOptimization) {
+        if (skipPicturesOptimization) {
             getLog().info("\033[31m PNG Optimization skipped \033[37m");
             return true;
         } else {
-        	return false;
+            return false;
         }
     }
 }

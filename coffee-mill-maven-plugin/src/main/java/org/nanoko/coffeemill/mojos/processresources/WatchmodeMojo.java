@@ -25,46 +25,46 @@ import java.io.IOException;
  * Watch mode Mojo
  */
 @Mojo(name = "watch", threadSafe = false,
-        requiresDependencyResolution = ResolutionScope.COMPILE,
-        requiresProject = true
+requiresDependencyResolution = ResolutionScope.COMPILE,
+requiresProject = true
         )
 @Execute(phase = LifecyclePhase.PACKAGE)
 public class WatchmodeMojo extends AbstractCoffeeMillMojo {
-    
+
     @Parameter(defaultValue="true")
     protected boolean watchRunServer;
-    
+
     @Parameter(defaultValue="8234")
     protected int watchJettyServerPort;   
-    
+
     //The Jetty Server
     private Server server;
-    
+
     private Pipeline pipeline; 
-    
+
 
     public void execute() throws MojoExecutionException {
-       
-    	try {
+
+        try {
             init();
         } catch (WatchingException e) {
             throw new MojoExecutionException("Cannot init watchers on WatchmodeMojo", e);
         }
-    	
-		if (watchRunServer) {
-	        try {
-	            server = new Server(watchJettyServerPort);
-	            addHandlersToServer();
-	            startServer();
-	        } catch (Exception e) {
-				throw new MojoExecutionException("Cannot run the jetty server", e);
-	        } 
+
+        if (watchRunServer) {
+            try {
+                server = new Server(watchJettyServerPort);
+                addHandlersToServer();
+                startServer();
+            } catch (Exception e) {
+                throw new MojoExecutionException("Cannot run the jetty server", e);
+            } 
         } else {
             try {
-            	// Pretty long
+                // Pretty long
                 Thread.sleep(1000000000); 
             } catch (InterruptedException e) { 
-            	throw new MojoExecutionException("InterruptedException", e);
+                throw new MojoExecutionException("InterruptedException", e);
             }
         }
 
@@ -75,25 +75,30 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         // Expand if needed.
         pipeline = Pipelines.watchers(session, new MavenLoggerWrapper(getLog()),basedir).watch();
     }
-    
-    
+
+
     private void addHandlersToServer() {
-        ResourceHandler resource_handler = new ResourceHandler();
-        resource_handler.setDirectoriesListed(true);
-        resource_handler.setWelcomeFiles(new String[]{ "index.html" });
+        ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.setDirectoriesListed(true);
+        resourceHandler.setWelcomeFiles(new String[]{ "index.html" });
         try {
-			resource_handler.setResourceBase(this.getWorkDirectory().getCanonicalPath());
-		} catch (IOException e) {
-			this.getLog().error(e.getMessage(), e);
-		}
+            resourceHandler.setResourceBase(this.getWorkDirectory().getCanonicalPath());
+        } catch (IOException e) {
+            this.getLog().error(e.getMessage(), e);
+        }
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { resource_handler, new DefaultHandler() });
+        handlers.setHandlers(new Handler[] { resourceHandler, new DefaultHandler() });
         server.setHandler(handlers);
     }    
 
-    private void startServer() throws Exception {
-        server.start();
-        server.join();
+    private void startServer() throws WatchingException  {        
+        try {
+            server.start();
+            server.join();
+        } catch ( Exception e) {
+            // TODO Auto-generated catch block
+            throw new WatchingException("Error during start server on watchmode.", e);
+        }
     }
 
 }

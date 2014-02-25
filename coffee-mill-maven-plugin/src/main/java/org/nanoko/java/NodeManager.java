@@ -37,45 +37,6 @@ public class NodeManager {
 
     private File nodeExecutable;
 
-
-    public static Log getLog() {
-        return log;
-    }
-
-    public static void setLog(Log log) {
-        NodeManager.log = log;
-    }
-    
-    public static NodeManager getInstance(){
-        return getSingleton(userHomeNodeFile);
-    }
-
-    public static NodeManager getInstance(File nodeDirectory){
-        return getSingleton(nodeDirectory);
-    }
-
-    public static NodeManager getInstance(String NODE_VER, String NPM_VER){
-        setVersion(NODE_VER,NPM_VER);
-        return getSingleton(userHomeNodeFile);
-    }
-
-    public static NodeManager getInstance(String NODE_VER, String NPM_VER,File nodeDirectory){
-        setVersion(NODE_VER,NPM_VER);
-        return getSingleton(nodeDirectory);
-    }
-
-    public static void setVersion(String NODE_VER, String NPM_VER) {
-        NODE_VERSION = NODE_VER;
-        NPM_VERSION = NPM_VER;
-    }
-
-    private static NodeManager getSingleton(File nodeDirectory) {
-        if(singleton == null)
-            singleton = new NodeManager(nodeDirectory);
-        return singleton;
-    }
-
-
     public NodeManager( File nodeDirectory) {
         this.nodeDirectory = nodeDirectory;
         this.npmDirectory = new File(nodeDirectory, "lib/node_modules/npm/");
@@ -97,6 +58,45 @@ public class NodeManager {
 
         nodeModulesDirectory = new File(nodeLibDirectory, "node_modules");
     }
+    
+    public static Log getLog() {
+        return log;
+    }
+
+    public static void setLog(Log log) {
+        NodeManager.log = log;
+    }
+    
+    public static NodeManager getInstance(){
+        return getSingleton(userHomeNodeFile);
+    }
+
+    public static NodeManager getInstance(File nodeDirectory){
+        return getSingleton(nodeDirectory);
+    }
+
+    public static NodeManager getInstance(String nodeVersion, String npmVersion){
+        setVersion(nodeVersion, npmVersion);
+        return getSingleton(userHomeNodeFile);
+    }
+
+    public static NodeManager getInstance(String nodeVersion, String npmVersion,File nodeDirectory){
+        setVersion(nodeVersion, npmVersion);
+        return getSingleton(nodeDirectory);
+    }
+
+    public static void setVersion(String nodeVersion, String npmVersion) {
+        NODE_VERSION = nodeVersion;
+        NPM_VERSION = npmVersion;
+    }
+
+    private static NodeManager getSingleton(File nodeDirectory) {
+        if(singleton == null){
+            singleton = new NodeManager(nodeDirectory);
+        }
+        return singleton;
+    }
+
 
     /**
      * Installs node in ~/.wisdom/node/$version.
