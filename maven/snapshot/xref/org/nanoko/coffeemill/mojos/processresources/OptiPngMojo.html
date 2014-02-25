@@ -50,13 +50,13 @@
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  defaultPhase = LifecyclePhase.COMPILE)
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/nanoko/coffeemill/mojos/processresources/OptiPngMojo.html">OptiPngMojo</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../org/nanoko/coffeemill/mojos/AbstractCoffeeMillWatcherMojo.html">AbstractCoffeeMillWatcherMojo</a> {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">     * Enables verbose mode.</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      @Parameter(defaultValue=<span class="jxr_string">"false"</span>)
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> verbose;    
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>      
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">     * Optimization level (0-7).</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     * 2 by default.</em>
@@ -64,92 +64,92 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      @Parameter(defaultValue=<span class="jxr_string">"2"</span>)
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">int</strong> level = 2;
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     * The JpegTran executable file name without extension.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     * This field is not final for testing purpose.</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String EXECUTABLE_NAME = <span class="jxr_string">"optipng"</span>;
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">     * The JpegTran executable.</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>      <strong class="jxr_keyword">private</strong> File optiPNGExec;
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>      
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>      
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setVerbose(Boolean verbose){
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>      	<strong class="jxr_keyword">this</strong>.verbose = verbose;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          <strong class="jxr_keyword">this</strong>.verbose = verbose;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>      
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String getExecutableName() {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">return</strong> EXECUTABLE_NAME;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>          <strong class="jxr_keyword">return</strong> EXECUTABLE_NAME;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      }
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setExecutableName(String exec_name) {
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		EXECUTABLE_NAME = exec_name;
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>      
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>      
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> setExecutableName(String execName) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          EXECUTABLE_NAME = execName;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute() <strong class="jxr_keyword">throws</strong> MojoExecutionException {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>      	
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>      	<strong class="jxr_keyword">if</strong>(isSkipped()) { 
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>      		<strong class="jxr_keyword">return</strong>; 
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      	}
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>          <strong class="jxr_keyword">if</strong>(isSkipped()) { 
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>              <strong class="jxr_keyword">return</strong>; 
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          }
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>      	optiPNGExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          optiPNGExec = FSUtils.findExecutableInPath(EXECUTABLE_NAME);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>          <strong class="jxr_keyword">if</strong> (optiPNGExec == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>              getLog().error(<span class="jxr_string">"Cannot optimize PNG files - optipng not installed."</span>);
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>              <strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>          } 
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>          
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a>         <strong class="jxr_keyword">if</strong>(!getWorkDirectory().exists()) { 
-<a class="jxr_linenumber" name="L101" href="#L101">101</a>         	<strong class="jxr_keyword">return</strong>; 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>             <strong class="jxr_keyword">return</strong>; 
 <a class="jxr_linenumber" name="L102" href="#L102">102</a>         }
-<a class="jxr_linenumber" name="L103" href="#L103">103</a>         
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a>         getLog().info(<span class="jxr_string">"Invoking optipng : "</span> + optiPNGExec.getAbsolutePath());
 <a class="jxr_linenumber" name="L105" href="#L105">105</a>         Iterator&lt;File&gt; files = FileUtils.iterateFiles(getWorkDirectory(), <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"png"</span>}, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a>         <strong class="jxr_keyword">while</strong> (files.hasNext()) {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a>             File file = files.next();
 <a class="jxr_linenumber" name="L108" href="#L108">108</a>             <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				optimize(file);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			} <strong class="jxr_keyword">catch</strong> (WatchingException e) {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(<span class="jxr_string">"Error during execute() on OptiPngMojo"</span>, e);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>                 optimize(file);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>             } <strong class="jxr_keyword">catch</strong> (WatchingException e) {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(<span class="jxr_string">"Error during execute() on OptiPngMojo"</span>, e);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>             }
 <a class="jxr_linenumber" name="L113" href="#L113">113</a>         }
 <a class="jxr_linenumber" name="L114" href="#L114">114</a>     }
-<a class="jxr_linenumber" name="L115" href="#L115">115</a>     
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
 <a class="jxr_linenumber" name="L116" href="#L116">116</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(File file) {
 <a class="jxr_linenumber" name="L117" href="#L117">117</a>         <strong class="jxr_keyword">return</strong> !isSkipped() 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a>         		&amp;&amp; optiPNGExec != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>                 &amp;&amp; optiPNGExec != <strong class="jxr_keyword">null</strong>
 <a class="jxr_linenumber" name="L119" href="#L119">119</a>                 &amp;&amp; FSUtils.isInDirectory(file.getName(), getWorkDirectory())
 <a class="jxr_linenumber" name="L120" href="#L120">120</a>                 &amp;&amp; (file.getName().endsWith(<span class="jxr_string">".png"</span>) );
 <a class="jxr_linenumber" name="L121" href="#L121">121</a>     }
-<a class="jxr_linenumber" name="L122" href="#L122">122</a>     
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> fileCreated(File file) <strong class="jxr_keyword">throws</strong> WatchingException {
 <a class="jxr_linenumber" name="L124" href="#L124">124</a>         <strong class="jxr_keyword">return</strong> fileUpdated(file);
 <a class="jxr_linenumber" name="L125" href="#L125">125</a>     }
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
 <a class="jxr_linenumber" name="L127" href="#L127">127</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> fileUpdated(File file) <strong class="jxr_keyword">throws</strong> WatchingException {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), <strong class="jxr_keyword">this</strong>.getWorkDirectory());
+<a class="jxr_linenumber" name="L128" href="#L128">128</a>         File relativeWorkFile = FSUtils.computeRelativeFile(file, getAssetsDir(), <strong class="jxr_keyword">this</strong>.getWorkDirectory());
 <a class="jxr_linenumber" name="L129" href="#L129">129</a>         optimize(relativeWorkFile);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a>     	<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L130" href="#L130">130</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L131" href="#L131">131</a>     }
-<a class="jxr_linenumber" name="L132" href="#L132">132</a>     
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
 <a class="jxr_linenumber" name="L133" href="#L133">133</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> fileDeleted(File file) <strong class="jxr_keyword">throws</strong> WatchingException {
-<a class="jxr_linenumber" name="L134" href="#L134">134</a>     	File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), <strong class="jxr_keyword">this</strong>.getWorkDirectory());
+<a class="jxr_linenumber" name="L134" href="#L134">134</a>         File deletedFromWork = FSUtils.computeRelativeFile(file, getAssetsDir(), <strong class="jxr_keyword">this</strong>.getWorkDirectory());
 <a class="jxr_linenumber" name="L135" href="#L135">135</a>         <strong class="jxr_keyword">if</strong> (deletedFromWork.isFile()){
-<a class="jxr_linenumber" name="L136" href="#L136">136</a>         	getLog().info(<span class="jxr_string">"deleting File : "</span>+file.getName()+<span class="jxr_string">" from "</span>+<strong class="jxr_keyword">this</strong>.getWorkDirectory());    	
-<a class="jxr_linenumber" name="L137" href="#L137">137</a>         	FileUtils.deleteQuietly(deletedFromWork); 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a>             getLog().info(<span class="jxr_string">"deleting File : "</span>+file.getName()+<span class="jxr_string">" from "</span>+<strong class="jxr_keyword">this</strong>.getWorkDirectory());    	
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>             FileUtils.deleteQuietly(deletedFromWork); 
 <a class="jxr_linenumber" name="L138" href="#L138">138</a>         }
 <a class="jxr_linenumber" name="L139" href="#L139">139</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L140" href="#L140">140</a>     } 
-<a class="jxr_linenumber" name="L141" href="#L141">141</a>     
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
 <a class="jxr_linenumber" name="L143" href="#L143">143</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> optimize(File file) <strong class="jxr_keyword">throws</strong> WatchingException {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a>     	File dir = file.getParentFile();
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>         File dir = file.getParentFile();
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
 <a class="jxr_linenumber" name="L146" href="#L146">146</a>         <em class="jxr_comment">// Build command line</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a>         CommandLine cmdLine = CommandLine.parse(optiPNGExec.getAbsolutePath());
@@ -170,16 +170,16 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a>             executor.execute(cmdLine);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a>             getLog().info(file.getName() + <span class="jxr_string">" optimized"</span>);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a>         } <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a>         	<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/nanoko/maven/WatchingException.html">WatchingException</a>(<span class="jxr_string">"Error during PNG optimization of "</span> + file.getAbsolutePath(), e);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../org/nanoko/maven/WatchingException.html">WatchingException</a>(<span class="jxr_string">"Error during PNG optimization of "</span> + file.getAbsolutePath(), e);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a>         }
 <a class="jxr_linenumber" name="L167" href="#L167">167</a>     }
-<a class="jxr_linenumber" name="L168" href="#L168">168</a>     
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
 <a class="jxr_linenumber" name="L169" href="#L169">169</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSkipped(){
-<a class="jxr_linenumber" name="L170" href="#L170">170</a>     	<strong class="jxr_keyword">if</strong> (skipPicturesOptimization) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>         <strong class="jxr_keyword">if</strong> (skipPicturesOptimization) {
 <a class="jxr_linenumber" name="L171" href="#L171">171</a>             getLog().info(<span class="jxr_string">"\033[31m PNG Optimization skipped \033[37m"</span>);
 <a class="jxr_linenumber" name="L172" href="#L172">172</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L173" href="#L173">173</a>         } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L174" href="#L174">174</a>         	<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>             <strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L175" href="#L175">175</a>         }
 <a class="jxr_linenumber" name="L176" href="#L176">176</a>     }
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> }

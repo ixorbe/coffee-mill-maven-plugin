@@ -33,16 +33,16 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../org/nanoko/coffeemill/utils/InjectionHelper.html">InjectionHelper</a> {
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Logger LOGGER = LoggerFactory.getLogger(InjectionHelper.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Logger LOGGER = LoggerFactory.getLogger(InjectionHelper.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>      @SuppressWarnings(<span class="jxr_string">"rawtypes"</span>)
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> inject(Object obj, Class clazz, String field, Object value) {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> inject(Object obj, Class clazz, String field, Object value) {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>          <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>              Field theField = clazz.getDeclaredField(field);
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>              theField.setAccessible(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>              theField.set(obj, value);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>          } <strong class="jxr_keyword">catch</strong> (NoSuchFieldException e) {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>          	LOGGER.warn(<span class="jxr_string">"Internal warning - error on first inject "</span> + field + <span class="jxr_string">" in "</span> + clazz.getName(), e);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>              LOGGER.warn(<span class="jxr_string">"Internal warning - error on first inject "</span> + field + <span class="jxr_string">" in "</span> + clazz.getName(), e);
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>              <strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>                  Field theField  = clazz.getField(field);
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>                  theField.setAccessible(<strong class="jxr_keyword">true</strong>);
