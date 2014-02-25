@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * The mojo packaging the application.
+ * The mojo packaging the Project as a distribution-ready ZIP file
  */
 @Mojo(name = "build-zip", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,

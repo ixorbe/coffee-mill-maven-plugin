@@ -16,7 +16,7 @@ import java.util.Collection;
 
 
 /**
- * Compiles less files.
+ * Compiles CSS files.
  */
 @Mojo(name = "compile-css", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.TEST,
