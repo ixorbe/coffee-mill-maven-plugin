@@ -32,7 +32,11 @@ import java.util.List;
  * Some helper methods related to Jasmine and the Jasmine Maven Plugin.
  */
 public class JasmineUtils {
+    
     public static final String TEST_JASMINE_XML = "TEST-jasmine.xml";
+    
+    private JasmineUtils(){
+    }
 
     public static void prepareJasmineMojo(AbstractCoffeeMillMojo mill, AbstractJasmineMojo mojo,
                                           List<String> aggregation) {
@@ -83,30 +87,7 @@ public class JasmineUtils {
              }
              deps.add(file.getName()); 
         }
-/*
-        List<String> deps = new ArrayList<String>();
-        for (Dependency dep : (Collection<Dependency>) project.getDependencies()) {
-            if ("js".equals(dep.getType())) {
-                String filename = dep.getArtifactId() + ".js";
-                if (dep.getClassifier() != null  && ! dep.getClassifier().equals("min")) {
-                    filename = dep.getArtifactId() + "-" + dep.getClassifier() + ".js";
-                }
-                File file = new File(mill.getLibDirectory(), filename);
 
-                if (! file.exists()) {
-                    mill.getLog().error("Cannot preload " + dep.getArtifactId() + ":" + dep.getVersion() + " : " +
-                            file
-                            .getAbsolutePath() + " not found");
-                } else {
-                    try {
-                        FileUtils.copyFileToDirectory(file, getJasmineDirectory(project));
-                    } catch (IOException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    }
-                    deps.add(filename);
-                }
-            }
-        }*/
         
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "preloadSources",
                 deps);
@@ -116,10 +97,8 @@ public class JasmineUtils {
             InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "sourceIncludes",
                     aggregation);
         }
-
-        // TODO Parameter.
-        InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "timeout",
-                300);
+        
+        InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "timeout", 300);// TODO Parameter.
 
 
     }

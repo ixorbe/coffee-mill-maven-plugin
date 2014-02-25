@@ -25,16 +25,16 @@ import java.lang.reflect.Field;
  */
 public class InjectionHelper {
 
-    public static Logger LOGGER = LoggerFactory.getLogger(InjectionHelper.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(InjectionHelper.class);
 
     @SuppressWarnings("rawtypes")
-	public static void inject(Object obj, Class clazz, String field, Object value) {
+    public static void inject(Object obj, Class clazz, String field, Object value) {
         try {
             Field theField = clazz.getDeclaredField(field);
             theField.setAccessible(true);
             theField.set(obj, value);
         } catch (NoSuchFieldException e) {
-        	LOGGER.warn("Internal warning - error on first inject " + field + " in " + clazz.getName(), e);
+            LOGGER.warn("Internal warning - error on first inject " + field + " in " + clazz.getName(), e);
             try {
                 Field theField  = clazz.getField(field);
                 theField.setAccessible(true);
