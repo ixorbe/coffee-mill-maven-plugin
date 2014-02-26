@@ -46,9 +46,9 @@ During the _test_ phase, all specs are executed againt your CoffeeScript and Jav
 The JavaScript files are loaded in the following order:
 
 * Maven dependencies using the _js_ type are preloaded.
-* JavaScript / CoffeeScript files are loaded using the order defined in the `javascriptAggregation` parameter (as below). If
-not defined, the sources are loaded in the alphabetical order.
+* JavaScript / CoffeeScript files are loaded using the order defined in the `javascriptAggregation` parameter (as below). If not defined, the sources are loaded in the alphabetical order.
 * The specifications are loaded
+
 
     <plugin>
         <groupId>${project.groupId}</groupId>
@@ -70,7 +70,7 @@ Test can be run using `mvn test`.
 Aggregating JavaScript files
 ------------------------------------------------
 
-JavaScript files and CoffeeScript files can be aggregated into one file. Dependencies can also be included too.
+JavaScript and CoffeeScript files can be aggregated into one file. Dependencies can also be included too.
 Generally, the order is important, so has to be specified using the `javascriptAggregation` parameter.
 
 Dependencies are included using their `artifactId`:
@@ -88,11 +88,26 @@ Dependencies are included using their `artifactId`:
         </configuration>
     </plugin>
 
+
 Minification
 ------------
 
 Once aggregated, the file can be minified using `uglify-js` with `npm`.
 Minification is not skipped by default. So `mvn package` produces the minified artifact. With the following configuration:
+
+* getting source files from work directory `target/www` and minify it to build directory `target/wwww-release`.
+
+
+SkipVariables
+-------------
+
+By default the packaging process is not skipped, so it launch compilation, aggregation and minification. But variables exist to escape those process :
+
+* skipCompilation
+* skipAggregation
+* skipMinification
+
+You can include its in pom.xml file to enabled/disabled the wanted process, like this : 
 
     <plugin>
         <groupId>${project.groupId}</groupId>
@@ -101,24 +116,15 @@ Minification is not skipped by default. So `mvn package` produces the minified a
         <extensions>true</extensions>
         <configuration>
             <javascriptAggregation>
-                <file>syndication-service</file> <!-- This is a dependency, we use the artifact id -->
-                <file>FeedReaderImpl.js</file>
+                ...
             </javascriptAggregation>
+            <skipCompilation>true</skipCompilation>
+            <skipAggregation>true</skipAggregation>
+            <skipMinification>true</skipMinification>
         </configuration>
     </plugin>
 
-
-SkipVariables
--------------
-
-By default the packaging process isn't skipped, so it's launch compilation, aggregation and minification. But variables exist to escape those process :
-
-* skipCompilation
-* skipAggregation
-* skipMinification
-
-
-
+The process respect the following order : `compilation` > `aggregation` > `minification`. So if you decide to skip the compilation process, the aggregation and minification are skipped too (and therefore when skipCompilation set to true, its useless to define the two others).
 
 
 Integration Tests
