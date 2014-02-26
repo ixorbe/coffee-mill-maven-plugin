@@ -103,11 +103,11 @@ SkipVariables
 
 By default the packaging process is not skipped, so it launch compilation, aggregation and minification. But variables exist to escape those process :
 
-* skipCompilation
-* skipAggregation
-* skipMinification
+* skipJsCompilation
+* skipJsAggregation
+* skipJsMinification
 
-You can include its in pom.xml file to enabled/disabled the wanted process, like this : 
+You can include those variables in pom.xml file to enabled/disabled the wanted process, like the following example : 
 
     <plugin>
         <groupId>${project.groupId}</groupId>
@@ -118,13 +118,13 @@ You can include its in pom.xml file to enabled/disabled the wanted process, like
             <javascriptAggregation>
                 ...
             </javascriptAggregation>
-            <skipCompilation>true</skipCompilation>
-            <skipAggregation>true</skipAggregation>
-            <skipMinification>true</skipMinification>
+            <skipJsCompilation>true</skipCompilation>
+            <skipJsAggregation>true</skipAggregation>
+            <skipJsMinification>true</skipMinification>
         </configuration>
     </plugin>
 
-The process respect the following order : `compilation` > `aggregation` > `minification`. So if you decide to skip the compilation process, the aggregation and minification are skipped too (and therefore when skipCompilation set to true, its useless to define the two others).
+The process respect the following order : `compilation` > `aggregation` > `minification`. So if you decide to skip the compilation process, the aggregation and minification are skipped too (and therefore when skipJsCompilation set to true, its useless to define the two others).
 
 
 Integration Tests
