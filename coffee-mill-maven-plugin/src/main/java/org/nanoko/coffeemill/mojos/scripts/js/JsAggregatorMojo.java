@@ -118,8 +118,15 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         }
 
         joinFiles(output, files);
-        if(project != null ){
-            project.getArtifact().setFile(output);
+        if(output.exists()) {
+            try {
+                File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + ".js");
+                getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
+                FileUtils.copyFile(output, artifact, true);
+                project.getArtifact().setFile(artifact);
+            } catch (IOException e) {
+                this.getLog().error("Error while attaching js to project",e);
+            }
         }
         return true;
     }    
@@ -133,8 +140,15 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
 
         joinFiles(output, files);
-        if(project != null ){
-            project.getArtifact().setFile(output);
+        if(output.exists()) {
+            try {
+                File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + ".js");
+                getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
+                FileUtils.copyFile(output, artifact, true);
+                project.getArtifact().setFile(artifact);
+            } catch (IOException e) {
+                this.getLog().error("Error while attaching js to project",e);
+            }
         }
         return true;
     }
