@@ -34,7 +34,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
     @Parameter(defaultValue="true")
     protected boolean watchRunServer;
 
-    @Parameter(defaultValue="8234")
+    @Parameter(defaultValue="8234", property="watch.port")
     protected int watchJettyServerPort;   
 
     //The Jetty Server
