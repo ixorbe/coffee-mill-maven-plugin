@@ -102,7 +102,7 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
         } else {
             if(projectHelper != null && !baseName.contains("all") ){
-                projectHelper.attachArtifact(project, "min", output);
+                projectHelper.attachArtifact(project, output, "min");
             }
         }
         return true;
