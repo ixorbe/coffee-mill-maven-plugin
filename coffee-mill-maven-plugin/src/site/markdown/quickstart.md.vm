@@ -75,7 +75,7 @@ Adding JavaScript dependencies
 
 You can add JavaScript dependencies to the project by specifying the `type` to `js`:
 
-<span style="display: block; background-color: #ff7a7a; text-align: left;"> 
+<span style="display: block; color: red; border: 2px solid red; border-radius: 10px; padding: 10px; font-weight: bold; "> 
 As version 1.1.0 release, required minified dependencies is deprecated because the compile process already do minification.
 </span>
 
