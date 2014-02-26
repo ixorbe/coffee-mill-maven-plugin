@@ -24,25 +24,20 @@ If the tools are missing, the optimization is skipped.
 Optimizing PNG files
 ---------------------
 
-The PNG optimization is automatically enabled in _regular_ Maven builds (during the _compile_ phase)and in _watch_
-mode. PNG files from _target/www_ are optimized in-place.
+The PNG optimization is automatically enabled in _regular_ Maven builds (during the _compile_ phase) and in _watch_ mode. PNG files from _target/www_ are optimized in-place.
 
-You can configure the optimization level between 0 and 7. 0 does not optimize the file,
-7 is highly optimize but slows down the process. The default level is 2.
+You can configure the optimization level between 0 and 7. 0 does not optimize the file, 7 is highly optimize but slows down the process. The default level is 2.
 
 More info about the configuration is available on the [Optimize PNG Mojo Page](./optimize-png-mojo.html).
 
 Optimizing JPEG files
 ----------------------
 
-The JPEG optimization is automatically enabled in _regular_ Maven builds (during the _compile_ phase)and in _watch_
-mode. `jpg` and `jpeg` files files from _target/www_ are optimized in-place. However, the process creates a temporary
-file and then replace the file.
+The JPEG optimization is automatically enabled in _regular_ Maven builds (during the _compile_ phase)and in _watch_ mode. `jpg` and `jpeg` files files from _target/www_ are optimized in-place. However, the process creates a temporary file and then replace the file.
 
 More info about the configuration is available on the [Optimize JPEG Mojo Page](./optimize-jpeg-mojo.html).
 
 Optimizing HTML files
 ---------------------
 
-The plugin is able to compress HTML files. However this feature is disabled by default,
-and must be enabled in your _pom.xml_ file. You can find more info on the [compress HTML pages](./compress-html-mojo.html).
+The plugin is able to compress HTML files. However this feature is disabled by default, and must be enabled in your _pom.xml_ file. You can find more info on the [compress HTML pages](./compress-html-mojo.html).
