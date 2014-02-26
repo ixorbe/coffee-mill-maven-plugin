@@ -62,3 +62,33 @@ aggregated CSS file. The resulting minified file is attached to the project usin
 packaging type.
 
 If the input file does not exist, the minification process is skipped.
+
+
+SkipVariables
+-------------
+
+By default the packaging process is not skipped, so it launch compilation, aggregation and minification. But variables exist to escape those process :
+
+* skipCssCompilation
+* skipCssAggregation
+* skipCssMinification
+
+You can include those variables in pom.xml file to enabled/disabled the wanted process, like the following example : 
+
+    <plugin>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>${project.artifactId}</artifactId>
+        <version>${project.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+            <javascriptAggregation>
+                ...
+            </javascriptAggregation>
+            <skipCssCompilation>true</skipCompilation>
+            <skipCssAggregation>true</skipAggregation>
+            <skipCssMinification>true</skipMinification>
+        </configuration>
+    </plugin>
+
+The process respect the following order : `compilation` > `aggregation` > `minification`. So if you decide to skip the compilation process, the aggregation and minification are skipped too (and therefore when skipCssCompilation set to true, its useless to define the two others).
+
