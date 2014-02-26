@@ -99,6 +99,10 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
+        }else {
+            if(projectHelper != null && !baseName.contains("all") ){
+                projectHelper.attachArtifact(project, "min", output);
+            }
         }
         return true;
     }

@@ -118,6 +118,9 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         }
 
         joinFiles(output, files);
+        if(projectHelper != null ){
+            projectHelper.attachArtifact(project, "css", output);
+        }
         return true;
     }
 
@@ -130,6 +133,9 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         getLog().info("Aggregate Css files from " + this.getWorkDirectory().getAbsolutePath());
 
         joinFiles(output, files);
+        if(projectHelper != null ){
+            projectHelper.attachArtifact(project, "css", output);
+        }
         return true;
     }
 

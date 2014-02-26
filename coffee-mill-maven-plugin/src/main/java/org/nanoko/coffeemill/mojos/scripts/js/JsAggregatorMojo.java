@@ -118,6 +118,9 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         }
 
         joinFiles(output, files);
+        if(projectHelper != null ){
+            projectHelper.attachArtifact(project, "js", output);
+        }
         return true;
     }    
 
@@ -130,6 +133,9 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
 
         joinFiles(output, files);
+        if(projectHelper != null ){
+            projectHelper.attachArtifact(project, "js", output);
+        }
         return true;
     }
 
