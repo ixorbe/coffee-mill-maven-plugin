@@ -303,6 +303,7 @@
                 <version>${mavenPluginPluginVersion}</version>
                 <configuration>
 	                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+	                    <goalPrefix>coffeemill</goalPrefix>
 	                </configuration>
                 <executions>
                     <execution>
