@@ -78,5 +78,16 @@
                 </phases>
             </configuration>
         </component>
+         <component>
+            <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+            <role-hint>js</role-hint>
+            <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler</implementation>
+            <configuration>
+                <extension>js</extension>
+                <type>js</type>
+                <language>javascript</language>
+                <addedToClasspath>true</addedToClasspath>
+            </configuration>
+        </component>
     </components>
 </component-set>
