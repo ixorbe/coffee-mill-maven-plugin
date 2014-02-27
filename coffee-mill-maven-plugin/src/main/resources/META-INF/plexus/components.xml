@@ -37,6 +37,7 @@
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-sass,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-css,
                         
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-dust,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-coffeescript,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-javascript,
                         
