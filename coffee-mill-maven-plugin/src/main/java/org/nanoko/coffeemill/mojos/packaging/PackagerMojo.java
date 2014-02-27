@@ -51,7 +51,7 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
         archiver.createArchive();
         this.getLog().info("getDirectory="+getBuildDirectory());
         if(projectHelper != null ){
-            projectHelper.attachArtifact(project, "zip", distFile);
+            projectHelper.attachArtifact(project,"zip", "dist", distFile);
         }
     }
 
