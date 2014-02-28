@@ -73,21 +73,19 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileDeleted(File file) {
-        File theFile = getOutputCSSFile(file);
-        FileUtils.deleteQuietly(theFile);
+        String cssFileName = file.getName().substring(0, file.getName().length() - ".scss".length()) + ".css";
+        File out = new File(getWorkDirectory(),cssFileName );
+        FileUtils.deleteQuietly(out);
         return true;
     }
 
 
 
-    private File getOutputCSSFile(File input) {
-        String cssFileName = input.getName().substring(0, input.getName().length() - ".scss".length()) + ".css";
-        String path = input.getParentFile().getAbsolutePath().substring(getStylesheetsDir().getAbsolutePath().length());
-        return new File(this.getWorkDirectory(), path + "/" + cssFileName);
-    }
+  
 
     private void compile(File file) throws WatchingException {
-        File out = getOutputCSSFile(file);
+        String cssFileName = file.getName().substring(0, file.getName().length() - ".scss".length()) + ".css";
+        File out = new File(getWorkDirectory(),cssFileName );
         getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
         int exit = sass.execute("node-sass", file.getAbsolutePath(), out.getAbsolutePath());
         getLog().debug("Sass execution exiting with " + exit + " status");
