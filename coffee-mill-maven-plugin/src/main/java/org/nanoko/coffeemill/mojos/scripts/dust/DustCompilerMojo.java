@@ -3,6 +3,7 @@ package org.nanoko.coffeemill.mojos.scripts.dust;
 import static org.nanoko.java.NPM.npm;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -28,8 +29,8 @@ import java.util.Collection;
         defaultPhase = LifecyclePhase.COMPILE)
 public class DustCompilerMojo extends  AbstractCoffeeMillWatcherMojo {
 
-    public static final String DUST_NPM_NAME = "dust-compiler";
-    public static final String DUST_NPM_VERSION = "0.3.7";
+    public static final String DUST_NPM_NAME = "dustjs-linkedin";
+    public static final String DUST_NPM_VERSION = "2.3.3";
 
     private NPM dust;
 
@@ -72,23 +73,29 @@ public class DustCompilerMojo extends  AbstractCoffeeMillWatcherMojo {
         return true;
     }
 
-    public boolean fileDeleted(File file) {
-        File theFile = getOutputJSFile(file);
-        FileUtils.deleteQuietly(theFile);
+    public boolean fileDeleted(File file) {        
+        File deleted = new File(this.getWorkDirectory().getAbsolutePath(), FilenameUtils.getBaseName(file.getName()) + ".js");
+        if (deleted.isFile()){
+            getLog().info("deleted File : "+deleted.getName());     
+            FileUtils.deleteQuietly(deleted); 
+        }
         return true;
     }
 
 
-    private File getOutputJSFile(File input) {
+    /*private File getOutputJSFile(File input) {
         String jsFileName = input.getName().substring(0, input.getName().length() - ".dust".length()) + ".js";
         String path = input.getParentFile().getAbsolutePath().substring(getJavaScriptDir().getAbsolutePath().length());
         return new File(this.getWorkDirectory(), path + "/" + jsFileName);
-    }
+    }*/
 
     private void compile(File file) throws WatchingException {
-        File out = getOutputJSFile(file);
-        getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
-        int exit = dust.execute("dust-compiler", "-s", file.getAbsolutePath(),"-d", out.getAbsolutePath());
+        //File out = getOutputJSFile(file);
+        String jsFileName = file.getName().substring(0, file.getName().length() - ".dust".length()) + ".js";
+        getLog().info("Compiling " + file.getAbsolutePath() + " to " + getWorkDirectory().getAbsolutePath());
+        File out = new File(getWorkDirectory(), jsFileName);
+
+        int exit = dust.execute("dustc", "--name="+jsFileName, file.getAbsolutePath(), out.getAbsolutePath());
         getLog().debug("Dust-compiler execution exiting with " + exit + " status");
 
         if (!out.isFile()) {
