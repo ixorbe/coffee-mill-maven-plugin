@@ -72,7 +72,7 @@ public class NodeManagerTest {
 
         NPM npm = NPM.npm(log, "coffee-script", "1.6.3");
         File input = new File("target/test-classes/coffee");
-        File output = new File("target/test/coffee");
+        File output = new File("target/test/NodeManagerTest/coffee");
         output.mkdirs();
         int exit = npm.execute("coffee", "--compile", "--map", "--output", output.getAbsolutePath(),
                 input.getAbsolutePath());
