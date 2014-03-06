@@ -132,7 +132,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }    
 
     private boolean aggregateAppOnly(File output) throws WatchingException {
-        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
+        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
         if(files.isEmpty()){
             getLog().warn("JavaScript work directory "+this.getWorkDirectory().getAbsolutePath()+" is empty !");
             return false;
