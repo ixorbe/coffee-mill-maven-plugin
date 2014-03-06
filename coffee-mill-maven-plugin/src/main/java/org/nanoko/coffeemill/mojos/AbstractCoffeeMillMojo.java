@@ -130,7 +130,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     /**
      * Where are the dependencies copies.
      */
-    @Parameter(defaultValue= "target/www/libs", required = true, readonly = true)
+    @Parameter(defaultValue= "target/libs", required = true, readonly = true)
     private File libDir;
 
 
