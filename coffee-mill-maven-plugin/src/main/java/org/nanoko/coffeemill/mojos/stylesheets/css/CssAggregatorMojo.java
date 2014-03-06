@@ -125,7 +125,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     private boolean aggregateAppOnly(File output) throws WatchingException {
-        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
+        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, true);
         if(files.isEmpty()){
             getLog().warn("No Css files in work directory "+this.getWorkDirectory().getAbsolutePath());
             return false;

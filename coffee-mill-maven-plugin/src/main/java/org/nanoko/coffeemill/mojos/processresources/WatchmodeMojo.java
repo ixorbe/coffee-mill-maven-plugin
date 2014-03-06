@@ -91,7 +91,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         releaseDirHandler.setWelcomeFiles(new String[]{ "index.html" });
         workDirHandler.setResourceBase(this.getWorkDirectory().getAbsolutePath());
         releaseDirHandler.setResourceBase(this.getBuildDirectory().getAbsolutePath());
-        libDirHandler.setResourceBase(this.getTargetDirectory().getAbsolutePath()+"/libs");
+        libDirHandler.setResourceBase(this.getLibDirectory().getAbsolutePath());
         
         ContextHandler releaseDirCtxHandler = new ContextHandler();
         releaseDirCtxHandler.setContextPath("/release");
