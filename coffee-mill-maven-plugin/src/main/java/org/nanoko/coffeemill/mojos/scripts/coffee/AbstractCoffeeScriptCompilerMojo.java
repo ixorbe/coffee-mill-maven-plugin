@@ -57,24 +57,21 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     	coffee = npm(new MavenLoggerWrapper(this.getLog()), COFFEE_SCRIPT_NPM_NAME, COFFEE_SCRIPT_NPM_VERSION);
 
         getLog().info("Get CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
-		Collection<File> files = FileUtils.listFiles(this.coffeeScriptDir, new String[]{"coffee"}, true);
-		
-		if(files.isEmpty()){
-			getLog().warn("/!\\ CoffeeScript sources directory " + this.coffeeScriptDir.getAbsolutePath() + " is empty !");
-			return;
-		}
-			
-		for(File file : files) {
-			invokeCoffeeScriptCompiler(file, getWorkDirectory());
-		}
+        invokeCoffeeScriptCompilerForDirectory(this.coffeeScriptDir, getWorkDirectory());
 
     }
 
 
     protected void invokeCoffeeScriptCompiler(File input, File out) throws MojoExecutionException {
-        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(),
-                input.getAbsolutePath());
+        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(), input.getAbsolutePath());
         getLog().debug("CoffeeScript compilation exits with " + exit + " status");
+    }
+    
+    protected void invokeCoffeeScriptCompilerForDirectory(File dirInput, File dirOut) throws MojoExecutionException {
+        if(dirInput.isDirectory() && dirOut.isDirectory()) {
+            int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", dirOut.getAbsolutePath(), dirInput.getAbsolutePath());
+            getLog().debug("CoffeeScript compilation exits with " + exit + " status");
+        }
     }
     
     private boolean isSkipped(){
