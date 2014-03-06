@@ -78,7 +78,7 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileDeleted(File file) {
-        File deleted = new File(this.getWorkDirectory(), file.getName());
+        File deleted = new File(FSUtils.computeRelativeFile(file, this.getJavaScriptDir(), getWorkDirectory()), file.getName());
         if (deleted.isFile()){
             getLog().info("Deleting File : "+file.getName());    	
             FileUtils.deleteQuietly(deleted); 
@@ -90,7 +90,12 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     private void copy(File f) throws WatchingException {
         getLog().info("Copy JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
         try {
-            FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
+            //FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
+            File outDir = FSUtils.computeRelativeFile(f, this.getJavaScriptDir(), getWorkDirectory());
+            if(!outDir.exists()) {
+                outDir.mkdirs();
+            }
+            FileUtils.copyFileToDirectory(f, outDir);
         } catch (IOException e) { 
             throw new WatchingException("Error during copy files to workDirectory "+this.getWorkDirectory().getAbsolutePath(), e); 
         }
