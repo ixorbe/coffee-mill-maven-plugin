@@ -1,6 +1,7 @@
 package org.nanoko.coffeemill.mojos.stylesheets.less;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -71,21 +72,26 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         return true;
     }
 
-    public boolean fileDeleted(File file) {
-        String cssFileName = file.getName().substring(0, file.getName().length() - ".less".length()) + ".css";
-        File out = new File(getWorkDirectory(),cssFileName );
-        FileUtils.deleteQuietly(out);
+    public boolean fileDeleted(File file) {     
+        File out = FSUtils.computeRelativeFile(file, this.getStylesheetsDir(), getWorkDirectory());
+        File outFile = new File(out.getParentFile(), file.getName().substring(0, file.getName().length() - ".less".length()) + ".css");
+        if(outFile.exists()){
+            FileUtils.deleteQuietly(outFile);
+        }
         return true;
     }
 
     private void compile(File file) throws WatchingException {
-        String cssFileName = file.getName().substring(0, file.getName().length() - ".less".length()) + ".css";
-        File out = new File(getWorkDirectory(),cssFileName );
-        getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
-        int exit = less.execute("lessc", file.getAbsolutePath(), out.getAbsolutePath());
+         //File out = new File(getWorkDirectory(),cssFileName );
+        File out = FSUtils.computeRelativeFile(file, this.getStylesheetsDir(), getWorkDirectory());
+        File outFile = new File(out.getParentFile(), file.getName().substring(0, file.getName().length() - ".less".length()) + ".css");
+
+        
+        getLog().info("Compiling " + file.getAbsolutePath() + " to " + outFile.getAbsolutePath());
+        int exit = less.execute("lessc", file.getAbsolutePath(), outFile.getAbsolutePath());
         getLog().debug("Less execution exiting with " + exit + " status");
 
-        if (!out.isFile()) {
+        if (!outFile.isFile()) {
             throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + " check log");
         }
     }
