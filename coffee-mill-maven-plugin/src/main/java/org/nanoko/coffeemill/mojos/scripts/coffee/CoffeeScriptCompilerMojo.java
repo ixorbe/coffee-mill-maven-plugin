@@ -53,10 +53,10 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeScriptCompilerMojo i
     }
 
     public boolean fileDeleted(File file) {
-    	File deleted = new File(this.getWorkDirectory().getAbsolutePath(), FilenameUtils.getBaseName(file.getName()) + ".js");
-        if (deleted.isFile()){
-        	getLog().info("deleted File : "+deleted.getName());    	
-        	FileUtils.deleteQuietly(deleted); 
+        File out = FSUtils.computeRelativeFile(file, this.getCoffeeScriptDir(), getWorkDirectory());
+        File newName = new File( out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".coffee".length()) + ".js" );
+        if(newName.exists()){
+            FileUtils.deleteQuietly(newName);
         }
         return true;
     }

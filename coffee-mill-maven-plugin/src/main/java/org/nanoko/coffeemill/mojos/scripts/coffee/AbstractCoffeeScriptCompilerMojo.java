@@ -21,7 +21,7 @@ import static org.nanoko.java.NPM.npm;
 public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
 
     public static final String COFFEE_SCRIPT_NPM_NAME = "coffee-script";
-    public static final String COFFEE_SCRIPT_NPM_VERSION = "1.6.3";
+    public static final String COFFEE_SCRIPT_NPM_VERSION = "1.7.1";
     public static final String COFFEE_SCRIPT_COMMAND = "coffee";
     
     /**
