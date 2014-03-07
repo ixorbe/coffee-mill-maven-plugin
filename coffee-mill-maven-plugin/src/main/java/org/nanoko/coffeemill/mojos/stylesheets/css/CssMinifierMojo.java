@@ -30,7 +30,7 @@ defaultPhase = LifecyclePhase.PACKAGE)
 public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String CLEANCSS_NPM_NAME = "clean-css";
-    public static final String CLEANCSS_NPM_VERSION = "2.0.7";
+    public static final String CLEANCSS_NPM_VERSION = "2.1.4";
 
     public String inputFilename = null;
 

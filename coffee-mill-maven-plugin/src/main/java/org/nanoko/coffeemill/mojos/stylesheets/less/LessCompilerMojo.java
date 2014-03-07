@@ -29,7 +29,7 @@ defaultPhase = LifecyclePhase.COMPILE)
 public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String LESS_NPM_NAME = "less";
-    public static final String LESS_NPM_VERSION = "1.6.2";
+    public static final String LESS_NPM_VERSION = "1.7.0";
 
     private NPM less;
 

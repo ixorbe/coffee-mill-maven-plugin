@@ -30,7 +30,7 @@ import java.util.Collection;
 public class DustCompilerMojo extends  AbstractCoffeeMillWatcherMojo {
 
     public static final String DUST_NPM_NAME = "dustjs-linkedin";
-    public static final String DUST_NPM_VERSION = "2.3.3";
+    public static final String DUST_NPM_VERSION = "2.3.4";
 
     private NPM dust;
 

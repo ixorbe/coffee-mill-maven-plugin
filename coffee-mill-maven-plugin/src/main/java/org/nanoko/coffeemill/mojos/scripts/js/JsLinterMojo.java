@@ -32,7 +32,7 @@ defaultPhase = LifecyclePhase.PACKAGE)
 public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String PKG_NPM_NAME = "jslint";
-    public static final String PKG_NPM_VERSION = "0.2.10";
+    public static final String PKG_NPM_VERSION = "0.2.11";
 
     private static Log defaultLogger;
 
