@@ -63,7 +63,7 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileDeleted(File file) throws WatchingException {        
-        File deleted = new File(this.getWorkDirectory(), file.getName());
+        File deleted = new File(FSUtils.computeRelativeFile(file, this.getStylesheetsDir(), getWorkDirectory()), file.getName());
         if (deleted.isFile()){
             getLog().info("deleting File : "+file.getName());    	
             FileUtils.deleteQuietly(deleted); 
@@ -75,7 +75,13 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     private void copy(File f) throws WatchingException {
         getLog().info("Copy css files from " + getStylesheetsDir().getAbsolutePath());
         try {
-            FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
+            File out = FSUtils.computeRelativeFile(f, this.getStylesheetsDir(), getWorkDirectory());
+            if (out.getParentFile() != null) {
+                out.getParentFile().mkdirs();
+                FileUtils.copyFileToDirectory(f, out.getParentFile());
+            } else{ 
+                getLog().error("Cannot copy file - parent directory not accessible for " + out);
+            }
         } catch (IOException e) { 
             throw new WatchingException("Error during copy css files to workDirectory "+this.getWorkDirectory().getAbsolutePath(), e); 
         }

@@ -89,7 +89,7 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         int exit = sass.execute("node-sass", file.getAbsolutePath(), newName);
         getLog().debug("Sass execution exiting with " + exit + " status");
 
-        if (!out.isFile()) {
+        if (!new File(newName).exists()) {
             throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + " check log");
         }
     }

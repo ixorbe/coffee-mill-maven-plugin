@@ -42,9 +42,8 @@ public class DustCompilerMojoTest {
     
     @Test
     public void testDustCompilation() throws MojoExecutionException, MojoFailureException {
-        mojo.getLog().info("");
         mojo.execute();
-        File result = new File(mojo.getWorkDirectory(), "mytemplate.js");
+        File result = new File(mojo.getWorkDirectory(), "sample/templates/mytemplate.js");
 
         assertThat(result.isFile()).isTrue();
 
@@ -52,7 +51,7 @@ public class DustCompilerMojoTest {
         //i.e mytemplate is this test
         try {
             assertThat(FileUtils.readFileToString(result)
-                    .startsWith("(function(){dust.register(\"mytemplate.js\"")).isTrue();
+                    .startsWith("(function(){dust.register(\"mytemplate\"")).isTrue();
         } catch (IOException e) {
             //we already have check that the file does exist
         }

@@ -90,15 +90,22 @@ public class DustCompilerMojo extends  AbstractCoffeeMillWatcherMojo {
     }*/
 
     private void compile(File file) throws WatchingException {
+        File out = FSUtils.computeRelativeFile(file, this.getJavaScriptDir(), getWorkDirectory());
+        String newName = out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".dust".length()) + ".js";
+        File outputFile = new File(newName);
+        if(!outputFile.getParentFile().exists()){
+            outputFile.getParentFile().mkdirs();
+        }
         //File out = getOutputJSFile(file);
-        String jsFileName = file.getName().substring(0, file.getName().length() - ".dust".length()) + ".js";
-        getLog().info("Compiling " + file.getAbsolutePath() + " to " + getWorkDirectory().getAbsolutePath());
-        File out = new File(getWorkDirectory(), jsFileName);
+        //String jsFileName = file.getName().substring(0, file.getName().length() - ".dust".length()) + ".js";        
+        //File out = new File(getWorkDirectory(), jsFileName);
 
-        int exit = dust.execute("dustc", "--name="+jsFileName, file.getAbsolutePath(), out.getAbsolutePath());
+        getLog().info("Compiling " + file.getAbsolutePath() + " to " + newName);
+        int exit = dust.execute("dustc", "--name="+FilenameUtils.getBaseName(newName), file.getAbsolutePath(), newName);
         getLog().debug("Dust-compiler execution exiting with " + exit + " status");
 
-        if (!out.isFile()) {
+        getLog().info("exist ? "+ new File(newName).exists());
+        if (!outputFile.exists()) {
             throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + "; check log");
         }
     }
