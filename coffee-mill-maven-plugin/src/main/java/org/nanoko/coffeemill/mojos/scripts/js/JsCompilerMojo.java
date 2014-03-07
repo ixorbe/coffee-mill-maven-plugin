@@ -90,12 +90,13 @@ public class JsCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     private void copy(File f) throws WatchingException {
         getLog().info("Copy JavaScript files from " + this.getJavaScriptDir().getAbsolutePath());
         try {
-            //FileUtils.copyFileToDirectory(f, this.getWorkDirectory());
-            File outDir = FSUtils.computeRelativeFile(f, this.getJavaScriptDir(), getWorkDirectory());
-            if(!outDir.exists()) {
-                outDir.mkdirs();
+            File out = FSUtils.computeRelativeFile(f, this.getJavaScriptDir(), getWorkDirectory());
+            if (out.getParentFile() != null) {
+                out.getParentFile().mkdirs();
+                FileUtils.copyFileToDirectory(f, out.getParentFile());
+            } else{ 
+                getLog().error("Cannot copy file - parent directory not accessible for " + out);
             }
-            FileUtils.copyFileToDirectory(f, outDir);
         } catch (IOException e) { 
             throw new WatchingException("Error during copy files to workDirectory "+this.getWorkDirectory().getAbsolutePath(), e); 
         }

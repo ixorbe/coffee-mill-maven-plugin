@@ -74,24 +74,22 @@ public class LessCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public boolean fileDeleted(File file) {     
         File out = FSUtils.computeRelativeFile(file, this.getStylesheetsDir(), getWorkDirectory());
-        File outFile = new File(out.getParentFile(), file.getName().substring(0, file.getName().length() - ".less".length()) + ".css");
-        if(outFile.exists()){
-            FileUtils.deleteQuietly(outFile);
+        File newName = new File( out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".less".length()) + ".css" );
+        if(newName.exists()){
+            FileUtils.deleteQuietly(newName);
         }
         return true;
     }
 
     private void compile(File file) throws WatchingException {
-         //File out = new File(getWorkDirectory(),cssFileName );
         File out = FSUtils.computeRelativeFile(file, this.getStylesheetsDir(), getWorkDirectory());
-        File outFile = new File(out.getParentFile(), file.getName().substring(0, file.getName().length() - ".less".length()) + ".css");
-
+        String newName = out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".less".length()) + ".css";
         
-        getLog().info("Compiling " + file.getAbsolutePath() + " to " + outFile.getAbsolutePath());
-        int exit = less.execute("lessc", file.getAbsolutePath(), outFile.getAbsolutePath());
+        getLog().info("Compiling " + file.getAbsolutePath() + " to " + newName);
+        int exit = less.execute("lessc", file.getAbsolutePath(), newName);
         getLog().debug("Less execution exiting with " + exit + " status");
 
-        if (!outFile.isFile()) {
+        if (!new File(newName).exists()) {
             throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + " check log");
         }
     }
