@@ -63,13 +63,16 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeScriptCompilerMojo i
 
     
     private void compile(File file) throws WatchingException {
-        if (file == null) { return; }
+        if (file == null) { 
+            return; 
+        }
         
         File out = FSUtils.computeRelativeFile(file, this.getCoffeeScriptDir(), getWorkDirectory());
+        //File newName = new File( out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".coffee".length()) + ".js" );
         getLog().info("Compiling CoffeeScript " + file.getAbsolutePath() + " to " + getWorkDirectory().getAbsolutePath());
-
+        
         try {
-            invokeCoffeeScriptCompiler(file, out);
+            invokeCoffeeScriptCompiler(file, out.getParentFile());
         } catch (MojoExecutionException e) { //NOSONAR
             throw new WatchingException("Error during the compilation of " + file.getName() + " : " + e.getMessage());
         }
