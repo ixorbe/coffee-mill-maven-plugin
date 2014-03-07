@@ -35,7 +35,7 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     
     public String inputFilename = null;
     
-    @Parameter(defaultValue="false")
+    @Parameter(defaultValue="true")
 	protected boolean skipJsDocumentation;
     
     private NPM jsdoc;
