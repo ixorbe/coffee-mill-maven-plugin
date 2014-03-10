@@ -56,16 +56,15 @@ Output
 The plugin works on three output folder:
 
 * the work directory `target/www` which contains all files for watch mode.
-* the build directory `target/www-release` which contains all aggregated, minified and external files for release.
+* the build directory `target/www-release` which contains all aggregated, minified and external files for release (not updated during Watch Mode).
 * the work test directory `target/www-test` which contains output test files. 
 
-In addition, JavaScript dependencies are copied in `target/www/libs` and in `target/www-release/libs`.
+In addition, JavaScript dependencies are copied in `target/libs`.
 
 The plugin creates the following artifacts:
 
-* the aggregated JS file
-* the minified JS file
-* the aggregated CSS file
+* the aggregated JS and CSS files
+* the minified JS and CSS files
 * the zip of the `target/www-release` directory. The assets are optimized.
 
 By default they are all attached to the project.
@@ -76,7 +75,7 @@ Adding JavaScript dependencies
 You can add JavaScript dependencies to the project by specifying the `type` to `js`:
 
 <span style="display: block; color: red; border: 2px solid red; border-radius: 10px; padding: 10px; font-weight: bold; "> 
-As version 1.1.0 release, required minified dependencies is deprecated because the compile process already do minification.
+Since 1.1.0 release version, require minified dependencies is deprecated because the compile process already do minification.
 </span>
 
         <dependency>
@@ -110,6 +109,6 @@ As shown, minified dependencies are selected using the `classifier` set to `min`
 
 Be aware that the order is important. Those dependencies will be loaded in the defined order during the test phases.
 
-Dependencies are copied within `target/www/libs` andf `target/www-release/libs`. The version and the _min_ classifier are stripped,
+Dependencies are copied within `target/libs`. The version and the _min_ classifier are stripped,
 so your code does not need to know the current version and whether the library is minified or not.
 

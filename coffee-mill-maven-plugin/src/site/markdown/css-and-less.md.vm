@@ -14,7 +14,7 @@ as well as applying a set of rules to the code that look for problematic pattern
 Stylesheets are placed in the `src/main/stylesheets`  directory. The validation happens automatically during the
 _compile_ phase, but you can launch it using:
 
-    mvn ${project.groupId}:${project.artifactId}:compile-css
+    mvn coffeemill:compile-css
 
 Compiling Less files
 ----------------------
@@ -22,7 +22,7 @@ Compiling Less files
 Less files are also in `src/main/stylesheets`. They are compiled during the _compile_ phase,
 but you can launch the compilation with:
 
-    mvn ${project.groupId}:${project.artifactId}:compile-less
+    mvn coffeemill:compile-less
     
 Compiling Sass files
 ----------------------
@@ -30,7 +30,7 @@ Compiling Sass files
 SAss files are also in `src/main/stylesheets`. They are compiled during the _compile_ phase,
 but you can launch the compilation with:
 
-    mvn ${project.groupId}:${project.artifactId}:compile-sass
+    mvn coffeemill:compile-sass
 
 Aggregating CSS files
 ---------------------

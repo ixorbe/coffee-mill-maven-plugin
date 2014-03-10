@@ -7,7 +7,7 @@ Validating JavaScript files
 JavaScript files from `src/main/js` are validated against JSLint. This step is automatically luanch during
 the _compile_ phase, however you can launch it using:
 
-    mvn ${project.groupId}:${project.artifactId}:compile-javascript
+    mvn coffeemill:compile-javascript
 
 Unlike for _main_ sources, _test_ sources from `src/test/js` are **not** validated.
 
@@ -19,11 +19,11 @@ the `target/www` directory.
 
 CoffeeScript compilation is part of the _js_ packaging lifecycle. However you can launch the compilation with:
 
-    mvn ${project.groupId}:${project.artifactId}:compile-coffeescript
+    mvn coffeemill:compile-coffeescript
 
 The plugin also support compile _test_ sources with:
 
-    mvn ${project.groupId}:${project.artifactId}:test-compile-coffeescript
+    mvn coffeemill:test-compile-coffeescript
 
 Testing JavaScript and CoffeeScript code
 ---------------------------------------
@@ -38,7 +38,7 @@ DOM. And it has a clean, obvious syntax so that you can easily write tests:
         });
     });
 
-Jasmine specs are placed in the `src/test/js` folder (they can also be in `src\test\coffee` if the tests are written
+Jasmine specs are placed in the `src/test/js` folder (they can also be in `src/test/coffee` if the tests are written
 using CoffeeScript).
 
 During the _test_ phase, all specs are executed againt your CoffeeScript and JavaScript code.
