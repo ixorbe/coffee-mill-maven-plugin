@@ -76,7 +76,7 @@ public class DustCompilerMojo extends  AbstractCoffeeMillWatcherMojo {
     public boolean fileDeleted(File file) {        
         File deleted = new File(this.getWorkDirectory().getAbsolutePath(), FilenameUtils.getBaseName(file.getName()) + ".js");
         if (deleted.isFile()){
-            getLog().info("deleted File : "+deleted.getName());     
+            getLog().info("Deleting File : "+deleted.getName());     
             FileUtils.deleteQuietly(deleted); 
         }
         return true;
@@ -104,7 +104,6 @@ public class DustCompilerMojo extends  AbstractCoffeeMillWatcherMojo {
         int exit = dust.execute("dustc", "--name="+FilenameUtils.getBaseName(newName), file.getAbsolutePath(), newName);
         getLog().debug("Dust-compiler execution exiting with " + exit + " status");
 
-        getLog().info("exist ? "+ new File(newName).exists());
         if (!outputFile.exists()) {
             throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + "; check log");
         }
