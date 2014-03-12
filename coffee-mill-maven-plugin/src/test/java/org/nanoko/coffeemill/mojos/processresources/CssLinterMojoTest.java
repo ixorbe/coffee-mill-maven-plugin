@@ -48,7 +48,15 @@ public class CssLinterMojoTest {
 			FileUtils.copyFileToDirectory(new File("src/test/resources/stylesheets/test_no_error.css"), testDir);
 		} catch (IOException e) { e.printStackTrace(); } 
     	this.mojo.execute();
-    	assertTrue( ((String) mylog.historyLogs.toArray()[2]).contains("Lint Free!"));
+    	
+    	boolean containsOK = false;        
+        for(Object line : mylog.historyLogs.toArray()){
+            if( ((String)line).contains("Lint Free!")){
+                containsOK = true;
+                break;
+            }
+        }
+        assertTrue(containsOK);
     }
 	
 	@Test
@@ -58,7 +66,15 @@ public class CssLinterMojoTest {
 			FileUtils.copyFileToDirectory(new File("src/test/resources/stylesheets/test_warning.css"), testDir);
 		} catch (IOException e) { e.printStackTrace(); } 
     	this.mojo.execute();
-    	assertFalse( ((String) mylog.historyLogs.toArray()[2]).contains("Lint Free!"));
+    	
+    	boolean containsOK = false;        
+        for(Object line : mylog.historyLogs.toArray()){
+            if( ((String)line).contains("Lint Free!")){
+                containsOK = true;
+                break;
+            }
+        }
+        assertFalse(containsOK);
     }
 	
 	@After
