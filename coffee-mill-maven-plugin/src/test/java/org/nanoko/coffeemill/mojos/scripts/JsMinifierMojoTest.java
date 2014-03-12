@@ -16,8 +16,7 @@ import org.nanoko.coffeemill.mojos.scripts.js.JsMinifierMojo;
 public class JsMinifierMojoTest {
 
 	private final File jsFileToMinify = new File("src/test/resources/js/h-ubu.js");
-	private final String testDir = "target/test/JsMinifierMojoTest";
-	private final File buildDir = new File(testDir, "www");
+	private final File buildDir = new File("target/test/JsMinifierMojoTest/www");
 	private JsMinifierMojo mojo;
 	
 	@Before
@@ -32,13 +31,15 @@ public class JsMinifierMojoTest {
 			} catch (IOException e) { e.printStackTrace(); } 
     }
 	
+	//TODO: use Mockito to test if "this.project" exist (on JsMinifierMojo : compile() )
 	/*@Test
     public void testJavaScriptMinification() throws MojoExecutionException, MojoFailureException {  
     	System.out.println("\n ==> Should minify file \"h-ubu.js\" from "+this.buildDir);
     	this.mojo.execute();    	
 
-    	//assertTrue(new File(this.mojo.getBuildDirectory(), this.mojo.getDefaultOutputFilename()+"-min.js").exists());
+    	assertTrue(new File(this.mojo.getBuildDirectory(), this.mojo.getDefaultOutputFilename()+"-min.js").exists());
     }*/
+	
 	
 	@After
 	public void cleanTestDirectory() {
