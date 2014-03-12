@@ -47,7 +47,15 @@ public class JsLinterMojoTest {
     	} catch (IOException e) { e.printStackTrace(); } 
     	
     	this.mojo.execute();
-    	assertFalse( ((String) mylog.historyLogs.toArray()[2]).contains("is OK"));
+    	
+    	boolean containsOK = false;        
+        for(Object line : mylog.historyLogs.toArray()){
+            if( ((String)line).contains("is OK")){
+                containsOK = true;
+                break;
+            }
+        }
+        assertFalse(containsOK);
     }
 	
 	@Test
@@ -57,7 +65,15 @@ public class JsLinterMojoTest {
 			FileUtils.copyFileToDirectory(this.src_jsFileNoError, testDir);
 		} catch (IOException e) { e.printStackTrace(); } 
     	this.mojo.execute();
-    	assertTrue( ((String) mylog.historyLogs.toArray()[2]).contains("is OK"));
+    	
+    	boolean containsOK = false;    	
+    	for(Object line : mylog.historyLogs.toArray()){
+            if( ((String)line).contains("is OK")){
+                containsOK = true;
+                break;
+            }
+        }
+    	assertTrue(containsOK);
     }
 	
 	@After
