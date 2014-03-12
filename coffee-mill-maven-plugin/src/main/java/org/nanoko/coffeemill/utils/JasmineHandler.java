@@ -24,7 +24,7 @@ public class JasmineHandler extends ResourceHandler {
     public JasmineHandler(WatchmodeMojo mojo) {
         this.watchMojo = mojo;
         jasmine = new TestMojo();
-        JasmineUtils.prepareJasmineMojo(watchMojo, jasmine, /*watchMojo.javascriptAggregation*/ null);
+        JasmineUtils.prepareJasmineMojo(watchMojo, jasmine, watchMojo.getJsAggregationFiles()/*watchMojo.javascriptAggregation*/);
         createsManualRunner = new JasmineRunnerGenerator(mojo, jasmine);
     }
 

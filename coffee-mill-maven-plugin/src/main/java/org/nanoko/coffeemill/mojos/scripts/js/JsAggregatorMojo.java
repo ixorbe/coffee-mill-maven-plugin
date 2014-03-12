@@ -30,11 +30,7 @@ defaultPhase = LifecyclePhase.PACKAGE)
 public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
-    /**
-     * Define ordered Js files list to aggregate
-     */
-    @Parameter
-    protected List<String> jsAggregationFiles;
+    
 
     @Parameter(defaultValue="true")
     protected boolean failedOnMissingFile;
@@ -90,7 +86,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         }
 
         // Classic Aggregation (app + ext. libs)
-        if (jsAggregationFiles == null || jsAggregationFiles.isEmpty()) {    		
+        if (this.getJsAggregationFiles() == null || this.getJsAggregationFiles().isEmpty()) {    		
             if(aggregateAppOnly(output)) {
                 aggregateAppWithLibs(output);
             }    		
@@ -103,7 +99,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     private boolean aggregateFromListFiles(File output) throws WatchingException {
         Collection<File> files = new ArrayList<File>();
 
-        for (String filename : jsAggregationFiles) {
+        for (String filename : this.getJsAggregationFiles()) {
             File file = FSUtils.resolveFile(filename, getWorkDirectory(), getLibDirectory(), "js");
             if (file == null) {
                 if (failedOnMissingFile) {

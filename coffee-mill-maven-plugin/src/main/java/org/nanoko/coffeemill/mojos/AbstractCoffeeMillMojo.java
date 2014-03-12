@@ -132,7 +132,19 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
      */
     @Parameter(defaultValue= "target/libs", required = true, readonly = true)
     private File libDir;
+    
+    /**
+     * Define ordered Js files list to aggregate
+     */
+    @Parameter
+    private List<String> jsAggregationFiles;
+    
+    
 
+
+    public List<String> getJsAggregationFiles() {
+        return jsAggregationFiles;
+    }
 
     // SKIP BOOLEAN
     /**
