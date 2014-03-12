@@ -21,7 +21,8 @@ public class PackagerMojoTest {
     @Test
     public void testJavaScriptAggregation() throws MojoExecutionException, MojoFailureException {
     	this.mojo = new PackagerMojo();
-    	this.mojo.setBuildDirectory(srcDir);
+    	this.mojo.setWorkDirectory(srcDir);
+    	this.mojo.setLibDirectory(new File(""));
     	this.mojo.setTargetDirectory(buildDir) ;
     	this.mojo.execute();    	
     	assertTrue(this.mojo.getTargetDirectory().list().length > 0);
@@ -29,11 +30,12 @@ public class PackagerMojoTest {
     	
     }
     
+    /*
     @After
     public void cleanTestDirectory(){
     	if(buildDir.exists()){
     		FileUtils.deleteQuietly(buildDir);
     	}
     }
-    
+    */
 }

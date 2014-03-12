@@ -46,10 +46,17 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
         File distFile = new File(this.getTargetDirectory(), this.outputFileName);
         ZipArchiver archiver = new ZipArchiver();
         archiver.enableLogging(new PlexusLoggerWrapper(new MavenLoggerWrapper(this.getLog())));
-        archiver.addDirectory(getBuildDirectory());
+        if (getWorkDirectory().isDirectory()) {
+            archiver.addDirectory( getWorkDirectory(), "" );
+        }
+        if (getLibDirectory().isDirectory()) {
+            archiver.addDirectory( getLibDirectory(), "" );
+        }
+        //archiver.addDirectory(getWorkDirectory());
+        //archiver.addDirectory(getLibDirectory());
         archiver.setDestFile(distFile);
         archiver.createArchive();
-        this.getLog().info("getDirectory="+getBuildDirectory());
+        this.getLog().info("getDirectory="+getWorkDirectory());
         if(projectHelper != null ){
             projectHelper.attachArtifact(project,"zip", "dist", distFile);
         }
