@@ -81,6 +81,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
 
     private void addHandlersToServer() {
         ResourceHandler workDirHandler = new ResourceHandler();
+        ResourceHandler workTestDirHandler = new ResourceHandler();
         ResourceHandler releaseDirHandler = new ResourceHandler();
         ResourceHandler libDirHandler = new ResourceHandler();
         
@@ -90,6 +91,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         workDirHandler.setWelcomeFiles(new String[]{ "index.html" });
         releaseDirHandler.setWelcomeFiles(new String[]{ "index.html" });
         workDirHandler.setResourceBase(this.getWorkDirectory().getAbsolutePath());
+        workTestDirHandler.setResourceBase(this.getWorkTestDirectory().getAbsolutePath());
         releaseDirHandler.setResourceBase(this.getBuildDirectory().getAbsolutePath());
         libDirHandler.setResourceBase(this.getLibDirectory().getAbsolutePath());
         
@@ -99,7 +101,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         releaseDirCtxHandler.setHandler(releaseDirHandler);
         
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { workDirHandler,libDirHandler, releaseDirCtxHandler, new JasmineHandler(this), new ResourceHandler() });
+        handlers.setHandlers(new Handler[] { workDirHandler,libDirHandler, releaseDirCtxHandler, workTestDirHandler, new JasmineHandler(this), new ResourceHandler() });
         server.setHandler(handlers);
     }    
 
