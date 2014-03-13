@@ -24,7 +24,7 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * Compiles less files.</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * Compiles CSS files.</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  @Mojo(name = <span class="jxr_string">"compile-css"</span>, threadSafe = false,
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  requiresDependencyResolution = ResolutionScope.TEST,
@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      }
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> fileDeleted(File file) <strong class="jxr_keyword">throws</strong> WatchingException {        
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          File deleted = <strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.getWorkDirectory(), file.getName());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          File deleted = FSUtils.computeRelativeFile(file, <strong class="jxr_keyword">this</strong>.getStylesheetsDir(), getWorkDirectory());
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>          <strong class="jxr_keyword">if</strong> (deleted.isFile()){
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>              getLog().info(<span class="jxr_string">"deleting File : "</span>+file.getName());    	
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>              FileUtils.deleteQuietly(deleted); 
@@ -83,22 +83,28 @@
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> copy(File f) <strong class="jxr_keyword">throws</strong> WatchingException {
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          getLog().info(<span class="jxr_string">"Copy css files from "</span> + getStylesheetsDir().getAbsolutePath());
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>              FileUtils.copyFileToDirectory(f, <strong class="jxr_keyword">this</strong>.getWorkDirectory());
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>          } <strong class="jxr_keyword">catch</strong> (IOException e) { 
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/nanoko/maven/WatchingException.html">WatchingException</a>(<span class="jxr_string">"Error during copy css files to workDirectory "</span>+<strong class="jxr_keyword">this</strong>.getWorkDirectory().getAbsolutePath(), e); 
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>          }
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>      }
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSkipped(){
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>          <strong class="jxr_keyword">if</strong> (skipCssCompilation) {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>              getLog().info(<span class="jxr_string">"\033[31m CSS Compilation skipped \033[37m"</span>);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>              <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>          } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>              <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>          }
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>      }
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  }
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>              File out = FSUtils.computeRelativeFile(f, <strong class="jxr_keyword">this</strong>.getStylesheetsDir(), getWorkDirectory());
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>              <strong class="jxr_keyword">if</strong> (out.getParentFile() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>                  out.getParentFile().mkdirs();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>                  FileUtils.copyFileToDirectory(f, out.getParentFile());
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>              } <strong class="jxr_keyword">else</strong>{ 
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>                  getLog().error(<span class="jxr_string">"Cannot copy file - parent directory not accessible for "</span> + out);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>              }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>          } <strong class="jxr_keyword">catch</strong> (IOException e) { 
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/nanoko/maven/WatchingException.html">WatchingException</a>(<span class="jxr_string">"Error during copy css files to workDirectory "</span>+<strong class="jxr_keyword">this</strong>.getWorkDirectory().getAbsolutePath(), e); 
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSkipped(){
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          <strong class="jxr_keyword">if</strong> (skipCssCompilation) {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>              getLog().info(<span class="jxr_string">"\033[31m CSS Compilation skipped \033[37m"</span>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>              <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      }
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2012&#x2013;2014 <a href="http://ow2.org">OW2</a>. All rights reserved.</div>

@@ -3,6 +3,7 @@ org.nanoko.coffeemill.mojos.packaging
 org.nanoko.coffeemill.mojos.processresources
 org.nanoko.coffeemill.mojos.reporting
 org.nanoko.coffeemill.mojos.scripts.coffee
+org.nanoko.coffeemill.mojos.scripts.dust
 org.nanoko.coffeemill.mojos.scripts.js
 org.nanoko.coffeemill.mojos.stylesheets.css
 org.nanoko.coffeemill.mojos.stylesheets.less

@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>          NPM npm = NPM.npm(log, <span class="jxr_string">"coffee-script"</span>, <span class="jxr_string">"1.6.3"</span>);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          File input = <strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"target/test-classes/coffee"</span>);
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          File output = <strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"target/test/coffee"</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>          File output = <strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"target/test/NodeManagerTest/coffee"</span>);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>          output.mkdirs();
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>          <strong class="jxr_keyword">int</strong> exit = npm.execute(<span class="jxr_string">"coffee"</span>, <span class="jxr_string">"--compile"</span>, <span class="jxr_string">"--map"</span>, <span class="jxr_string">"--output"</span>, output.getAbsolutePath(),
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>                  input.getAbsolutePath());

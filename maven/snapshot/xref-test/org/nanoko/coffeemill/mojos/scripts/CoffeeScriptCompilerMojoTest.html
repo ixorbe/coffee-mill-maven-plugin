@@ -59,8 +59,8 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      	System.out.println(<span class="jxr_string">"\n ==&gt; Should compile 3 files \&quot;FeedEntry.coffee\&quot;, \&quot;FeedReader.coffee\&quot;, \&quot;SyndicationService.coffee\&quot; to "</span>+<strong class="jxr_keyword">this</strong>.workDir);       
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>      	mojo.execute();
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>      	
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      	assertTrue(<strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory(), <span class="jxr_string">"FeedEntry.js"</span>).exists());
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      	assertTrue(<strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory(), <span class="jxr_string">"FeedReader.js"</span>).exists());
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      	assertTrue(<strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory().getAbsolutePath()+<span class="jxr_string">"/interfaces"</span>, <span class="jxr_string">"FeedEntry.js"</span>).exists());
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      	assertTrue(<strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory().getAbsolutePath()+<span class="jxr_string">"/interfaces"</span>, <span class="jxr_string">"FeedReader.js"</span>).exists());
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>      	assertTrue(<strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory(), <span class="jxr_string">"SyndicationService.js"</span>).exists());
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      }
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>      
