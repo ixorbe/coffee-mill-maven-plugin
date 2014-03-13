@@ -1,8 +1,8 @@
 Working with Stylesheets
 ========================
 
-the plugin supports plain CSS files and LESS files. [LESS](http://lesscss.org) extends CSS with dynamic behavior such
-as variables, mixins, operations and functions. LESS runs on both the client-side (Chrome, Safari,
+the plugin supports plain CSS, LESS and SASS files. [LESS](http://lesscss.org) and [SASS](http://sass-lang.com) extends CSS with dynamic behavior such
+as variables, mixins, operations and functions. LESS and SASS runs on both the client-side (Chrome, Safari,
 Firefox) and server-side, with Node.js and Rhino.
 
 Validating CSS files
@@ -14,7 +14,7 @@ as well as applying a set of rules to the code that look for problematic pattern
 Stylesheets are placed in the `src/main/stylesheets`  directory. The validation happens automatically during the
 _compile_ phase, but you can launch it using:
 
-    mvn ${project.groupId}:${project.artifactId}:compile-css
+    mvn coffeemill:compile-css
 
 Compiling Less files
 ----------------------
@@ -22,7 +22,15 @@ Compiling Less files
 Less files are also in `src/main/stylesheets`. They are compiled during the _compile_ phase,
 but you can launch the compilation with:
 
-    mvn ${project.groupId}:${project.artifactId}:compile-less
+    mvn coffeemill:compile-less
+    
+Compiling Sass files
+----------------------
+
+SAss files are also in `src/main/stylesheets`. They are compiled during the _compile_ phase,
+but you can launch the compilation with:
+
+    mvn coffeemill:compile-sass
 
 Aggregating CSS files
 ---------------------
@@ -39,7 +47,7 @@ aggregated using the alphabetical order.
         <configuration>
             <cssAggregation>
                 <file>style.css</file>
-                <file>my-site.css</file> <!-- Generated form my-site.less -->
+                <file>my-site.css</file> <!-- Generated form my-site.less or my-site.scss -->
             </cssAggregation>
         </configuration>
     </plugin>
@@ -49,8 +57,38 @@ The resulting aggregated file is attached to the project using the `css` extensi
 Minification
 ------------
 
-Once aggregated, the file can be minified using YUI CSS Compressor. This step happens automatically if you have an
+Once aggregated, the file can be minified using CSSMin Compressor. This step happens automatically if you have an
 aggregated CSS file. The resulting minified file is attached to the project using the _min_ classifier and the _css_
 packaging type.
 
 If the input file does not exist, the minification process is skipped.
+
+
+SkipVariables
+-------------
+
+By default the packaging process is not skipped, so it launch compilation, aggregation and minification. But variables exist to escape those process :
+
+* skipCssCompilation
+* skipCssAggregation
+* skipCssMinification
+
+You can include those variables in pom.xml file to enabled/disabled the wanted process, like the following example : 
+
+    <plugin>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>${project.artifactId}</artifactId>
+        <version>${project.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+            <javascriptAggregation>
+                ...
+            </javascriptAggregation>
+            <skipCssCompilation>true</skipCompilation>
+            <skipCssAggregation>true</skipAggregation>
+            <skipCssMinification>true</skipMinification>
+        </configuration>
+    </plugin>
+
+The process respect the following order : `compilation` > `aggregation` > `minification`. So if you decide to skip the compilation process, the aggregation and minification are skipped too (and therefore when skipCssCompilation set to true, its useless to define the two others).
+

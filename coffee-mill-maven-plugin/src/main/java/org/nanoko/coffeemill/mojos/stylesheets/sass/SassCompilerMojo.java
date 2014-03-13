@@ -19,7 +19,7 @@ import java.util.Collection;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Compiles less files.
+ * Compiles SASS files.
  */
 @Mojo(name = "compile-sass", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,
@@ -73,26 +73,23 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileDeleted(File file) {
-        File theFile = getOutputCSSFile(file);
-        FileUtils.deleteQuietly(theFile);
+        File out = FSUtils.computeRelativeFile(file, this.getStylesheetsDir(), getWorkDirectory());
+        File newName = new File( out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".scss".length()) + ".css" );
+        if(newName.exists()){
+            FileUtils.deleteQuietly(newName);
+        }
         return true;
     }
-
-
-
-    private File getOutputCSSFile(File input) {
-        String cssFileName = input.getName().substring(0, input.getName().length() - ".scss".length()) + ".css";
-        String path = input.getParentFile().getAbsolutePath().substring(getStylesheetsDir().getAbsolutePath().length());
-        return new File(this.getWorkDirectory(), path + "/" + cssFileName);
-    }
+  
 
     private void compile(File file) throws WatchingException {
-        File out = getOutputCSSFile(file);
-        getLog().info("Compiling " + file.getAbsolutePath() + " to " + out.getAbsolutePath());
-        int exit = sass.execute("node-sass", file.getAbsolutePath(), out.getAbsolutePath());
+        File out = FSUtils.computeRelativeFile(file, this.getStylesheetsDir(), getWorkDirectory());
+        String newName = out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".scss".length()) + ".css";
+        getLog().info("Compiling " + file.getAbsolutePath() + " to " + newName);
+        int exit = sass.execute("node-sass", file.getAbsolutePath(), newName);
         getLog().debug("Sass execution exiting with " + exit + " status");
 
-        if (!out.isFile()) {
+        if (!new File(newName).exists()) {
             throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + " check log");
         }
     }

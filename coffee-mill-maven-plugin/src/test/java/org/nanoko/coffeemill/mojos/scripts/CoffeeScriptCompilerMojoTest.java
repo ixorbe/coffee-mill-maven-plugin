@@ -51,8 +51,8 @@ public class CoffeeScriptCompilerMojoTest {
     	System.out.println("\n ==> Should compile 3 files \"FeedEntry.coffee\", \"FeedReader.coffee\", \"SyndicationService.coffee\" to "+this.workDir);       
     	mojo.execute();
     	
-    	assertTrue(new File(this.mojo.getWorkDirectory(), "FeedEntry.js").exists());
-    	assertTrue(new File(this.mojo.getWorkDirectory(), "FeedReader.js").exists());
+    	assertTrue(new File(this.mojo.getWorkDirectory().getAbsolutePath()+"/interfaces", "FeedEntry.js").exists());
+    	assertTrue(new File(this.mojo.getWorkDirectory().getAbsolutePath()+"/interfaces", "FeedReader.js").exists());
     	assertTrue(new File(this.mojo.getWorkDirectory(), "SyndicationService.js").exists());
     }
     

@@ -20,7 +20,7 @@ import java.util.List;
 
 
 /**
- * Compiles less files.
+ * Aggregate CSS files.
  */
 @Mojo(name = "aggregate-stylesheets", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.TEST,
@@ -118,11 +118,14 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         }
 
         joinFiles(output, files);
+        if(projectHelper != null ){
+            projectHelper.attachArtifact(project, "css", output); // "css" -> type (not classifier)
+        }
         return true;
     }
 
     private boolean aggregateAppOnly(File output) throws WatchingException {
-        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, false);
+        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"css"}, true);
         if(files.isEmpty()){
             getLog().warn("No Css files in work directory "+this.getWorkDirectory().getAbsolutePath());
             return false;
@@ -130,6 +133,9 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         getLog().info("Aggregate Css files from " + this.getWorkDirectory().getAbsolutePath());
 
         joinFiles(output, files);
+        if(projectHelper != null ){
+            projectHelper.attachArtifact(project, "css", output);// "css" -> type (not classifier)
+        }
         return true;
     }
 

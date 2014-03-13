@@ -10,7 +10,6 @@ The default structure of the project is the following:
            |- js <------------ JavaScript files
            |- coffee <-------- CoffeeScript files
            |- www <----------- HTML files, images and other files
-           |- resources <----- Regular resources
            |- stylesheets <--- CSS and Less
        |- test
            |- js <------------ Jasmine specs
@@ -54,15 +53,19 @@ To use the plugin you must set the `packaging` to **js**. The following pom show
 Output
 ------
 
-The plugin works on two output folder: `target/www` and `target/www-test`. In addition,
-JavaScript dependencies are copied in `target/libs`.
+The plugin works on three output folder:
+
+* the work directory `target/www` which contains all files for watch mode.
+* the build directory `target/www-release` which contains all aggregated, minified and external files for release (not updated during Watch Mode).
+* the work test directory `target/www-test` which contains output test files. 
+
+In addition, JavaScript dependencies are copied in `target/libs`.
 
 The plugin creates the following artifacts:
 
-* the aggregated JS file
-* the minified JS file
-* the aggregated CSS file
-* the zip of the `target/www` and `target/libs` directories. The assets are optimized.
+* the aggregated JS and CSS files
+* the minified JS and CSS files
+* the zip of the `target/www-release` directory. The assets are optimized.
 
 By default they are all attached to the project.
 
@@ -71,11 +74,15 @@ Adding JavaScript dependencies
 
 You can add JavaScript dependencies to the project by specifying the `type` to `js`:
 
+<span style="display: block; color: red; border: 2px solid red; border-radius: 10px; padding: 10px; font-weight: bold; "> 
+Since 1.1.0 release version, require minified dependencies is deprecated because the compile process already do minification.
+</span>
+
         <dependency>
             <groupId>org.nanoko</groupId>
             <artifactId>syndication-service</artifactId>
             <type>js</type>
-            <classifier>min</classifier>
+            <classifier>min</classifier> <!-- deprecated -->
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -88,7 +95,7 @@ You can add JavaScript dependencies to the project by specifying the `type` to `
             <groupId>com.jquery</groupId>
             <artifactId>jquery</artifactId>
             <version>1.7.2</version>
-            <classifier>min</classifier>
+            <classifier>min</classifier> <!-- deprecated -->
             <type>js</type>
         </dependency>
         <dependency>
@@ -104,3 +111,4 @@ Be aware that the order is important. Those dependencies will be loaded in the d
 
 Dependencies are copied within `target/libs`. The version and the _min_ classifier are stripped,
 so your code does not need to know the current version and whether the library is minified or not.
+

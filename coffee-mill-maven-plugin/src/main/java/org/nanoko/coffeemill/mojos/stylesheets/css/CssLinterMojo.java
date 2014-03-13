@@ -23,7 +23,7 @@ import java.util.Collection;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Optimize Js files.
+ * Quality-Check CSS files.
  */
 @Mojo(name = "lint-css", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,
@@ -91,7 +91,7 @@ public class CssLinterMojo extends AbstractCoffeeMillWatcherMojo {
 
     private boolean isSkipped() {
         if (skipJsLint || skipJsCompilation) {
-            getLog().info("\033[31m JS Lint Optimizer skipped \033[37m");
+            getLog().info("\033[31m CSS Lint skipped \033[37m");
             return true;
         } else {
             return false;   	

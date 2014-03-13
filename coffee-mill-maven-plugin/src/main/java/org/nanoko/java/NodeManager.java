@@ -21,8 +21,8 @@ public class NodeManager {
 
     private static final String NODE_DIST = "http://nodejs.org/dist/v";
     private static final String NPM_DIST = "http://nodejs.org/dist/npm/npm-";
-    private static String NODE_VERSION = "0.10.24";
-    private static String NPM_VERSION = "1.3.23";    
+    private static String NODE_VERSION = "0.10.26";
+    private static String NPM_VERSION = "1.4.3";    
 
     private static NodeManager singleton= null;
 

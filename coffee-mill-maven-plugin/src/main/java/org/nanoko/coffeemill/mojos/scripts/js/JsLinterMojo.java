@@ -23,7 +23,7 @@ import java.util.Collection;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Optimize Js files.
+ * Quality Check Js files.
  */
 @Mojo(name = "lint-javascript", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,
@@ -32,7 +32,7 @@ defaultPhase = LifecyclePhase.PACKAGE)
 public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String PKG_NPM_NAME = "jslint";
-    public static final String PKG_NPM_VERSION = "0.2.10";
+    public static final String PKG_NPM_VERSION = "0.2.11";
 
     private static Log defaultLogger;
 
@@ -101,7 +101,7 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
 
     private boolean isSkipped() {
         if (skipJsLint || skipJsCompilation) {
-            getLog().info("\033[31m JS Lint Optimizer skipped \033[37m");
+            getLog().info("\033[31m JS Lint skipped \033[37m");
             return true;
         } else {
             return false;   	

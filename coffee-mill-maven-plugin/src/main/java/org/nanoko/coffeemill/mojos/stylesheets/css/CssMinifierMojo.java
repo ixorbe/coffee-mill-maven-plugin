@@ -21,7 +21,7 @@ import java.io.File;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Minifying Css files.
+ * Minifying CSS files.
  */
 @Mojo(name = "minify-stylesheets", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,
@@ -30,7 +30,7 @@ defaultPhase = LifecyclePhase.PACKAGE)
 public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String CLEANCSS_NPM_NAME = "clean-css";
-    public static final String CLEANCSS_NPM_VERSION = "2.0.7";
+    public static final String CLEANCSS_NPM_VERSION = "2.1.4";
 
     public String inputFilename = null;
 
@@ -99,6 +99,10 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
+        }else {
+            if(projectHelper != null && !baseName.contains("all") ){
+                projectHelper.attachArtifact(project, "css", "min", output);
+            }
         }
         return true;
     }

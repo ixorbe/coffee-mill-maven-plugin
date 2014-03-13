@@ -52,6 +52,7 @@ public class CoffeeScriptTestCompilerMojo extends AbstractCoffeeScriptCompilerMo
 
     public void execute() throws MojoExecutionException {
     	this.setCoffeeScriptDir(coffeeScriptTestDir);
+    	this.setDefaultOutputDirectory(getWorkTestDirectory());
     	super.execute();
     }
     

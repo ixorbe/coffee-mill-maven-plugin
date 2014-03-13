@@ -21,7 +21,7 @@ import static org.nanoko.java.NPM.npm;
 public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
 
     public static final String COFFEE_SCRIPT_NPM_NAME = "coffee-script";
-    public static final String COFFEE_SCRIPT_NPM_VERSION = "1.6.3";
+    public static final String COFFEE_SCRIPT_NPM_VERSION = "1.7.1";
     public static final String COFFEE_SCRIPT_COMMAND = "coffee";
     
     /**
@@ -33,6 +33,13 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     
     private NPM coffee;
     
+    private File defaultOutputDirectory;
+    
+    public void setDefaultOutputDirectory(File outputDirectory){
+        this.defaultOutputDirectory = outputDirectory;
+    }
+    
+            
     // Getters / Setters
     public File getCoffeeScriptDir() {
     	this.coffeeScriptDir.mkdirs();
@@ -49,6 +56,12 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     		return; 
     	}
     	
+    	if(this.defaultOutputDirectory==null){
+    	    
+    	    this.defaultOutputDirectory = this.getWorkDirectory();
+    	}
+    	getLog().info("defaultOutputDirectory : "+this.defaultOutputDirectory);
+    	
     	if (!this.coffeeScriptDir.isDirectory()){
         	getLog().warn("/!\\ CoffeeScript compilation skipped - " + coffeeScriptDir.getAbsolutePath() + " does not exist !");
         	return;
@@ -57,24 +70,21 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     	coffee = npm(new MavenLoggerWrapper(this.getLog()), COFFEE_SCRIPT_NPM_NAME, COFFEE_SCRIPT_NPM_VERSION);
 
         getLog().info("Get CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
-		Collection<File> files = FileUtils.listFiles(this.coffeeScriptDir, new String[]{"coffee"}, true);
-		
-		if(files.isEmpty()){
-			getLog().warn("/!\\ CoffeeScript sources directory " + this.coffeeScriptDir.getAbsolutePath() + " is empty !");
-			return;
-		}
-			
-		for(File file : files) {
-			invokeCoffeeScriptCompiler(file, getWorkDirectory());
-		}
+        invokeCoffeeScriptCompilerForDirectory(this.coffeeScriptDir, defaultOutputDirectory);
 
     }
 
 
     protected void invokeCoffeeScriptCompiler(File input, File out) throws MojoExecutionException {
-        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(),
-                input.getAbsolutePath());
+        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(), input.getAbsolutePath());
         getLog().debug("CoffeeScript compilation exits with " + exit + " status");
+    }
+    
+    protected void invokeCoffeeScriptCompilerForDirectory(File dirInput, File dirOut) throws MojoExecutionException {
+        if(dirInput.isDirectory() && dirOut.isDirectory()) {
+            int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", dirOut.getAbsolutePath(), dirInput.getAbsolutePath());
+            getLog().debug("CoffeeScript compilation exits with " + exit + " status");
+        }
     }
     
     private boolean isSkipped(){

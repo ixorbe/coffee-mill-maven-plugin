@@ -21,7 +21,7 @@ import java.util.List;
 
 
 /**
- * Compiles Js files.
+ * Aggregate Js files.
  */
 @Mojo(name = "aggregate-javascript", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.TEST,
@@ -30,11 +30,7 @@ defaultPhase = LifecyclePhase.PACKAGE)
 public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
-    /**
-     * Define ordered Js files list to aggregate
-     */
-    @Parameter
-    protected List<String> jsAggregationFiles;
+    
 
     @Parameter(defaultValue="true")
     protected boolean failedOnMissingFile;
@@ -90,7 +86,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         }
 
         // Classic Aggregation (app + ext. libs)
-        if (jsAggregationFiles == null || jsAggregationFiles.isEmpty()) {    		
+        if (this.getJsAggregationFiles() == null || this.getJsAggregationFiles().isEmpty()) {    		
             if(aggregateAppOnly(output)) {
                 aggregateAppWithLibs(output);
             }    		
@@ -103,7 +99,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     private boolean aggregateFromListFiles(File output) throws WatchingException {
         Collection<File> files = new ArrayList<File>();
 
-        for (String filename : jsAggregationFiles) {
+        for (String filename : this.getJsAggregationFiles()) {
             File file = FSUtils.resolveFile(filename, getWorkDirectory(), getLibDirectory(), "js");
             if (file == null) {
                 if (failedOnMissingFile) {
@@ -118,11 +114,21 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         }
 
         joinFiles(output, files);
+        if(output.exists() && project != null) {
+            try {
+                File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + ".js");
+                getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
+                FileUtils.copyFile(output, artifact, true);
+                project.getArtifact().setFile(artifact);
+            } catch (IOException e) {
+                this.getLog().error("Error while attaching js to project",e);
+            }
+        }
         return true;
     }    
 
     private boolean aggregateAppOnly(File output) throws WatchingException {
-        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, false);
+        Collection<File> files = FileUtils.listFiles(this.getWorkDirectory(), new String[]{"js"}, true);
         if(files.isEmpty()){
             getLog().warn("JavaScript work directory "+this.getWorkDirectory().getAbsolutePath()+" is empty !");
             return false;
@@ -130,6 +136,16 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         getLog().info("Aggregate Js files from " + this.getWorkDirectory().getAbsolutePath());
 
         joinFiles(output, files);
+        if(output.exists()&& project != null) {
+            try {
+                File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + ".js");
+                getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
+                FileUtils.copyFile(output, artifact, true);
+                project.getArtifact().setFile(artifact);
+            } catch (IOException e) {
+                this.getLog().error("Error while attaching js to project",e);
+            }
+        }
         return true;
     }
 

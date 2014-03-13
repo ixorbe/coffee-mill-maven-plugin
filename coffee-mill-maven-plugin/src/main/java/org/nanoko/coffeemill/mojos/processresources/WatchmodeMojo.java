@@ -10,10 +10,12 @@ import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
 import org.nanoko.maven.WatchingException;
 import org.nanoko.maven.pipeline.Pipeline;
 import org.nanoko.maven.pipeline.Pipelines;
+import org.nanoko.coffeemill.utils.JasmineHandler;
 import org.nanoko.coffeemill.utils.MavenLoggerWrapper;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -34,7 +36,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
     @Parameter(defaultValue="true")
     protected boolean watchRunServer;
 
-    @Parameter(defaultValue="8234")
+    @Parameter(defaultValue="8234", property="watch.port")
     protected int watchJettyServerPort;   
 
     //The Jetty Server
@@ -78,16 +80,28 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
 
 
     private void addHandlersToServer() {
-        ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setDirectoriesListed(true);
-        resourceHandler.setWelcomeFiles(new String[]{ "index.html" });
-        try {
-            resourceHandler.setResourceBase(this.getWorkDirectory().getCanonicalPath());
-        } catch (IOException e) {
-            this.getLog().error(e.getMessage(), e);
-        }
+        ResourceHandler workDirHandler = new ResourceHandler();
+        ResourceHandler workTestDirHandler = new ResourceHandler();
+        ResourceHandler releaseDirHandler = new ResourceHandler();
+        ResourceHandler libDirHandler = new ResourceHandler();
+        
+        workDirHandler.setDirectoriesListed(true);
+        releaseDirHandler.setDirectoriesListed(true);
+        
+        workDirHandler.setWelcomeFiles(new String[]{ "index.html" });
+        releaseDirHandler.setWelcomeFiles(new String[]{ "index.html" });
+        workDirHandler.setResourceBase(this.getWorkDirectory().getAbsolutePath());
+        workTestDirHandler.setResourceBase(this.getWorkTestDirectory().getAbsolutePath());
+        releaseDirHandler.setResourceBase(this.getBuildDirectory().getAbsolutePath());
+        libDirHandler.setResourceBase(this.getLibDirectory().getAbsolutePath());
+        
+        ContextHandler releaseDirCtxHandler = new ContextHandler();
+        releaseDirCtxHandler.setContextPath("/release");
+        releaseDirCtxHandler.setClassLoader(Thread.currentThread().getContextClassLoader());
+        releaseDirCtxHandler.setHandler(releaseDirHandler);
+        
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { resourceHandler, new DefaultHandler() });
+        handlers.setHandlers(new Handler[] { workDirHandler,libDirHandler, releaseDirCtxHandler, workTestDirHandler, new JasmineHandler(this), new ResourceHandler() });
         server.setHandler(handlers);
     }    
 

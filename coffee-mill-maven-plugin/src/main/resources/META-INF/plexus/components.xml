@@ -37,6 +37,7 @@
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-sass,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-css,
                         
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-dust,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-coffeescript,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-javascript,
                         
@@ -76,6 +77,17 @@
 						org.apache.maven.plugins:maven-deploy-plugin:deploy
                     </deploy>
                 </phases>
+            </configuration>
+        </component>
+         <component>
+            <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+            <role-hint>js</role-hint>
+            <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler</implementation>
+            <configuration>
+                <extension>js</extension>
+                <type>js</type>
+                <language>javascript</language>
+                <addedToClasspath>true</addedToClasspath>
             </configuration>
         </component>
     </components>

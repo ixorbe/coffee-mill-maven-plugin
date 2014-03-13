@@ -17,7 +17,7 @@ import java.io.IOException;
 
 
 /**
- * Compiles less files.
+ * Copy assets to target directory.
  */
 @Mojo(name = "copy-assets", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.TEST,

@@ -53,23 +53,26 @@ public class CoffeeScriptCompilerMojo extends AbstractCoffeeScriptCompilerMojo i
     }
 
     public boolean fileDeleted(File file) {
-    	File deleted = new File(this.getWorkDirectory().getAbsolutePath(), FilenameUtils.getBaseName(file.getName()) + ".js");
-        if (deleted.isFile()){
-        	getLog().info("deleted File : "+deleted.getName());    	
-        	FileUtils.deleteQuietly(deleted); 
+        File out = FSUtils.computeRelativeFile(file, this.getCoffeeScriptDir(), getWorkDirectory());
+        File newName = new File( out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".coffee".length()) + ".js" );
+        if(newName.exists()){
+            FileUtils.deleteQuietly(newName);
         }
         return true;
     }
 
     
     private void compile(File file) throws WatchingException {
-        if (file == null) { return; }
+        if (file == null) { 
+            return; 
+        }
         
-        //File out = new File(getWorkDirectory(), file.getName());
+        File out = FSUtils.computeRelativeFile(file, this.getCoffeeScriptDir(), getWorkDirectory());
+        //File newName = new File( out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".coffee".length()) + ".js" );
         getLog().info("Compiling CoffeeScript " + file.getAbsolutePath() + " to " + getWorkDirectory().getAbsolutePath());
-
+        
         try {
-            invokeCoffeeScriptCompiler(file, getWorkDirectory());
+            invokeCoffeeScriptCompiler(file, out.getParentFile());
         } catch (MojoExecutionException e) { //NOSONAR
             throw new WatchingException("Error during the compilation of " + file.getName() + " : " + e.getMessage());
         }

@@ -7,27 +7,28 @@ The process-resources phase
 ---------------------------
 
 * _maven-resources-plugin:ressources_ : the regular resource processing
-* _resolve-dependencies_ : resolve _js_ dependencies and copy them within the _target/libs_ folder,
-_css_ dependencies are cresolved and copied to _target/www_
+* _resolve-dependencies_ : resolve _js_ dependencies and copy them within the _target/www/libs_ folder,
+_css_ dependencies are solved and copied to _target/www/libs_
 * _copy-assets_ : copy the files form the asset folder (_src/main/www_ by default) to _target/www_
 
 The compile phase
 -----------------
 
 * _compile-javascript_ : copy JavaScript files from _src/main/js_ to the _target/www_ folder. Validate them using
-JSHint and JSLint. Dust templates are also compiled.
+JSHint and JSLint.
 * _compile-coffeescript_ : compile CoffeeScript files (_.coffee_), from _src/main/coffee_ to the _target/www_ folder
 * _compile-less_ : compile Less files (_.less_), from _src/main/stylesheets_ to the _target/www_ folder
+* _compile-saas_ : compile Saas files (_.scss_), from _src/main/stylesheets_ to the _target/www_ folder
 * _compile-css_ : copy CSS files from _src/main/stylesheets_ to the _target/www_ folder. Validate them using
 CSSHint.
 * _optimize-png_ : optimize the PNG files
 * _optimize-jpeg_ : optimize the JPEG files
-* _compress-html_ : compress HTML files using HTML Compressor (disabled by default)
+* _compress-html_ : compress HTML files using HTML Compressor
 
 The process-test-resourcces phase
 ---------------------------------
 
-Nothing in particular happing. The _maven-resources-plugin:testRessources_ mojo is executed.
+Nothing in particular happens. The _maven-resources-plugin:testRessources_ mojo is executed.
 
 The test-compile phase
 ----------------------
@@ -46,14 +47,16 @@ The package phase
 ----------------
 
 * _aggregate-javascript_ : aggregate the JavaScript and CoffeeScript code (and JS dependencies if configured). The
-resulting file is the main project artifact
-* _aggregate-stylesheets_ : aggregate the CSS and Less files. The resulting file is attached to the project using the
+resulting file is the main project artifact.
+It also create an aggregated version containing the external dependencies : this version is suffixed with _-all_ classifier
+* _aggregate-stylesheets_ : aggregate the CSS , Less and Saas files. The resulting file is attached to the project using the
  _css_ extension.
-* _minify-javascript_: minify the aggregated JavaScript file using YUI Compressor or Google Closure. The resulting
+It also create an aggregated version containing the external dependencies : this version is suffixed with _-all_ classifier
+* _minify-javascript_: minify the aggregated JavaScript file using UglifyJS. The resulting
 file is attached ot the project using the _min_ classifier.
-* _minify-stylesheets: minify the aggregated CSS file using YUI Compressor. The resulting
+* _minify-stylesheets_: minify the aggregated CSS file using CSSMin . The resulting
 file is attached ot the project using the _min_ classifier and obvisouly the CSS extension.
-* _build-zip_ : create a zip from the _target/www_ and _target/libs_ directory. The zip file is attached to the
+* _build-zip_ : create a zip from the _target/www-release_ directory. The zip file is attached to the
 project using the _dist_ classifier and the _zip_ extension.
 
 The integration-test phase

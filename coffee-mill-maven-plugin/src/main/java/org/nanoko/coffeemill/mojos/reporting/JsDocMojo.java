@@ -22,7 +22,7 @@ import java.io.File;
 import static org.nanoko.java.NPM.npm;
 
 /**
- * Minifying Js files.
+ * Create JsDoc for project.
  */
 @Mojo(name = "documentation-javascript", threadSafe = false,
         requiresDependencyResolution = ResolutionScope.TEST,
@@ -35,7 +35,7 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     
     public String inputFilename = null;
     
-    @Parameter(defaultValue="false")
+    @Parameter(defaultValue="true")
 	protected boolean skipJsDocumentation;
     
     private NPM jsdoc;
