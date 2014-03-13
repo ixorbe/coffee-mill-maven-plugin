@@ -43,13 +43,6 @@ public class JasmineMojo extends AbstractCoffeeMillMojo {
 	@Parameter(defaultValue="false")
     protected boolean skipJasmineTest;
 
-    /**
-     * The list in order of the javascript file to include.
-     * This list is shared with the javascript aggregation.
-     */
-	@Parameter
-    protected List<String> javascriptAggregation;
-
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (isSkipped()) {
@@ -87,7 +80,7 @@ public class JasmineMojo extends AbstractCoffeeMillMojo {
 
         try {
             TestMojo testMojo = new TestMojo();
-            JasmineUtils.prepareJasmineMojo(this, testMojo, javascriptAggregation);
+            JasmineUtils.prepareJasmineMojo(this, testMojo, getJsAggregationFiles());
             testMojo.execute();
         } finally {
             File report = new File(JasmineUtils.getJasmineDirectory(project), JasmineUtils.TEST_JASMINE_XML);

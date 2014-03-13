@@ -95,12 +95,12 @@ public class JasmineRunnerGenerator {
             }
 
             // Sources
-            /*
-            if (mojo.javascriptAggregation != null) {
-                for (String s : mojo.javascriptAggregation) {
+            
+            if (mojo.getJsAggregationFiles() != null) {
+                for (String s : mojo.getJsAggregationFiles()) {
                     set.add("/" + s);
                 }
-            } else {*/
+            } else {
                 for (File f : FileUtils.listFiles(mojo.getWorkDirectory(), new String[] {"js"}, true)) {
                     String path = f.getAbsolutePath().substring(mojo.getWorkDirectory().getAbsolutePath().length());
                     if (path.startsWith("/")) {
@@ -109,7 +109,7 @@ public class JasmineRunnerGenerator {
                         set.add("/" + path);
                     }
                 }
-           /* }*/
+            }
 
             // Specs
             for (File f : FileUtils.listFiles(mojo.getWorkTestDirectory(), new String[] {"js"}, true)) {

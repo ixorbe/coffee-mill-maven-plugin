@@ -33,6 +33,13 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     
     private NPM coffee;
     
+    private File defaultOutputDirectory;
+    
+    public void setDefaultOutputDirectory(File outputDirectory){
+        this.defaultOutputDirectory = outputDirectory;
+    }
+    
+            
     // Getters / Setters
     public File getCoffeeScriptDir() {
     	this.coffeeScriptDir.mkdirs();
@@ -49,6 +56,12 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     		return; 
     	}
     	
+    	if(this.defaultOutputDirectory==null){
+    	    
+    	    this.defaultOutputDirectory = this.getWorkDirectory();
+    	}
+    	getLog().info("defaultOutputDirectory : "+this.defaultOutputDirectory);
+    	
     	if (!this.coffeeScriptDir.isDirectory()){
         	getLog().warn("/!\\ CoffeeScript compilation skipped - " + coffeeScriptDir.getAbsolutePath() + " does not exist !");
         	return;
@@ -57,7 +70,7 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     	coffee = npm(new MavenLoggerWrapper(this.getLog()), COFFEE_SCRIPT_NPM_NAME, COFFEE_SCRIPT_NPM_VERSION);
 
         getLog().info("Get CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
-        invokeCoffeeScriptCompilerForDirectory(this.coffeeScriptDir, getWorkDirectory());
+        invokeCoffeeScriptCompilerForDirectory(this.coffeeScriptDir, defaultOutputDirectory);
 
     }
 
