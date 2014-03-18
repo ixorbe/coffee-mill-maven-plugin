@@ -55,7 +55,7 @@
                 
                     
                   <li id="publishDate">Last Published: 2014-03-18</li>
-                  <li class="divider">|</li> <li id="projectVersion">Version: 1.1.1</li>
+                  <li class="divider">|</li> <li id="projectVersion">Version: 1.1.2-SNAPSHOT</li>
                       
                 
                     
@@ -273,11 +273,41 @@
 <th>File</th>
 <th>Line</th></tr>
 <tr class="b">
+<td>org/nanoko/coffeemill/mojos/stylesheets/css/CssAggregatorMojo.java</td>
+<td><a href="./xref/org/nanoko/coffeemill/mojos/stylesheets/css/CssAggregatorMojo.html#121">121</a></td></tr>
+<tr class="a">
+<td>org/nanoko/coffeemill/mojos/stylesheets/css/CssAggregatorMojo.java</td>
+<td><a href="./xref/org/nanoko/coffeemill/mojos/stylesheets/css/CssAggregatorMojo.html#146">146</a></td></tr>
+<tr class="b"><td colspan='2'>
+<div>
+<pre>        joinFiles(output, files);
+        if(output.exists() &amp;&amp; project != null) {
+            try {
+                File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + &quot;.css&quot;);
+                getLog().info(&quot;Copying &quot; + output.getAbsolutePath() + &quot; to the &quot; + artifact.getAbsolutePath());
+                FileUtils.copyFile(output, artifact, true);
+                project.getArtifact().setFile(artifact);
+            } catch (IOException e) {
+                this.getLog().error(&quot;Error while attaching js to project&quot;,e);
+            }
+        }
+        if(projectHelper != null ){
+            projectHelper.attachArtifact(project, &quot;css&quot;, output); // &quot;css&quot; -&gt; type (not classifier)
+        }
+        return true;
+    }
+
+    private boolean aggregateAppOnly(File output) throws WatchingException {</pre></div></td></tr></table>
+<table border="0" class="table table-striped">
+<tr class="a">
+<th>File</th>
+<th>Line</th></tr>
+<tr class="b">
 <td>org/nanoko/coffeemill/mojos/scripts/js/JsAggregatorMojo.java</td>
-<td><a href="./xref/org/nanoko/coffeemill/mojos/scripts/js/JsAggregatorMojo.html#116">116</a></td></tr>
+<td><a href="./xref/org/nanoko/coffeemill/mojos/scripts/js/JsAggregatorMojo.html#118">118</a></td></tr>
 <tr class="a">
 <td>org/nanoko/coffeemill/mojos/scripts/js/JsAggregatorMojo.java</td>
-<td><a href="./xref/org/nanoko/coffeemill/mojos/scripts/js/JsAggregatorMojo.html#138">138</a></td></tr>
+<td><a href="./xref/org/nanoko/coffeemill/mojos/scripts/js/JsAggregatorMojo.html#140">140</a></td></tr>
 <tr class="b"><td colspan='2'>
 <div>
 <pre>        joinFiles(output, files);

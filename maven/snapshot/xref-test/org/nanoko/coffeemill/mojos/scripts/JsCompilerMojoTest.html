@@ -41,8 +41,8 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../org/nanoko/coffeemill/mojos/scripts/JsCompilerMojoTest.html">JsCompilerMojoTest</a> {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File jsSourceTestDir = <strong class="jxr_keyword">new</strong> File(<span class="jxr_string">"src/test/resources/js"</span>);
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String testDir = <span class="jxr_string">"target/test/JSCompilerMojoTest"</span>;
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File workDir = <strong class="jxr_keyword">new</strong> File(testDir, <span class="jxr_string">"tmp"</span>);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String testDir = <span class="jxr_string">"target/test/JsCompilerMojoTest"</span>;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> File workDir = <strong class="jxr_keyword">new</strong> File(testDir, <span class="jxr_string">"www"</span>);
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> JsCompilerMojo mojo;
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Before
@@ -58,19 +58,19 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>      	System.out.println(<span class="jxr_string">"\n ==&gt; Should copy 2 files \&quot;test.js\&quot;, \&quot;test2.js\&quot; from "</span>+<strong class="jxr_keyword">this</strong>.jsSourceTestDir+<span class="jxr_string">" to "</span>+<strong class="jxr_keyword">this</strong>.workDir);     
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      	<strong class="jxr_keyword">this</strong>.mojo.execute();    	
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>      	<em class="jxr_comment">//assertTrue(new File(this.mojo.getWorkDirectory(), "test.js").exists());</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>      	<em class="jxr_comment">//assertTrue(new File(this.mojo.getWorkDirectory(), "test2.js").exists());</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>      }
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>      
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>      	assertTrue(<strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory(), <span class="jxr_string">"sample/test.js"</span>).exists());
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>      	assertTrue(<strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory(), <span class="jxr_string">"sample/test2.js"</span>).exists());
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      	assertTrue(<strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory(), <span class="jxr_string">"h-ubu.js"</span>).exists());
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>      }
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>      
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      @Test
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSkippedJavaScriptCompilationBecauseOfEmptyFolder() <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException {    	    	
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      	System.out.println(<span class="jxr_string">"\n ==&gt; Should copy nothing : Empty Folder."</span>);
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>      	<strong class="jxr_keyword">this</strong>.mojo.setJavaScriptDir(<strong class="jxr_keyword">new</strong> File(jsSourceTestDir, <span class="jxr_string">"empty"</span>));
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      	<strong class="jxr_keyword">this</strong>.mojo.execute();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>      	
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>      	<em class="jxr_comment">//assertTrue( this.mojo.getWorkDirectory().isDirectory()</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>      		<em class="jxr_comment">//	&amp;&amp; this.mojo.getWorkDirectory().list().length==0 );</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      @Test
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSkippedJavaScriptCompilationBecauseOfEmptyFolder() <strong class="jxr_keyword">throws</strong> MojoExecutionException, MojoFailureException {    	    	
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>      	System.out.println(<span class="jxr_string">"\n ==&gt; Should copy nothing : Empty Folder."</span>);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>      	<strong class="jxr_keyword">this</strong>.mojo.setJavaScriptDir(<strong class="jxr_keyword">new</strong> File(jsSourceTestDir, <span class="jxr_string">"empty"</span>));
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>      	<strong class="jxr_keyword">this</strong>.mojo.execute();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>      	
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      	assertTrue( <strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory().isDirectory()	&amp;&amp; <strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory().list().length==0 );
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>      }
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>      
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      
