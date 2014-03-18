@@ -33,8 +33,8 @@ import org.nanoko.coffeemill.mojos.scripts.js.JsCompilerMojo;
 public class JsCompilerMojoTest {
 	
 	private final File jsSourceTestDir = new File("src/test/resources/js");
-	private final String testDir = "target/test/JSCompilerMojoTest";
-	private final File workDir = new File(testDir, "tmp");
+	private final String testDir = "target/test/JsCompilerMojoTest";
+	private final File workDir = new File(testDir, "www");
 	private JsCompilerMojo mojo;
 	
 	@Before
@@ -50,8 +50,9 @@ public class JsCompilerMojoTest {
     	System.out.println("\n ==> Should copy 2 files \"test.js\", \"test2.js\" from "+this.jsSourceTestDir+" to "+this.workDir);     
     	this.mojo.execute();    	
 
-    	//assertTrue(new File(this.mojo.getWorkDirectory(), "test.js").exists());
-    	//assertTrue(new File(this.mojo.getWorkDirectory(), "test2.js").exists());
+    	assertTrue(new File(this.mojo.getWorkDirectory(), "sample/test.js").exists());
+    	assertTrue(new File(this.mojo.getWorkDirectory(), "sample/test2.js").exists());
+    	assertTrue(new File(this.mojo.getWorkDirectory(), "h-ubu.js").exists());
     }
     
     
@@ -61,8 +62,7 @@ public class JsCompilerMojoTest {
     	this.mojo.setJavaScriptDir(new File(jsSourceTestDir, "empty"));
     	this.mojo.execute();
     	
-    	//assertTrue( this.mojo.getWorkDirectory().isDirectory()
-    		//	&& this.mojo.getWorkDirectory().list().length==0 );
+    	assertTrue( this.mojo.getWorkDirectory().isDirectory()	&& this.mojo.getWorkDirectory().list().length==0 );
     }
     
     

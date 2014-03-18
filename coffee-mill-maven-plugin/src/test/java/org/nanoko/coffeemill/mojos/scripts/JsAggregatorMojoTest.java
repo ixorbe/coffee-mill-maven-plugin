@@ -68,7 +68,7 @@ public class JsAggregatorMojoTest {
     	this.mojo.execute();    	
     	assertTrue(new File(this.mojo.getWorkDirectory(), "test.js").exists());
     	assertTrue(new File(this.mojo.getWorkDirectory(), "test2.js").exists());
-    	assertTrue(new File(this.mojo.getBuildDirectory(), this.mojo.getDefaultOutputFilename()+".js").exists());
+    	assertTrue(new File(this.mojo.getWorkDirectory(), this.mojo.getDefaultOutputFilename()+".js").exists());
     }
     
     

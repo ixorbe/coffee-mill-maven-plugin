@@ -16,6 +16,7 @@ import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
 import org.nanoko.maven.WatchingException;
 
 import java.io.File;
+import java.io.IOException;
 
 
 import static org.nanoko.java.NPM.npm;
@@ -32,6 +33,8 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String PKG_NPM_NAME = "uglify-js";
     public static final String PKG_NPM_VERSION = "2.4.12";
 
+    public String inputFilename = null;
+    
     private NPM ugly;
 
 
@@ -72,24 +75,28 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     private boolean compile() throws WatchingException {
         getLog().info("Js Minification Compilation");
 
-        if(this.project.getArtifactId() != null) {
-            this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
+        if(this.inputFilename == null) {
+            this.inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
         }
-
-        boolean res = minify(this.getDefaultOutputFilename()+"-all");
-        boolean res2 = minify(this.getDefaultOutputFilename());
-        return res || res2;
+        
+        boolean res = minify(this.inputFilename);
+        //boolean res2 = minify(this.inputFilename+"-all");
+        //return res || res2;
+        return res;
+        
     }
 
     private boolean minify( String baseName) throws WatchingException {
         // check if input is valid
-        File input = new File( this.getBuildDirectory(), baseName+".js");
+        //File input = new File( this.getBuildDirectory(), baseName+".js");
+        File input = new File( this.getWorkDirectory(), baseName+".js");
         if(!input.exists()) {
             return false;
         }
 
         // if output exist, delete it
-        File output = new File( this.getBuildDirectory(), baseName+"-min.js");
+        //File output = new File( this.getBuildDirectory(), baseName+"-min.js");
+        File output = new File( this.getWorkDirectory(), baseName+"-min.js");
         if(output.exists()) {
             FileUtils.deleteQuietly(output);
         }
@@ -101,8 +108,18 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
         } else {
-            if(projectHelper != null && !baseName.contains("all") ){
+            /*if(projectHelper != null && !baseName.contains("all") ){
                 projectHelper.attachArtifact(project, "js", "min", output);
+            }*/
+            if(project!=null){
+                try {
+                    File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + "-min.js");
+                    getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
+                    FileUtils.copyFile(output, artifact, true);
+                    project.getArtifact().setFile(artifact);
+                } catch (IOException e) {
+                    this.getLog().error("Error while attaching js to project",e);
+                }
             }
         }
         return true;

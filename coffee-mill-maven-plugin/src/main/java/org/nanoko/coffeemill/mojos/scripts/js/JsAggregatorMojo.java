@@ -80,7 +80,9 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
             this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
         }
 
-        File output = new File( this.getBuildDirectory(), this.getDefaultOutputFilename() + ".js");
+        //File output = new File( this.getBuildDirectory(), this.getDefaultOutputFilename() + ".js");
+        File output = new File( this.getWorkDirectory(), this.getDefaultOutputFilename() + ".js");
+        
         if(output.exists()) {
             FileUtils.deleteQuietly(output); 
         }

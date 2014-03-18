@@ -23,6 +23,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.stylesheets.css.CssAggregatorMojo;
+import org.openqa.selenium.internal.seleniumemulation.GetBodyText;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,8 +56,8 @@ public class CssAggregatorMojoTest {
 	
 	
     @Test
-    public void testCssCompilation() {
-        System.out.println("It should aggregate");
+    public void testCssCompilation() throws MojoExecutionException {
+        System.out.println("==> It should aggregate");
         
         CssAggregatorMojo mojo = new CssAggregatorMojo();
         mojo.setWorkDirectory( testWorkDir );
@@ -64,15 +65,12 @@ public class CssAggregatorMojoTest {
         mojo.setLibDirectory(this.libDir);
         
         mojo.outputFileName = "test.aggregate";
-        try {
-			mojo.execute();
-		} catch (MojoExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        assertTrue(new File(testBuildDir, "test.aggregate.css").exists());
+        mojo.execute();
+        
+        assertTrue(new File(mojo.getWorkDirectory(), "test.aggregate.css").exists());
     }
     
+    /*
     @After
     public void cleanTestDirectory(){
         //clean output
@@ -80,5 +78,5 @@ public class CssAggregatorMojoTest {
         	FileUtils.deleteQuietly(testBuildDir);
         if (testWorkDir.exists())
         	FileUtils.deleteQuietly(testWorkDir);
-    }
+    }*/
 }

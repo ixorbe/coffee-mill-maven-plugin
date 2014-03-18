@@ -80,7 +80,8 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
             this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
         }
 
-        File output = new File( this.getBuildDirectory(), this.outputFileName + ".css");
+        //File output = new File( this.getBuildDirectory(), this.outputFileName + ".css");
+        File output = new File( this.getWorkDirectory(), this.outputFileName + ".css");
         if(output.exists()) {
             FileUtils.deleteQuietly(output);   
         }    	
@@ -118,6 +119,16 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         }
 
         joinFiles(output, files);
+        if(output.exists() && project != null) {
+            try {
+                File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + ".css");
+                getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
+                FileUtils.copyFile(output, artifact, true);
+                project.getArtifact().setFile(artifact);
+            } catch (IOException e) {
+                this.getLog().error("Error while attaching js to project",e);
+            }
+        }
         if(projectHelper != null ){
             projectHelper.attachArtifact(project, "css", output); // "css" -> type (not classifier)
         }
@@ -133,6 +144,16 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         getLog().info("Aggregate Css files from " + this.getWorkDirectory().getAbsolutePath());
 
         joinFiles(output, files);
+        if(output.exists() && project != null) {
+            try {
+                File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + ".css");
+                getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
+                FileUtils.copyFile(output, artifact, true);
+                project.getArtifact().setFile(artifact);
+            } catch (IOException e) {
+                this.getLog().error("Error while attaching js to project",e);
+            }
+        }
         if(projectHelper != null ){
             projectHelper.attachArtifact(project, "css", output);// "css" -> type (not classifier)
         }

@@ -16,6 +16,7 @@ import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
 import org.nanoko.maven.WatchingException;
 
 import java.io.File;
+import java.io.IOException;
 
 
 import static org.nanoko.java.NPM.npm;
@@ -75,20 +76,23 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
             this.inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
         }
 
-        boolean res = minify(this.inputFilename+"-all");
-        boolean res2 = minify(this.inputFilename);
-        return res || res2;
+        boolean res = minify(this.inputFilename);
+        //boolean res2 = minify(this.inputFilename+"-all");
+        //return res || res2;
+        return res;
     }
 
     private boolean minify( String baseName) throws WatchingException {
         // check if input is valid
-        File input = new File( this.getBuildDirectory(), baseName+".css");
+        //File input = new File( this.getBuildDirectory(), baseName+".css");
+        File input = new File( this.getWorkDirectory(), baseName+".css");
         if(!input.exists()) {
             return false;
         }
 
         // if output exist, delete it
-        File output = new File( this.getBuildDirectory(),baseName+"-min.css");
+        //File output = new File( this.getBuildDirectory(),baseName+"-min.css");
+        File output = new File( this.getWorkDirectory(),baseName+"-min.css");
         if(output.exists()) {
             FileUtils.deleteQuietly(output);
         }
@@ -100,8 +104,18 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");
         }else {
-            if(projectHelper != null && !baseName.contains("all") ){
+            /*if(projectHelper != null && !baseName.contains("all") ){
                 projectHelper.attachArtifact(project, "css", "min", output);
+            }*/
+            if(project!=null){
+                try {
+                    File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + "-min.css");
+                    getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
+                    FileUtils.copyFile(output, artifact, true);
+                    project.getArtifact().setFile(artifact);
+                } catch (IOException e) {
+                    this.getLog().error("Error while attaching js to project",e);
+                }
             }
         }
         return true;
