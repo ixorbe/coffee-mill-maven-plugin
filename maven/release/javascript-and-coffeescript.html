@@ -175,7 +175,7 @@
   
 <li>Maven dependencies using the <i>js</i> type are preloaded.</li>
   
-<li>JavaScript / CoffeeScript files are loaded using the order defined in the <tt>javascriptAggregation</tt> parameter (as below). If not defined, the sources are loaded in the alphabetical order.</li>
+<li>JavaScript / CoffeeScript files are loaded using the order defined in the <tt>jsAggregationFiles</tt> parameter (as below). If not defined, the sources are loaded in the alphabetical order.</li>
   
 <li>The specifications are loaded</li>
 </ul>
@@ -187,18 +187,18 @@
     &lt;version&gt;1.1.1&lt;/version&gt;
     &lt;extensions&gt;true&lt;/extensions&gt;
     &lt;configuration&gt;
-        &lt;javascriptAggregation&gt;
+        &lt;jsAggregationFiles&gt;
             &lt;file&gt;SyndicationService&lt;/file&gt;
             &lt;file&gt;FeedEntry&lt;/file&gt;
             &lt;file&gt;FeedReader&lt;/file&gt;
-        &lt;/javascriptAggregation&gt;
+        &lt;/jsAggregationFiles&gt;
     &lt;/configuration&gt;
 &lt;/plugin&gt;
 </pre></div>
 <p>Test can be run using <tt>mvn test</tt>.</p></div>
 <div class="section">
 <h2>Aggregating JavaScript files<a name="Aggregating_JavaScript_files"></a></h2>
-<p>JavaScript and CoffeeScript files can be aggregated into one file. Dependencies can also be included too. Generally, the order is important, so has to be specified using the <tt>javascriptAggregation</tt> parameter.</p>
+<p>JavaScript and CoffeeScript files can be aggregated into one file. Dependencies can also be included too. Generally, the order is important, so has to be specified using the <tt>jsAggregationFiles</tt> parameter.</p>
 <p>Dependencies are included using their <tt>artifactId</tt>:</p>
 
 <div class="source">
@@ -208,10 +208,10 @@
     &lt;version&gt;1.1.1&lt;/version&gt;
     &lt;extensions&gt;true&lt;/extensions&gt;
     &lt;configuration&gt;
-        &lt;javascriptAggregation&gt;
+        &lt;jsAggregationFiles&gt;
             &lt;file&gt;syndication-service&lt;/file&gt; &lt;!-- This is a dependency, we use the artifact id --&gt;
             &lt;file&gt;FeedReaderImpl.js&lt;/file&gt;
-        &lt;/javascriptAggregation&gt;
+        &lt;/jsAggregationFiles&gt;
     &lt;/configuration&gt;
 &lt;/plugin&gt;
 </pre></div></div>
@@ -244,9 +244,9 @@
     &lt;version&gt;1.1.1&lt;/version&gt;
     &lt;extensions&gt;true&lt;/extensions&gt;
     &lt;configuration&gt;
-        &lt;javascriptAggregation&gt;
+        &lt;jsAggregationFiles&gt;
             ...
-        &lt;/javascriptAggregation&gt;
+        &lt;/jsAggregationFiles&gt;
         &lt;skipJsCompilation&gt;true&lt;/skipCompilation&gt;
         &lt;skipJsAggregation&gt;true&lt;/skipAggregation&gt;
         &lt;skipJsMinification&gt;true&lt;/skipMinification&gt;
@@ -266,10 +266,10 @@
     &lt;version&gt;1.1.1&lt;/version&gt;
     &lt;extensions&gt;true&lt;/extensions&gt;
     &lt;configuration&gt;
-        &lt;javascriptAggregation&gt;
+        &lt;jsAggregationFiles&gt;
             &lt;file&gt;syndication-service&lt;/file&gt; &lt;!-- This is a dependency, we use the artifact id --&gt;
             &lt;file&gt;FeedReaderImpl.js&lt;/file&gt;
-        &lt;/javascriptAggregation&gt;
+        &lt;/jsAggregationFiles&gt;
         &lt;javaScriptIntegrationTestDir&gt;src/test/js&lt;/javaScriptIntegrationTestDir&gt;
     &lt;/configuration&gt;
 &lt;/plugin&gt;
