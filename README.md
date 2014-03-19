@@ -35,3 +35,7 @@ The documentation is available on:
 License
 -------
 This plugin is licensed under the Apache License 2.0. The project is part of the _nanoko_ initiative.
+
+Issues Tracker
+--------------
+Follow project issues on our JIRA instance : https://ubidreams.atlassian.net/browse/NANOKO/component/10101
