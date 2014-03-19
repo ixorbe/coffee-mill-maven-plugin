@@ -46,7 +46,7 @@ During the _test_ phase, all specs are executed againt your CoffeeScript and Jav
 The JavaScript files are loaded in the following order:
 
 * Maven dependencies using the _js_ type are preloaded.
-* JavaScript / CoffeeScript files are loaded using the order defined in the `javascriptAggregation` parameter (as below). If not defined, the sources are loaded in the alphabetical order.
+* JavaScript / CoffeeScript files are loaded using the order defined in the `jsAggregationFiles` parameter (as below). If not defined, the sources are loaded in the alphabetical order.
 * The specifications are loaded
 
 
@@ -56,11 +56,11 @@ The JavaScript files are loaded in the following order:
         <version>${project.version}</version>
         <extensions>true</extensions>
         <configuration>
-            <javascriptAggregation>
+            <jsAggregationFiles>
                 <file>SyndicationService</file>
                 <file>FeedEntry</file>
                 <file>FeedReader</file>
-            </javascriptAggregation>
+            </jsAggregationFiles>
         </configuration>
     </plugin>
 
@@ -71,7 +71,7 @@ Aggregating JavaScript files
 ------------------------------------------------
 
 JavaScript and CoffeeScript files can be aggregated into one file. Dependencies can also be included too.
-Generally, the order is important, so has to be specified using the `javascriptAggregation` parameter.
+Generally, the order is important, so has to be specified using the `jsAggregationFiles` parameter.
 
 Dependencies are included using their `artifactId`:
 
@@ -81,10 +81,10 @@ Dependencies are included using their `artifactId`:
         <version>${project.version}</version>
         <extensions>true</extensions>
         <configuration>
-            <javascriptAggregation>
+            <jsAggregationFiles>
                 <file>syndication-service</file> <!-- This is a dependency, we use the artifact id -->
                 <file>FeedReaderImpl.js</file>
-            </javascriptAggregation>
+            </jsAggregationFiles>
         </configuration>
     </plugin>
 
@@ -115,9 +115,9 @@ You can include those variables in pom.xml file to enabled/disabled the wanted p
         <version>${project.version}</version>
         <extensions>true</extensions>
         <configuration>
-            <javascriptAggregation>
+            <jsAggregationFiles>
                 ...
-            </javascriptAggregation>
+            </jsAggregationFiles>
             <skipJsCompilation>true</skipCompilation>
             <skipJsAggregation>true</skipAggregation>
             <skipJsMinification>true</skipMinification>
@@ -143,10 +143,10 @@ placed in the `src/integration-test/js` directory. However this can be changed t
         <version>${project.version}</version>
         <extensions>true</extensions>
         <configuration>
-            <javascriptAggregation>
+            <jsAggregationFiles>
                 <file>syndication-service</file> <!-- This is a dependency, we use the artifact id -->
                 <file>FeedReaderImpl.js</file>
-            </javascriptAggregation>
+            </jsAggregationFiles>
             <javaScriptIntegrationTestDir>src/test/js</javaScriptIntegrationTestDir>
         </configuration>
     </plugin>

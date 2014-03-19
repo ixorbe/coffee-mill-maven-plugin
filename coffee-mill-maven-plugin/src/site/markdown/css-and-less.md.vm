@@ -36,7 +36,7 @@ Aggregating CSS files
 ---------------------
 
 CSS files and the output of the Less files can be aggregated within one file. Like for JavaScript,
-the order may matter, so you can configure it using the `cssAggregation` parameter. If not set the files are
+the order may matter, so you can configure it using the `cssAggregationFiles` parameter. If not set the files are
 aggregated using the alphabetical order.
 
     <plugin>
@@ -45,10 +45,10 @@ aggregated using the alphabetical order.
         <version>${project.version}</version>
         <extensions>true</extensions>
         <configuration>
-            <cssAggregation>
+            <cssAggregationFiles>
                 <file>style.css</file>
                 <file>my-site.css</file> <!-- Generated form my-site.less or my-site.scss -->
-            </cssAggregation>
+            </cssAggregationFiles>
         </configuration>
     </plugin>
 
@@ -81,9 +81,9 @@ You can include those variables in pom.xml file to enabled/disabled the wanted p
         <version>${project.version}</version>
         <extensions>true</extensions>
         <configuration>
-            <javascriptAggregation>
+            <jsAggregationFiles>
                 ...
-            </javascriptAggregation>
+            </jsAggregationFiles>
             <skipCssCompilation>true</skipCompilation>
             <skipCssAggregation>true</skipAggregation>
             <skipCssMinification>true</skipMinification>
