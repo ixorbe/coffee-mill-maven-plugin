@@ -13,30 +13,30 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.LifecyclePhase;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.Mojo;
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.apache.maven.plugins.annotations.ResolutionScope;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.nanoko.maven.WatchingException;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> java.io.File;
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> java.util.Collection;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> * Compiles JavaScript Test files.</em>
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;It compiles (checks) JavaScript files from src/test/js.&lt;/ol&gt;</em>
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;It copies these JavaScript files into work directory target/www-test.&lt;/ol&gt;</em>
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * &lt;p/&gt;</em>
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * This mojo makes the assumption that the files are already copied/generated to their destination directory,</em>
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * when it is executed.</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  @Mojo(name = <span class="jxr_string">"test-compile-javascript"</span>, threadSafe = false,
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  requiresDependencyResolution = ResolutionScope.COMPILE,
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  requiresProject = <strong class="jxr_keyword">true</strong>,
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  defaultPhase = LifecyclePhase.COMPILE)
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/nanoko/coffeemill/mojos/scripts/js/JsTestCompilerMojo.html">JsTestCompilerMojo</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../org/nanoko/coffeemill/mojos/AbstractCoffeeMillMojo.html">AbstractCoffeeMillMojo</a> {
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.nanoko.coffeemill.utils.FSUtils;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.nanoko.maven.WatchingException;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> java.util.Collection;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * Compiles JavaScript Test files.</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;It compiles (checks) JavaScript files from src/test/js.&lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;It copies these JavaScript files into work directory target/www-test.&lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * &lt;p/&gt;</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * This mojo makes the assumption that the files are already copied/generated to their destination directory,</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * when it is executed.</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  @Mojo(name = <span class="jxr_string">"test-compile-javascript"</span>, threadSafe = false,
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  requiresDependencyResolution = ResolutionScope.COMPILE,
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  requiresProject = <strong class="jxr_keyword">true</strong>,
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  defaultPhase = LifecyclePhase.TEST_COMPILE)
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../org/nanoko/coffeemill/mojos/scripts/js/JsTestCompilerMojo.html">JsTestCompilerMojo</a> <strong class="jxr_keyword">extends</strong> <a href="../../../../../../org/nanoko/coffeemill/mojos/AbstractCoffeeMillWatcherMojo.html">AbstractCoffeeMillWatcherMojo</a> {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> execute() <strong class="jxr_keyword">throws</strong> MojoExecutionException {    	
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>          <strong class="jxr_keyword">if</strong>(isSkipped()) { 
@@ -63,27 +63,57 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>                  <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> MojoExecutionException(<span class="jxr_string">"Error during execute() on JsTestCompilerMojo : cannot copy"</span>, e);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>              }    		
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>          }   
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>      }        
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> copy(File f) <strong class="jxr_keyword">throws</strong> WatchingException {
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>          getLog().info(<span class="jxr_string">"Copy JavaScript files from "</span> + <strong class="jxr_keyword">this</strong>.getJavaScriptTestDir().getAbsolutePath());
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>              FileUtils.copyFileToDirectory(f, <strong class="jxr_keyword">this</strong>.getWorkTestDirectory());
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>          } <strong class="jxr_keyword">catch</strong> (IOException e) { 
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/nanoko/maven/WatchingException.html">WatchingException</a>(<span class="jxr_string">"Error during copy JavaScript files."</span>, e); 
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>          }
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>      }    
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSkipped(){
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">if</strong> (skipJsTestCompilation) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>              getLog().info(<span class="jxr_string">"\033[31m JS Test Compilation skipped \033[37m"</span>);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>              <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>          } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>              <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>          }
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>      }
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  }
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>      }    
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>      
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> accept(File file) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          System.out.println(<span class="jxr_string">"JSTestCompiler accept"</span>);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          <strong class="jxr_keyword">return</strong> !isSkipped()
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>                  &amp;&amp; file.getParent().contains( getJavaScriptTestDir().getAbsolutePath() )
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>                  &amp;&amp; FSUtils.hasExtension(file, <span class="jxr_string">"js"</span>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>      }
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> fileCreated(File file) <strong class="jxr_keyword">throws</strong> WatchingException {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          <strong class="jxr_keyword">this</strong>.copy(file);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>      }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> fileUpdated(File file) <strong class="jxr_keyword">throws</strong> WatchingException {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>          System.out.println(<span class="jxr_string">"JSTestCompiler fileUpdated"</span>);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">if</strong>(fileDeleted(file)) {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>              <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.fileCreated(file);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>              <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          }
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>      }
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> fileDeleted(File file) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>          File deleted = FSUtils.computeRelativeFile(file, <strong class="jxr_keyword">this</strong>.getJavaScriptTestDir(), getWorkTestDirectory());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">if</strong> (deleted.isFile()){
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>              getLog().info(<span class="jxr_string">"Deleting File : "</span>+file.getName());       
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>              FileUtils.deleteQuietly(deleted); 
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>          }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>      }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> copy(File f) <strong class="jxr_keyword">throws</strong> WatchingException {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          getLog().info(<span class="jxr_string">"Copy JavaScript files from "</span> + <strong class="jxr_keyword">this</strong>.getJavaScriptTestDir().getAbsolutePath());
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>              FileUtils.copyFileToDirectory(f, <strong class="jxr_keyword">this</strong>.getWorkTestDirectory());
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          } <strong class="jxr_keyword">catch</strong> (IOException e) { 
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>              <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../../org/nanoko/maven/WatchingException.html">WatchingException</a>(<span class="jxr_string">"Error during copy JavaScript files."</span>, e); 
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>          }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>      }    
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSkipped(){
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>         <strong class="jxr_keyword">if</strong> (skipJsTestCompilation) {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>             getLog().info(<span class="jxr_string">"\033[31m JS Test Compilation skipped \033[37m"</span>);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a>         } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>             <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>         }
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>     }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> }
 </pre>
 <hr/>
 <div id="footer">Copyright &#169; 2012&#x2013;2014 <a href="http://ow2.org">OW2</a>. All rights reserved.</div>
