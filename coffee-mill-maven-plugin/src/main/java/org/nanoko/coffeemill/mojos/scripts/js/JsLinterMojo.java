@@ -10,9 +10,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.nanoko.java.NPM;
 
-import org.nanoko.coffeemill.utils.FSUtils;
 import org.nanoko.coffeemill.utils.MavenLoggerWrapper;
-import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
+import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
 
 import org.nanoko.maven.WatchingException;
 
@@ -29,7 +28,7 @@ import static org.nanoko.java.NPM.npm;
 requiresDependencyResolution = ResolutionScope.COMPILE,
 requiresProject = true,
 defaultPhase = LifecyclePhase.PACKAGE)
-public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
+public class JsLinterMojo extends AbstractCoffeeMillMojo {
 
     public static final String PKG_NPM_NAME = "jslint";
     public static final String PKG_NPM_VERSION = "0.2.11";
@@ -68,24 +67,6 @@ public class JsLinterMojo extends AbstractCoffeeMillWatcherMojo {
         } catch (WatchingException e) {
             throw new MojoExecutionException("Error during execute() on JsLinterMojo : cannot compile", e);
         }
-    }
-
-    public boolean accept(File file) {
-        return !isSkipped() && FSUtils.hasExtension(file, getScriptextensions());
-    }
-
-    public boolean fileCreated(File file) throws WatchingException {
-        compile(file);
-        return true;
-    }
-
-    public boolean fileUpdated(File file) throws WatchingException {
-        compile(file);
-        return true;
-    }
-
-    public boolean fileDeleted(File file) throws WatchingException{
-        return true;
     }
 
     private void compile(File f) throws WatchingException {
