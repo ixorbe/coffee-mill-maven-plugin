@@ -1,24 +1,19 @@
 package org.nanoko.coffeemill.mojos.scripts.coffee;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.nanoko.java.NPM;
+import org.nanoko.maven.WatchingException;
 
-import org.nanoko.coffeemill.utils.MavenLoggerWrapper;
-import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
-
+import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
 
 import java.io.File;
-import java.util.Collection;
-
-
-import static org.nanoko.java.NPM.npm;
 
 /**
  * Compiles coffeescript files.
  */
-public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
+public abstract class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public static final String COFFEE_SCRIPT_NPM_NAME = "coffee-script";
     public static final String COFFEE_SCRIPT_NPM_VERSION = "1.7.1";
@@ -30,17 +25,34 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     @Parameter(defaultValue= "src/main/coffee", required = true, readonly = true)
     protected File coffeeScriptDir;
     
+    /**
+     * Where are CoffeeScript files implementing tests.
+     */
+    @Parameter(defaultValue="src/test/coffee", required = true, readonly = true)
+    protected File coffeeScriptTestDir;
     
-    private NPM coffee;
+    /**
+     * Enables / Disables the coffeescript test compilation.
+     * Be aware that this property disables the compilation of test sources only.
+     */
+    @Parameter(defaultValue="false")
+    protected boolean skipCoffeeScriptTestCompilation;  
     
-    private File defaultOutputDirectory;
+    protected File defaultOutputDirectory;
     
-    public void setDefaultOutputDirectory(File outputDirectory){
-        this.defaultOutputDirectory = outputDirectory;
-    }
+    protected NPM coffee;    
     
             
     // Getters / Setters
+    public File getDefaultOutputDirectory(){
+        return this.defaultOutputDirectory;
+    }
+    
+    public void setDefaultOutputDirectory(File outputDirectory){
+        this.defaultOutputDirectory = outputDirectory;
+        this.defaultOutputDirectory.mkdirs();
+    }
+    
     public File getCoffeeScriptDir() {
     	this.coffeeScriptDir.mkdirs();
         return this.coffeeScriptDir;
@@ -49,32 +61,37 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
     public void setCoffeeScriptDir(File coffeescriptDir){
     	this.coffeeScriptDir = coffeescriptDir;
     }
-
     
-    public void execute() throws MojoExecutionException {    	
-    	if(isSkipped()) { 
-    		return; 
-    	}
-    	
-    	if(this.defaultOutputDirectory==null){
-    	    
-    	    this.defaultOutputDirectory = this.getWorkDirectory();
-    	}
-    	getLog().info("defaultOutputDirectory : "+this.defaultOutputDirectory);
-    	
-    	if (!this.coffeeScriptDir.isDirectory()){
-        	getLog().warn("/!\\ CoffeeScript compilation skipped - " + coffeeScriptDir.getAbsolutePath() + " does not exist !");
-        	return;
-        }
-    	
-    	coffee = npm(new MavenLoggerWrapper(this.getLog()), COFFEE_SCRIPT_NPM_NAME, COFFEE_SCRIPT_NPM_VERSION);
-
-        getLog().info("Get CoffeeScript files from " + this.coffeeScriptDir.getAbsolutePath());
-        invokeCoffeeScriptCompilerForDirectory(this.coffeeScriptDir, defaultOutputDirectory);
-
+    public File getCoffeeScriptTestDir() {
+        this.coffeeScriptTestDir.mkdirs();
+        return this.coffeeScriptTestDir;
+    }
+    
+    public void setCoffeeScriptTestDir(File coffeescriptTestDir){
+        this.coffeeScriptTestDir = coffeescriptTestDir;
+    }
+    
+    
+    public void execute() throws MojoExecutionException, MojoFailureException {    
+    }    
+    
+    public boolean accept(File file) {
+        return false;
+    }
+    
+    public boolean fileCreated(File file) throws WatchingException{
+        return false;
     }
 
+    public boolean fileUpdated(File file) throws WatchingException{
+        return false;
+    }
 
+    public boolean fileDeleted(File file) throws WatchingException{
+        return false;
+    }      
+    
+    
     protected void invokeCoffeeScriptCompiler(File input, File out) throws MojoExecutionException {
         int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(), input.getAbsolutePath());
         getLog().debug("CoffeeScript compilation exits with " + exit + " status");
@@ -87,8 +104,13 @@ public class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMillMojo {
         }
     }
     
+    @SuppressWarnings("unused")
     private boolean isSkipped(){
     	return false;
     }
+
+    
+
+
 
 }

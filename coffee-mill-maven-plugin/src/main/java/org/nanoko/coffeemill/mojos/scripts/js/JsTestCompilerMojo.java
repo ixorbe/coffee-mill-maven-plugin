@@ -5,7 +5,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.nanoko.coffeemill.mojos.AbstractCoffeeMillMojo;
+import org.nanoko.coffeemill.mojos.AbstractCoffeeMillWatcherMojo;
+import org.nanoko.coffeemill.utils.FSUtils;
 
 import org.nanoko.maven.WatchingException;
 
@@ -26,9 +27,8 @@ import java.util.Collection;
 @Mojo(name = "test-compile-javascript", threadSafe = false,
 requiresDependencyResolution = ResolutionScope.COMPILE,
 requiresProject = true,
-defaultPhase = LifecyclePhase.COMPILE)
-public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
-
+defaultPhase = LifecyclePhase.TEST_COMPILE)
+public class JsTestCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     public void execute() throws MojoExecutionException {    	
         if(isSkipped()) { 
@@ -55,7 +55,37 @@ public class JsTestCompilerMojo extends AbstractCoffeeMillMojo {
                 throw new MojoExecutionException("Error during execute() on JsTestCompilerMojo : cannot copy", e);
             }    		
         }   
-    }        
+    }    
+    
+    public boolean accept(File file) {
+        System.out.println("JSTestCompiler accept");
+        return !isSkipped()
+                && file.getParent().contains( getJavaScriptTestDir().getAbsolutePath() )
+                && FSUtils.hasExtension(file, "js");
+    }
+
+    public boolean fileCreated(File file) throws WatchingException {
+        this.copy(file);
+        return true;
+    }
+
+    public boolean fileUpdated(File file) throws WatchingException {
+        System.out.println("JSTestCompiler fileUpdated");
+        if(fileDeleted(file)) {
+            return this.fileCreated(file);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean fileDeleted(File file) {
+        File deleted = FSUtils.computeRelativeFile(file, this.getJavaScriptTestDir(), getWorkTestDirectory());
+        if (deleted.isFile()){
+            getLog().info("Deleting File : "+file.getName());       
+            FileUtils.deleteQuietly(deleted); 
+        }
+        return true;
+    }
 
     private void copy(File f) throws WatchingException {
         getLog().info("Copy JavaScript files from " + this.getJavaScriptTestDir().getAbsolutePath());

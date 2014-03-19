@@ -28,7 +28,6 @@ import org.nanoko.coffeemill.utils.JasmineUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 
 @Mojo(name = "jasmine-test", threadSafe = false,

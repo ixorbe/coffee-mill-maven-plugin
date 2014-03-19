@@ -16,12 +16,9 @@ import org.nanoko.coffeemill.utils.MavenLoggerWrapper;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 
-
-import java.io.IOException;
 
 /**
  * Watch mode Mojo
