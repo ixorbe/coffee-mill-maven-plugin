@@ -55,9 +55,13 @@ public class Pipeline {
         watcher = new FileAlterationMonitor(2000);
         watcher.setThreadFactory(new DefensiveThreadFactory("wisdom-pipeline-watcher", this.log));
         FileAlterationObserver srcObserver = new FileAlterationObserver(new File(baseDir, "src/main"), TrueFileFilter.INSTANCE);
-        PipelineWatcher listener = new PipelineWatcher(this);
-        srcObserver.addListener(listener);
+        FileAlterationObserver testObserver = new FileAlterationObserver(new File(baseDir, "src/test"), TrueFileFilter.INSTANCE);
+        PipelineWatcher srclistener = new PipelineWatcher(this);
+        PipelineWatcher testlistener = new PipelineWatcher(this);
+        srcObserver.addListener(srclistener);
+        testObserver.addListener(testlistener);
         watcher.addObserver(srcObserver);
+        watcher.addObserver(testObserver);
         try {
         	this.log.info("Start watching " + baseDir.getAbsolutePath());
             watcher.start();
