@@ -42,8 +42,7 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean accept(File file) {
-        return !isSkipped() 
-                //&& FSUtils.isInDirectory(file.getName(), this.stylesheetsDir)
+        return !isSkipped()
                 && file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
                 && FSUtils.hasExtension(file, "css");
     }

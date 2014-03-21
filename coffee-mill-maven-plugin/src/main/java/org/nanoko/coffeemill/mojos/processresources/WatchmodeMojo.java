@@ -98,7 +98,7 @@ public class WatchmodeMojo extends AbstractCoffeeMillMojo {
         releaseDirCtxHandler.setHandler(releaseDirHandler);
         
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] { workDirHandler,libDirHandler, releaseDirCtxHandler, workTestDirHandler, new JasmineHandler(this), new ResourceHandler() });
+        handlers.setHandlers(new Handler[] { workDirHandler,libDirHandler, workTestDirHandler, releaseDirCtxHandler, new JasmineHandler(this), new ResourceHandler() });
         server.setHandler(handlers);
     }    
 

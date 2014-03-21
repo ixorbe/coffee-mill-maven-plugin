@@ -29,8 +29,6 @@ defaultPhase = LifecyclePhase.PACKAGE)
 public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
-    
-
     @Parameter(defaultValue="true")
     protected boolean failedOnMissingFile;
 
@@ -61,7 +59,6 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
         this.aggregate();
         return true;
     }
-
 
     public boolean fileUpdated(File file) throws WatchingException {
         this.aggregate();

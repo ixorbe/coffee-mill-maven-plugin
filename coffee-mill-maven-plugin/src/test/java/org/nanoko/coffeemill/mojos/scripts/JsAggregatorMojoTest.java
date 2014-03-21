@@ -63,7 +63,7 @@ public class JsAggregatorMojoTest {
 	
     @Test
     public void testJavaScriptAggregation() throws MojoExecutionException {
-    	System.out.println("\n ==> Should aggregate 2 files \"test.js\" and \"test2.js\" from "+this.workDir +" to "+this.buildDir);
+    	System.out.println("\n ==> Should aggregate 2 files \"test.js\" and \"test2.js\" to "+this.workDir);
 
     	this.mojo.execute();    	
     	assertTrue(new File(this.mojo.getWorkDirectory(), "test.js").exists());

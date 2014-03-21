@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.stylesheets.css.CssCompilerMojo;
 
@@ -34,46 +35,43 @@ public class CssCompilerMojoTest {
 	private final File workDir = new File("target/test/CssCompilerMojoTest/www");
 	private final File stylesDir = new File("src/test/resources/stylesheets");
 	
+	private CssCompilerMojo mojo;
+	
+	@Before 
+    public void prepareTestDirectory()  {   
+        mojo = new CssCompilerMojo();
+        mojo.setWorkDirectory( workDir );
+        mojo.setStylesheetsDir(stylesDir);        
+    }
+	
 	
     @Test
-    public void testCssCompilation() {
+    public void testCssCompilation() throws MojoExecutionException{
         System.out.println("Should compile two css files");
 
-        CssCompilerMojo mojo = new CssCompilerMojo();
-        mojo.setStylesheetsDir(stylesDir);
-        mojo.setWorkDirectory(workDir);
-        try {
-			mojo.execute();
-		} catch (MojoExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
+		mojo.execute();
+        
+		Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
         assertTrue(files.size()==4);
     }
     
 	
     @Test
-    public void testCssCompilationNoSources() {
+    public void testCssCompilationNoSources() throws MojoExecutionException{
         System.out.println("Should compile nothing");
 
-        CssCompilerMojo mojo = new CssCompilerMojo();
         mojo.setStylesheetsDir(new File(stylesDir, "nowhere"));
-        mojo.setWorkDirectory(workDir);
-        try {
-			mojo.execute();
-		} catch (MojoExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		mojo.execute();
+		
         Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
         assertFalse(files.size() > 0);
     }
     
     @After
 	public void cleanTestDirectory() {
-        if (workDir.exists())
+        if (workDir.exists()){
         	FileUtils.deleteQuietly(workDir);
+        }
     }
     
 }

@@ -49,7 +49,7 @@ public class CssMinifierMojoTest {
 			//FileUtils.copyFileToDirectory( srcStyleFile , buildDir);
 			FileUtils.copyFileToDirectory( srcStyleFile , workDir);
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.mojo.getLog().error("Error during preparing CssMinifier Test directory", e);
 		}
     }
 	
@@ -58,7 +58,7 @@ public class CssMinifierMojoTest {
     public void testCssMinification() throws MojoExecutionException {
         System.out.println("It should minify the CSS");
        
-        mojo.inputFilename = "stuff";
+        mojo.setDefaultOutputFilename("stuff");
 		mojo.execute();
 		
         assertTrue(new File(mojo.getWorkDirectory(), "stuff-min.css").exists());
@@ -68,7 +68,7 @@ public class CssMinifierMojoTest {
     public void testCssMinificationWithNoSource() throws MojoExecutionException {
         System.out.println("It should abort the CSS minification");
 
-        mojo.inputFilename = "nofile";
+        mojo.setDefaultOutputFilename("nofile");
 		mojo.execute();
 		
         assertFalse(new File(mojo.getWorkDirectory(), "nofile-min.css").exists());

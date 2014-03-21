@@ -25,17 +25,20 @@ public class JsMinifierMojoTest {
     	this.mojo.setWorkDirectory(this.workdir);
     	
     	
-    	if(this.jsFileToMinify.exists())
+    	if(this.jsFileToMinify.exists()){
 			try {
 				FileUtils.copyFileToDirectory(this.jsFileToMinify, this.workdir);
-			} catch (IOException e) { e.printStackTrace(); } 
+			} catch (IOException e) { 
+			    e.printStackTrace(); 
+			} 
+    	}
     }
 	
 	//TODO: use Mockito to test if "this.project" exist (on JsMinifierMojo : compile() )
 	@Test
     public void testJavaScriptMinification() throws MojoExecutionException, MojoFailureException {  
     	System.out.println("\n ==> Should minify file \"h-ubu.js\" from "+this.workdir);
-    	mojo.inputFilename = "h-ubu";
+    	mojo.setDefaultOutputFilename("h-ubu");
     	this.mojo.execute();    	
 
     	assertTrue(new File(this.mojo.getWorkDirectory(), "h-ubu-min.js").exists());
@@ -44,8 +47,9 @@ public class JsMinifierMojoTest {
 	
 	@After
 	public void cleanTestDirectory() {
-		if(workdir.exists())
+		if(workdir.exists()){
 			FileUtils.deleteQuietly(workdir);
+		}
 	}
 	
 }

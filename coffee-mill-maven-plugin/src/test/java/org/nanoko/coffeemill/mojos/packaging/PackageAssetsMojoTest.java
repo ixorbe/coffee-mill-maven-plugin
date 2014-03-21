@@ -46,8 +46,9 @@ public class PackageAssetsMojoTest {
     
     @After
 	public void cleanTestDirectory() {
-		if(this.mojo.getBuildDirectory().exists())
+		if(this.mojo.getBuildDirectory().exists()){
 			FileUtils.deleteQuietly(this.mojo.getBuildDirectory());
+		}
 	}
     
 }

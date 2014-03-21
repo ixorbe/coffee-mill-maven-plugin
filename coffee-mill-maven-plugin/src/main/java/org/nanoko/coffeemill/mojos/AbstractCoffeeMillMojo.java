@@ -142,9 +142,7 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     
 
 
-    public List<String> getJsAggregationFiles() {
-        return jsAggregationFiles;
-    }
+    
 
     // SKIP BOOLEAN
     /**
@@ -202,7 +200,16 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     protected boolean skipPicturesOptimization;
 
 
-
+    
+    
+    /**
+     * Return aggregation files list
+     * @return jsAggregationFiles
+     */
+    public List<String> getJsAggregationFiles() {
+        return jsAggregationFiles;
+    }    
+    
     /**
      * Return output Filename
      * @return filename
@@ -226,7 +233,6 @@ public abstract class AbstractCoffeeMillMojo extends AbstractMojo {
     public NodeManager getNodeManager() {
         return this.node;
     }
-
 
     /**
      * Get Target directory (maven)

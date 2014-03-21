@@ -103,7 +103,6 @@ public class JasmineUtils {
 
     }
 
-    @SuppressWarnings("unchecked")
 	public static void extendJasmineMojoForIT(AbstractCoffeeMillMojo mill, AbstractJasmineMojo mojo,
                                                String reportName) {
         InjectionHelper.inject(mojo, AbstractJasmineMojo.class, "jasmineTargetDir",

@@ -56,8 +56,7 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     public boolean accept(File file) {
-        return !isSkipped() 
-                //&& FSUtils.isInDirectory(file.getName(), getStylesheetsDir())
+        return !isSkipped()
                 && file.getParent().contains( getStylesheetsDir().getAbsolutePath() )
                 && FSUtils.hasExtension(file, "scss");
     }

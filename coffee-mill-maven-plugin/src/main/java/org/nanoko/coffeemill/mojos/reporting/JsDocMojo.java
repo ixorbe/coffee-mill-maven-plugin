@@ -33,8 +33,6 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     public static final String PKG_NPM_NAME = "jsdoc";
     public static final String PKG_NPM_VERSION = "3.3.0-alpha4";
     
-    public String inputFilename = null;
-    
     @Parameter(defaultValue="true")
 	protected boolean skipJsDocumentation;
     
@@ -59,11 +57,11 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     }
 
     private void compile() throws WatchingException {
-    	if(inputFilename == null) {
-    		inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
+    	if(this.project!=null) {
+    		this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
     	}
     	
-    	File input = new File( this.getBuildDirectory(), inputFilename+".js");
+    	File input = new File( this.getBuildDirectory(), getDefaultOutputFilename() +".js");
     	if(!input.exists()) { 
     		return; 
     	}

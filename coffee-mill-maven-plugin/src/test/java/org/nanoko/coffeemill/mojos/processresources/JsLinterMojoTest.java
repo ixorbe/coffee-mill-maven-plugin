@@ -35,7 +35,7 @@ public class JsLinterMojoTest {
     	this.mojo.setWorkDirectory(testDir);
     	this.mojo.setBuildDirectory(testDir);
     	mylog = new TestableLoggerWrapper(this.mojo.getLog());
-    	this.mojo.setDefaultLogger(mylog);
+    	JsLinterMojo.setDefaultLogger(mylog);
     }
 	
 	@Test
@@ -78,8 +78,9 @@ public class JsLinterMojoTest {
 	
 	@After
 	public void cleanTestDirectory() {
-		if(this.mojo.getBuildDirectory().exists())
+		if(this.mojo.getBuildDirectory().exists()){
 			FileUtils.deleteQuietly(this.mojo.getBuildDirectory());
+		}
 	}
 	
 }

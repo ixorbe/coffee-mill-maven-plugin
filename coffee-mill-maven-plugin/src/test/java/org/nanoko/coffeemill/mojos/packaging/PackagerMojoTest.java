@@ -30,12 +30,12 @@ public class PackagerMojoTest {
     	
     }
     
-    /*
+    
     @After
     public void cleanTestDirectory(){
     	if(buildDir.exists()){
     		FileUtils.deleteQuietly(buildDir);
     	}
     }
-    */
+    
 }

@@ -28,9 +28,6 @@ requiresProject = true,
 defaultPhase = LifecyclePhase.PACKAGE)
 public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
-
-    public String outputFileName = null;
-
     /**
      * Define ordered Css files list to aggregate
      */
@@ -76,12 +73,12 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     private void aggregate() throws WatchingException {
-        if(this.outputFileName == null) {
-            this.outputFileName = this.project.getArtifactId()+"-"+this.project.getVersion();
+        if(this.project!=null) {
+            this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
         }
 
         //File output = new File( this.getBuildDirectory(), this.outputFileName + ".css");
-        File output = new File( this.getWorkDirectory(), this.outputFileName + ".css");
+        File output = new File( this.getWorkDirectory(), this.getDefaultOutputFilename() + ".css");
         if(output.exists()) {
             FileUtils.deleteQuietly(output);   
         }    	
@@ -161,7 +158,7 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     private void aggregateAppWithLibs(File in) throws WatchingException, IOException {
-        File output = new File(this.getBuildDirectory(),  this.outputFileName+"-all.css");
+        File output = new File(this.getBuildDirectory(),  this.getDefaultOutputFilename()+"-all.css");
         if(output.exists()) {
             FileUtils.deleteQuietly(output);    
         }

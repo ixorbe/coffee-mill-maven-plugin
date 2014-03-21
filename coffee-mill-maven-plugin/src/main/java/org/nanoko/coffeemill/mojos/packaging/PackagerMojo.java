@@ -52,8 +52,6 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
         if (getLibDirectory().isDirectory()) {
             archiver.addDirectory( getLibDirectory(), "" );
         }
-        //archiver.addDirectory(getWorkDirectory());
-        //archiver.addDirectory(getLibDirectory());
         archiver.setDestFile(distFile);
         archiver.createArchive();
         this.getLog().info("getDirectory="+getWorkDirectory());

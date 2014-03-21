@@ -30,14 +30,14 @@ public class JsDocMojoTest {
     @Test
     public void testJsDocGeneration() throws MojoExecutionException, MojoFailureException {
     	System.out.println("==> Should generate javadoc from "+jsSourceDir);
-    	this.mojo.inputFilename = "test-js-to-doc";
+    	this.mojo.setDefaultOutputFilename("test-js-to-doc");
     	mojo.execute();
     	
     	File jsDocReport = new File(targetDir, "jsdoc-report");
     	assertTrue(jsDocReport.exists());
     	assertTrue(new File( jsDocReport, "index.html").exists());
     	assertTrue(new File( jsDocReport, "scripts").exists());
-    	assertTrue(new File( jsDocReport, this.mojo.inputFilename+".js.html").exists());
+    	assertTrue(new File( jsDocReport, "test-js-to-doc.js.html").exists());
     }
     
     

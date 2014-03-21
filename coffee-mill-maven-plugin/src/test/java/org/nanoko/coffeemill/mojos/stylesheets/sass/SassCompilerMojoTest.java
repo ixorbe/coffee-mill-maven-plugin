@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import org.nanoko.coffeemill.mojos.stylesheets.sass.SassCompilerMojo;
@@ -35,38 +36,33 @@ public class SassCompilerMojoTest {
 	private final File workDir = new File("target/test/SassCompilerMojoTest/www");
 	private final File stylesDir = new File("src/test/resources/stylesheets");
 	
+	private SassCompilerMojo mojo;
+	
+	@Before
+    public void prepareTestDirectory(){     
+        this.mojo = new SassCompilerMojo();        
+        this.mojo.setWorkDirectory(this.workDir);
+        this.mojo.setStylesheetsDir(stylesDir);
+    } 
 	
     @Test
-    public void testLessCompilation() {
+    public void testLessCompilation() throws MojoExecutionException{
         System.out.println("Should compile 1 Sass file");
 
-        SassCompilerMojo mojo = new SassCompilerMojo();
-        mojo.setStylesheetsDir(stylesDir);
-        mojo.setWorkDirectory(workDir);
-        try {
-			mojo.execute();
-		} catch (MojoExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        mojo.execute();
+
         Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
         assertTrue(files.size()==1);
     }
     
 	
     @Test
-    public void testLessCompilationNoSources() {
+    public void testLessCompilationNoSources() throws MojoExecutionException{
         System.out.println("Should compile nothing");
 
-        SassCompilerMojo mojo = new SassCompilerMojo();
         mojo.setStylesheetsDir(new File(stylesDir, "nowhere"));
-        mojo.setWorkDirectory(workDir);
-        try {
-			mojo.execute();
-		} catch (MojoExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        mojo.execute();
+
         Collection<File> files = FileUtils.listFiles(mojo.getWorkDirectory(), new String[]{"css"}, true);
         assertFalse(files.size() > 0);
     }

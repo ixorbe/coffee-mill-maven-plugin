@@ -33,8 +33,7 @@ import org.nanoko.coffeemill.mojos.scripts.js.JsCompilerMojo;
 public class JsCompilerMojoTest {
 	
 	private final File jsSourceTestDir = new File("src/test/resources/js");
-	private final String testDir = "target/test/JsCompilerMojoTest";
-	private final File workDir = new File(testDir, "www");
+	private final File workDir = new File("target/test/JsCompilerMojoTest/www");
 	private JsCompilerMojo mojo;
 	
 	@Before
@@ -68,8 +67,9 @@ public class JsCompilerMojoTest {
     
     @After
 	public void cleanTestDirectory() {
-		if(this.mojo.getWorkDirectory().exists())
+		if(this.mojo.getWorkDirectory().exists()){
 			FileUtils.deleteQuietly(this.mojo.getWorkDirectory());
+		}
 	}
 
 }

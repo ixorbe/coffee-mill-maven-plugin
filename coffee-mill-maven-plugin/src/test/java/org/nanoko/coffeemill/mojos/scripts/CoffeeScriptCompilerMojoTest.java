@@ -70,8 +70,9 @@ public class CoffeeScriptCompilerMojoTest {
     
     @After
 	public void cleanTestDirectory() {
-		if(this.mojo.getWorkDirectory().exists())
+		if(this.mojo.getWorkDirectory().exists()){
 			FileUtils.deleteQuietly(this.mojo.getWorkDirectory());
+		}
 	}
     
     

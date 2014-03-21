@@ -26,6 +26,7 @@ public class Watchers {
         return get(session).contains(watcher);
     }
 
+    @SuppressWarnings({ "deprecation", "unchecked" })
     public static synchronized List<Watcher> get(MavenSession session) {
         List<Watcher> watchers = (List<Watcher>) session.getExecutionProperties().get(WATCHERS_KEY);
         if (watchers == null) {

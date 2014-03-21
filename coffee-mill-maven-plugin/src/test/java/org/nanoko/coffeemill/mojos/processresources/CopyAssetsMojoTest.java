@@ -55,15 +55,14 @@ public class CopyAssetsMojoTest {
         assertTrue(new File(mojo.getWorkDirectory(), "img/demo.png").exists());
     }
 
-	// TODO: determine allowed files to be copied from assets
-    /*@Test
+	
+    @Test
     public void testIgnoredFileDuringCopy() throws MojoExecutionException, MojoFailureException {
         mojo.execute();
 
-        assertFalse(new File(mojo.getWorkDirectory(), "project.pj").isFile());
-        assertFalse(new File(mojo.getWorkDirectory(), "BitKeeper").isDirectory());
-        assertFalse(new File(mojo.getWorkDirectory(), "BitKeeper/example").exists());
-    }*/
+        assertFalse(new File(mojo.getWorkDirectory(), "shouldNotBeCopied.css").exists());
+        assertFalse(new File(mojo.getWorkDirectory(), "shouldNotBeCopied.js").exists());
+    }
 
     @Test
     public void testAssetCopyWhenAssetDoesNotExist() throws MojoExecutionException, MojoFailureException {
@@ -76,8 +75,9 @@ public class CopyAssetsMojoTest {
     
     @After
 	public void cleanTestDirectory() {
-		if(this.mojo.getWorkDirectory().exists())
+		if(this.mojo.getWorkDirectory().exists()){
 			FileUtils.deleteQuietly(this.mojo.getWorkDirectory());
+		}
 	}
 
 }

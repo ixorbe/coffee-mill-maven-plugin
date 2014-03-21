@@ -18,6 +18,7 @@ package org.nanoko.coffeemill.mojos.stylesheets.dust;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.scripts.dust.DustCompilerMojo;
@@ -50,17 +51,24 @@ public class DustCompilerMojoTest {
         //check the compiled template name is set to the file name
         //i.e mytemplate is this test
         try {
-            assertThat(FileUtils.readFileToString(result)
-                    .startsWith("(function(){dust.register(\"mytemplate\"")).isTrue();
+            assertThat(FileUtils.readFileToString(result).startsWith("(function(){dust.register(\"mytemplate\"")).isTrue();
         } catch (IOException e) {
             //we already have check that the file does exist
         }
     }
 
     @Test
-    public void testWhenJavaScriptDirectoryDoesNotExist() throws MojoExecutionException,
-            MojoFailureException {
+    public void testWhenJavaScriptDirectoryDoesNotExist() throws MojoExecutionException, MojoFailureException {
         mojo.setJavaScriptDir(new File("src/test/resources/does_not_exist"));
         mojo.execute();
     }
+    
+    @After
+    public void cleanTestDirectory()  {
+        //clean output
+        if (workDir.exists()){
+            FileUtils.deleteQuietly(workDir);
+        }
+    }
+    
 }

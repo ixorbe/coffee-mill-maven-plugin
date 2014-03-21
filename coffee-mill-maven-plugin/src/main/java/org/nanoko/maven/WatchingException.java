@@ -5,6 +5,7 @@ import java.io.File;
 /**
  * Common exception thrown by Watcher.
  */
+@SuppressWarnings("serial")
 public class WatchingException extends Exception {
 
     private File file;

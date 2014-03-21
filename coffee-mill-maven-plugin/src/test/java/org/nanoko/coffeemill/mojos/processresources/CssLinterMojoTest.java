@@ -1,15 +1,12 @@
 package org.nanoko.coffeemill.mojos.processresources;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -21,9 +18,7 @@ import org.nanoko.coffeemill.mojos.stylesheets.css.CssLinterMojo;
 import org.nanoko.maven.WatchingException;
 
 
-public class CssLinterMojoTest {
-
-	
+public class CssLinterMojoTest {	
 	
 	private final File testDir = new File("target/test/CssLinterMojoTest/");
 
@@ -37,7 +32,7 @@ public class CssLinterMojoTest {
     	this.mojo.setWorkDirectory(testDir);
     	this.mojo.setBuildDirectory(testDir);
     	mylog = new TestableLoggerWrapper(this.mojo.getLog());
-    	this.mojo.defaultLogger = mylog;
+    	CssLinterMojo.defaultLogger = mylog;
     }
 	
 	
@@ -79,8 +74,9 @@ public class CssLinterMojoTest {
 	
 	@After
 	public void cleanTestDirectory() {
-		if(this.mojo.getBuildDirectory().exists())
+		if(this.mojo.getBuildDirectory().exists()){
 			FileUtils.deleteQuietly(this.mojo.getBuildDirectory());
+		}
 	}
 	
 }

@@ -58,7 +58,6 @@ public class JsTestCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }    
     
     public boolean accept(File file) {
-        System.out.println("JSTestCompiler accept");
         return !isSkipped()
                 && file.getParent().contains( getJavaScriptTestDir().getAbsolutePath() )
                 && FSUtils.hasExtension(file, "js");
@@ -70,7 +69,6 @@ public class JsTestCompilerMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     public boolean fileUpdated(File file) throws WatchingException {
-        System.out.println("JSTestCompiler fileUpdated");
         if(fileDeleted(file)) {
             return this.fileCreated(file);
         } else {

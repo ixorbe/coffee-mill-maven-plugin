@@ -23,7 +23,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nanoko.coffeemill.mojos.stylesheets.css.CssAggregatorMojo;
-import org.openqa.selenium.internal.seleniumemulation.GetBodyText;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,18 +37,22 @@ public class CssAggregatorMojoTest {
 	private final File testWorkDir = new File("target/test/CssAggregatorMojoTest/www");
 	private final File testBuildDir = new File("target/test/CssAggregatorMojoTest/www-release");
 	private final File libDir = new File(testWorkDir , "libs");
-	
+	private CssAggregatorMojo mojo;
 	
 	@Before 
-	public void prepareTestDirectory()  {        
+	public void prepareTestDirectory()  {   
+        mojo = new CssAggregatorMojo();
+        mojo.setWorkDirectory( testWorkDir );
+        mojo.setBuildDirectory( testBuildDir );
+        mojo.setLibDirectory(this.libDir);
+        
         //copy new ressources
         Collection<File> files = FileUtils.listFiles(srcStyleDir, new String[]{"css"}, true);
         for(File f : files) {
         	try {
-				FileUtils.copyFileToDirectory( f , testWorkDir);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				FileUtils.copyFileToDirectory( f , this.mojo.getWorkDirectory());
+			} catch (IOException e) {	
+				this.mojo.getLog().error("Error during preparing CssAggregator Test directory", e);
 			}
         }
     }
@@ -57,20 +60,15 @@ public class CssAggregatorMojoTest {
 	
     @Test
     public void testCssCompilation() throws MojoExecutionException {
-        System.out.println("==> It should aggregate");
+        System.out.println("==> It should aggregate");        
         
-        CssAggregatorMojo mojo = new CssAggregatorMojo();
-        mojo.setWorkDirectory( testWorkDir );
-        mojo.setBuildDirectory( testBuildDir );
-        mojo.setLibDirectory(this.libDir);
-        
-        mojo.outputFileName = "test.aggregate";
+        mojo.setDefaultOutputFilename("test.aggregate");
         mojo.execute();
         
         assertTrue(new File(mojo.getWorkDirectory(), "test.aggregate.css").exists());
     }
     
-    /*
+    
     @After
     public void cleanTestDirectory(){
         //clean output
@@ -78,5 +76,5 @@ public class CssAggregatorMojoTest {
         	FileUtils.deleteQuietly(testBuildDir);
         if (testWorkDir.exists())
         	FileUtils.deleteQuietly(testWorkDir);
-    }*/
+    }
 }

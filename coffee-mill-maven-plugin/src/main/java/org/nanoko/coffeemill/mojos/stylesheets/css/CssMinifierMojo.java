@@ -33,8 +33,6 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
     public static final String CLEANCSS_NPM_NAME = "clean-css";
     public static final String CLEANCSS_NPM_VERSION = "2.1.4";
 
-    public String inputFilename = null;
-
     private NPM cleancss;
 
 
@@ -72,11 +70,11 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
 
 
     private boolean compile() throws WatchingException { 
-        if(this.inputFilename == null) {
-            this.inputFilename = this.project.getArtifactId()+"-"+this.project.getVersion();
+        if(this.project!=null) {
+            this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
         }
 
-        boolean res = minify(this.inputFilename);
+        boolean res = minify(this.getDefaultOutputFilename());
         //boolean res2 = minify(this.inputFilename+"-all");
         //return res || res2;
         return res;
