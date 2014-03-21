@@ -148,7 +148,8 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     private void aggregateAppWithLibs(File in) throws WatchingException{
-        File output = new File(this.getBuildDirectory(),  this.getDefaultOutputFilename()+"-all.js");
+        //File output = new File(this.getBuildDirectory(),  this.getDefaultOutputFilename()+"-all.js");
+        File output = new File(this.getWorkDirectory(),  this.getDefaultOutputFilename()+"-all.js");
         if(output.exists()){
             FileUtils.deleteQuietly(output);
         }
@@ -160,7 +161,8 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
             try {
                 FileUtils.copyFile(in, output);
             } catch (IOException e) {
-                throw new WatchingException("Error during copy file to build directory "+this.getBuildDirectory(), e);
+                //throw new WatchingException("Error during copy file to build directory "+this.getBuildDirectory(), e);
+                throw new WatchingException("Error during copy file to work directory "+this.getWorkDirectory(), e);
             }
             return;
         }

@@ -15,14 +15,15 @@ import org.junit.Test;
 
 public class JsDocMojoTest {
 	private final File jsSourceDir = new File("src/test/resources/jsdoc");
-	private final File targetDir = new File("target/test/JsDocMojoTest");
+	private final File targetDir = new File("target/test/JsDocMojoTest/jsdoc-report");
 	private JsDocMojo mojo;
 	
 	
 	@Before
 	public void prepareTestDirectory(){
 		this.mojo = new JsDocMojo();
-		this.mojo.setBuildDirectory(jsSourceDir);
+		//this.mojo.setBuildDirectory(jsSourceDir);
+		this.mojo.setWorkDirectory(jsSourceDir);
 		this.mojo.setTargetDirectory(targetDir);
 	}
 	
@@ -33,19 +34,16 @@ public class JsDocMojoTest {
     	this.mojo.setDefaultOutputFilename("test-js-to-doc");
     	mojo.execute();
     	
-    	File jsDocReport = new File(targetDir, "jsdoc-report");
-    	assertTrue(jsDocReport.exists());
-    	assertTrue(new File( jsDocReport, "index.html").exists());
-    	assertTrue(new File( jsDocReport, "scripts").exists());
-    	assertTrue(new File( jsDocReport, "test-js-to-doc.js.html").exists());
+    	assertTrue(new File( targetDir, "index.html").exists());
+    	assertTrue(new File( targetDir, "scripts").exists());
+    	assertTrue(new File( targetDir, "test-js-to-doc.js.html").exists());
     }
     
     
     @After
     public void cleanTestDirectory(){
-    	File jsDocReport = new File(targetDir, "jsdoc-report");
-    	if(jsDocReport.exists()){
-    		FileUtils.deleteQuietly(jsDocReport);
+    	if(targetDir.exists()){
+    		FileUtils.deleteQuietly(targetDir);
     	}
     }
     

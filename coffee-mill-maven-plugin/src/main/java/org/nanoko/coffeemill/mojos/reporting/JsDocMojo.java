@@ -61,7 +61,8 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     		this.setDefaultOutputFilename(this.project.getArtifactId()+"-"+this.project.getVersion());
     	}
     	
-    	File input = new File( this.getBuildDirectory(), getDefaultOutputFilename() +".js");
+    	//File input = new File( this.getBuildDirectory(), getDefaultOutputFilename() +".js");
+    	File input = new File( this.getWorkDirectory(), getDefaultOutputFilename() +".js");
     	if(!input.exists()) { 
     		return; 
     	}
