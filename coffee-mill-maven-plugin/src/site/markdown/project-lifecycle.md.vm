@@ -7,8 +7,8 @@ The process-resources phase
 ---------------------------
 
 * _maven-resources-plugin:ressources_ : the regular resource processing
-* _resolve-dependencies_ : resolve _js_ dependencies and copy them within the _target/www/libs_ folder,
-_css_ dependencies are solved and copied to _target/www/libs_
+* _resolve-dependencies_ : resolve _js_ dependencies and copy them within the _target/libs_ folder,
+_css_ dependencies are solved and copied to _target/www_
 * _copy-assets_ : copy the files form the asset folder (_src/main/www_ by default) to _target/www_
 
 The compile phase
@@ -16,6 +16,7 @@ The compile phase
 
 * _compile-javascript_ : copy JavaScript files from _src/main/js_ to the _target/www_ folder. Validate them using
 JSHint and JSLint.
+* _compile-dust_ : compile Dust files (_.dust_), from _src/main/js_ to the _target/www_ folder
 * _compile-coffeescript_ : compile CoffeeScript files (_.coffee_), from _src/main/coffee_ to the _target/www_ folder
 * _compile-less_ : compile Less files (_.less_), from _src/main/stylesheets_ to the _target/www_ folder
 * _compile-saas_ : compile Saas files (_.scss_), from _src/main/stylesheets_ to the _target/www_ folder
@@ -48,15 +49,13 @@ The package phase
 
 * _aggregate-javascript_ : aggregate the JavaScript and CoffeeScript code (and JS dependencies if configured). The
 resulting file is the main project artifact.
-It also create an aggregated version containing the external dependencies : this version is suffixed with _-all_ classifier
 * _aggregate-stylesheets_ : aggregate the CSS , Less and Saas files. The resulting file is attached to the project using the
  _css_ extension.
-It also create an aggregated version containing the external dependencies : this version is suffixed with _-all_ classifier
 * _minify-javascript_: minify the aggregated JavaScript file using UglifyJS. The resulting
 file is attached ot the project using the _min_ classifier.
 * _minify-stylesheets_: minify the aggregated CSS file using CSSMin . The resulting
 file is attached ot the project using the _min_ classifier and obvisouly the CSS extension.
-* _build-zip_ : create a zip from the _target/www-release_ directory. The zip file is attached to the
+* _build-zip_ : create a zip from the _target/www_ and _target/libs_ directory. The zip file is attached to the
 project using the _dist_ classifier and the _zip_ extension.
 
 The integration-test phase

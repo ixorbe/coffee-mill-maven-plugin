@@ -56,7 +56,6 @@ Output
 The plugin works on three output folder:
 
 * the work directory `target/www` which contains all files for watch mode.
-* the build directory `target/www-release` which contains all aggregated, minified and external files for release (not updated during Watch Mode).
 * the work test directory `target/www-test` which contains output test files. 
 
 In addition, JavaScript dependencies are copied in `target/libs`.
@@ -65,7 +64,7 @@ The plugin creates the following artifacts:
 
 * the aggregated JS and CSS files
 * the minified JS and CSS files
-* the zip of the `target/www-release` directory. The assets are optimized.
+* the zip of the `target/www` and `target/libs` directory. The assets are optimized.
 
 By default they are all attached to the project.
 
