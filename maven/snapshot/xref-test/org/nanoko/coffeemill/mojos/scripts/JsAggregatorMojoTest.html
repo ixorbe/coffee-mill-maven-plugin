@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>      @Test
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testJavaScriptAggregation() <strong class="jxr_keyword">throws</strong> MojoExecutionException {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>      	System.out.println(<span class="jxr_string">"\n ==&gt; Should aggregate 2 files \&quot;test.js\&quot; and \&quot;test2.js\&quot; from "</span>+<strong class="jxr_keyword">this</strong>.workDir +<span class="jxr_string">" to "</span>+<strong class="jxr_keyword">this</strong>.buildDir);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>      	System.out.println(<span class="jxr_string">"\n ==&gt; Should aggregate 2 files \&quot;test.js\&quot; and \&quot;test2.js\&quot; to "</span>+<strong class="jxr_keyword">this</strong>.workDir);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>      	<strong class="jxr_keyword">this</strong>.mojo.execute();    	
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>      	assertTrue(<strong class="jxr_keyword">new</strong> File(<strong class="jxr_keyword">this</strong>.mojo.getWorkDirectory(), <span class="jxr_string">"test.js"</span>).exists());
