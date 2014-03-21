@@ -64,7 +64,7 @@
 	                	org.nanoko.coffee-mill:coffee-mill-maven-plugin:minify-javascript, 
 	                    org.nanoko.coffee-mill:coffee-mill-maven-plugin:minify-stylesheets,
 	                    org.nanoko.coffee-mill:coffee-mill-maven-plugin:documentation-javascript,
-	                    org.nanoko.coffee-mill:coffee-mill-maven-plugin:package-assets,
+	                    <!-- org.nanoko.coffee-mill:coffee-mill-maven-plugin:package-assets, -->
 	                    org.nanoko.coffee-mill:coffee-mill-maven-plugin:build-zip
                     </package>
                     <integration-test>
