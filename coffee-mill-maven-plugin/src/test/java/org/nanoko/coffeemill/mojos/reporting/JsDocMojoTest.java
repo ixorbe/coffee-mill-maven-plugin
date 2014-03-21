@@ -15,7 +15,7 @@ import org.junit.Test;
 
 public class JsDocMojoTest {
 	private final File jsSourceDir = new File("src/test/resources/jsdoc");
-	private final File targetDir = new File("target/test/JsDocMojoTest/jsdoc-report");
+	private final File targetDir = new File("target/test/JsDocMojoTest");
 	private JsDocMojo mojo;
 	
 	
@@ -34,9 +34,9 @@ public class JsDocMojoTest {
     	this.mojo.setDefaultOutputFilename("test-js-to-doc");
     	mojo.execute();
     	
-    	assertTrue(new File( targetDir, "index.html").exists());
-    	assertTrue(new File( targetDir, "scripts").exists());
-    	assertTrue(new File( targetDir, "test-js-to-doc.js.html").exists());
+    	assertTrue(new File( targetDir, "jsdoc-report/index.html").exists());
+    	assertTrue(new File( targetDir, "jsdoc-report/scripts").exists());
+    	assertTrue(new File( targetDir, "jsdoc-report/test-js-to-doc.js.html").exists());
     }
     
     
