@@ -95,7 +95,7 @@ Minification
 Once aggregated, the file can be minified using `uglify-js` with `npm`.
 Minification is not skipped by default. So `mvn package` produces the minified artifact. With the following configuration:
 
-* getting source files from work directory `target/www` and minify it to build directory `target/wwww-release`.
+* getting source files from work directory `target/www` and minify it to target directory `target` and to work directory `target/www`.
 
 
 SkipVariables
