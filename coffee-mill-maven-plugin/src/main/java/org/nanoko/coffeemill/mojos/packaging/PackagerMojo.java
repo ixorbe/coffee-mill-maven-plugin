@@ -26,8 +26,6 @@ requiresProject = true,
 defaultPhase = LifecyclePhase.PACKAGE)
 public class PackagerMojo extends AbstractCoffeeMillMojo  {
 
-    protected String outputFileName = "release.zip";
-
     public void execute() throws MojoExecutionException {
 
         try {
@@ -40,10 +38,10 @@ public class PackagerMojo extends AbstractCoffeeMillMojo  {
     private void createApplicationDistribution() throws IOException {
         this.getLog().info("createApplicationDistribution");
         if( this.project != null ){
-            this.outputFileName =  this.project.getArtifactId() + "-" + this.project.getVersion() + ".zip";
+            this.setDefaultOutputFilename(this.project.getArtifactId() + "-" + this.project.getVersion() );
         }
 
-        File distFile = new File(this.getTargetDirectory(), this.outputFileName);
+        File distFile = new File(this.getTargetDirectory(), this.getDefaultOutputFilename()+ ".zip");
         ZipArchiver archiver = new ZipArchiver();
         archiver.enableLogging(new PlexusLoggerWrapper(new MavenLoggerWrapper(this.getLog())));
         if (getWorkDirectory().isDirectory()) {
