@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * Pipeline.
  */
+@SuppressWarnings("static-access")
 public class Pipeline {
 
     private List<Watcher> watchers = new ArrayList<>();
@@ -70,7 +71,7 @@ public class Pipeline {
         }
         return this;
     }
-
+    
     public void onFileCreate(File file) {
     	this.log.info("");
     	this.log.info("The watcher has detected a new file: " + file.getAbsolutePath());
@@ -82,7 +83,7 @@ public class Pipeline {
                 try {
                     continueProcessing = watcher.fileCreated(file);
                 } catch (WatchingException e) { //NOSONAR
-                	this.log.error(String.format(WATCHING_EXCEPTION_MESSAGE + e.getMessage()));
+                	this.log.error(WATCHING_EXCEPTION_MESSAGE.format(e.getMessage()));
                     continueProcessing = false;
                 }
                 if (!continueProcessing) {
@@ -105,7 +106,8 @@ public class Pipeline {
                 try {
                     continueProcessing = watcher.fileUpdated(file);
                 } catch (WatchingException e) { //NOSONAR
-                	this.log.error(String.format(WATCHING_EXCEPTION_MESSAGE + e.getMessage()));
+                    
+                	this.log.error(WATCHING_EXCEPTION_MESSAGE.format(e.getMessage()));
                     continueProcessing = false;
                 }
                 if (!continueProcessing) {
@@ -128,7 +130,7 @@ public class Pipeline {
                 try {
                     continueProcessing = watcher.fileDeleted(file);
                 } catch (WatchingException e) { //NOSONAR
-                	this.log.error(String.format(WATCHING_EXCEPTION_MESSAGE + e.getMessage()));
+                	this.log.error(WATCHING_EXCEPTION_MESSAGE.format(e.getMessage()));
                     continueProcessing = false;
                 }
                 if (!continueProcessing) {
