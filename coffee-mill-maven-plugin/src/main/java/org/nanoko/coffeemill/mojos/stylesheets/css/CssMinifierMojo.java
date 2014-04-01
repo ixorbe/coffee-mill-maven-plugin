@@ -121,7 +121,7 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
 
     private boolean isSkipped(){
         if (skipCssMinification || skipCssAggregation || skipCssCompilation) {
-            getLog().info("\033[31m CSS Minification skipped \033[37m");
+            getLog().info("\033[31m CSS Minification skipped \033[0m");
             return true;
         } else {
             return false;

@@ -89,7 +89,7 @@ public class JasmineMojo extends AbstractCoffeeMillMojo {
     
     private boolean isSkipped(){
     	if (skipJasmineTest) {
-            getLog().info("\033[31m Jasmine Tests skipped \033[37m");
+            getLog().info("\033[31m Jasmine Tests skipped \033[0m");
             return true;
         } else {
         	return false;

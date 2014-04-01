@@ -115,7 +115,7 @@ public class PackageAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 
     private boolean isSkipped(){
         if (skipAssetsPackage) {
-            getLog().info("\033[31m Asset packaging skipped \033[37m");
+            getLog().info("\033[31m Asset packaging skipped \033[0m");
             return true;
         } else{
             return false;

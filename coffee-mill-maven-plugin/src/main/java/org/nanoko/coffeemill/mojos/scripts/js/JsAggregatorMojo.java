@@ -187,7 +187,7 @@ public class JsAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
 
     private boolean isSkipped(){
         if (skipJsAggregation || skipJsCompilation) {
-            getLog().info("\033[31m JS Aggregation skipped \033[37m");
+            getLog().info("\033[31m JS Aggregation skipped \033[0m");
             return true;
         } else {
             return false;

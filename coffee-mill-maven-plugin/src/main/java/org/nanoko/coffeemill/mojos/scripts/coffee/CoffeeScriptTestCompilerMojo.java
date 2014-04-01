@@ -114,7 +114,7 @@ public class CoffeeScriptTestCompilerMojo extends AbstractCoffeeScriptCompilerMo
     
     private boolean isSkipped(){
     	if (skipCoffeeScriptTestCompilation) {
-            getLog().info("\033[31m CoffeeScript Test Compilation skipped \033[37m");
+            getLog().info("\033[31m CoffeeScript Test Compilation skipped \033[0m");
             return true;
         } else {
         	return false;

@@ -177,7 +177,7 @@ public class OptiJpegMojo extends AbstractCoffeeMillWatcherMojo {
 
     private boolean isSkipped(){
         if (skipPicturesOptimization) {
-            getLog().info("\033[31m JPEG Optimization skipped \033[37m");
+            getLog().info("\033[31m JPEG Optimization skipped \033[0m");
             return true;
         } else {
             return false;

@@ -71,7 +71,7 @@ public class CssLinterMojo extends AbstractCoffeeMillMojo {
 
     private boolean isSkipped() {
         if (skipJsLint || skipJsCompilation) {
-            getLog().info("\033[31m CSS Lint skipped \033[37m");
+            getLog().info("\033[31m CSS Lint skipped \033[0m");
             return true;
         } else {
             return false;   	

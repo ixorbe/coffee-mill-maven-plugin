@@ -88,7 +88,7 @@ public class CssCompilerMojo extends AbstractCoffeeMillWatcherMojo {
 
     private boolean isSkipped(){
         if (skipCssCompilation) {
-            getLog().info("\033[31m CSS Compilation skipped \033[37m");
+            getLog().info("\033[31m CSS Compilation skipped \033[0m");
             return true;
         } else {
             return false;

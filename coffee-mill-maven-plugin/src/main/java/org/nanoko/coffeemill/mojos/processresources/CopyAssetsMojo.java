@@ -103,7 +103,7 @@ public class CopyAssetsMojo extends AbstractCoffeeMillWatcherMojo {
 
     private boolean isSkipped(){
         if (skipAssetsCopy) {
-            getLog().info("\033[31m Asset copy skipped \033[37m");
+            getLog().info("\033[31m Asset copy skipped \033[0m");
             return true;
         } else{
             return false;
