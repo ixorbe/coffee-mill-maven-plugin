@@ -100,9 +100,13 @@ public class DustCompilerMojo extends  AbstractCoffeeMillWatcherMojo {
         //String jsFileName = file.getName().substring(0, file.getName().length() - ".dust".length()) + ".js";        
         //File out = new File(getWorkDirectory(), jsFileName);
 
-        getLog().info("Compiling " + file.getAbsolutePath() + " to " + newName);
-        int exit = dust.execute("dustc", "--name="+FilenameUtils.getBaseName(newName), file.getAbsolutePath(), newName);
-        getLog().debug("Dust-compiler execution exiting with " + exit + " status");
+        getLog().info("Compiling " + file.getAbsolutePath() + " to " + newName);        
+        try {            
+            int exit = dust.execute("dustc", "--name="+FilenameUtils.getBaseName(newName), file.getAbsolutePath(), newName);
+            getLog().debug("Dust-compiler execution exiting with " + exit + " status");
+        } catch (MojoExecutionException e) {
+            throw new WatchingException("Error during the compilation of " + file.getName(), e);
+        }  
 
         if (!outputFile.exists()) {
             throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + "; check log");

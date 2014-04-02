@@ -95,9 +95,13 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
             FileUtils.deleteQuietly(output);
         }
 
-        getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
-        int exit = cleancss.execute("cleancss", "-o",  output.getAbsolutePath(),input.getAbsolutePath());
-        getLog().debug("Js minification execution exiting with " + exit + " status");
+        getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());        
+        try {
+            int exit = cleancss.execute("cleancss", "-o",  output.getAbsolutePath(),input.getAbsolutePath());
+            getLog().debug("Js minification execution exiting with " + exit + " status");
+        } catch (MojoExecutionException e) {
+            throw new WatchingException("Error during the minification of " + input.getName(), e);
+        }
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");

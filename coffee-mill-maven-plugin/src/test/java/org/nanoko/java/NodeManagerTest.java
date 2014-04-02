@@ -1,6 +1,7 @@
 package org.nanoko.java;
 
 import org.apache.commons.logging.Log;
+import org.apache.maven.plugin.MojoExecutionException;
 
 import org.json.simple.parser.ParseException;
 import org.junit.Before;
@@ -67,7 +68,7 @@ public class NodeManagerTest {
     }
 
     @Test
-    public void testExecution() throws IOException, ParseException {
+    public void testExecution() throws IOException, ParseException, MojoExecutionException {
         manager.installIfNotInstalled();
 
         NPM npm = NPM.npm(log, "coffee-script", "1.6.3");

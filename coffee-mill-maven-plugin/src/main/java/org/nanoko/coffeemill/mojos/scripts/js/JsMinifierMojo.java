@@ -100,8 +100,12 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
         }
 
         getLog().info("Minifying " + input.getAbsolutePath() + " to " + output.getAbsolutePath());
-        int exit = ugly.execute("uglifyjs",input.getAbsolutePath(), "-o",  output.getAbsolutePath(),"-c");
-        getLog().debug("Js minification execution exiting with " + exit + " status");
+        try {            
+            int exit = ugly.execute("uglifyjs",input.getAbsolutePath(), "-o",  output.getAbsolutePath(),"-c");
+            getLog().debug("Js minification execution exiting with " + exit + " status");
+        } catch (MojoExecutionException e) {
+            throw new WatchingException("Error during the compilation of " + input.getName(), e);
+        }        
 
         if (!output.isFile()) {
             throw new WatchingException("Error during the minification of " + input.getAbsoluteFile() + " check log");

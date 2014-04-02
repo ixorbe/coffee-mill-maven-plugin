@@ -76,8 +76,14 @@ public class JsLinterMojo extends AbstractCoffeeMillMojo {
             return;
         }
 
-        getLog().info("Linting " + input.getAbsolutePath());
-        lint.execute(PKG_NPM_NAME, input.getAbsolutePath());
+        getLog().info("Linting " + input.getAbsolutePath());        
+        try {            
+            int exit = lint.execute(PKG_NPM_NAME, input.getAbsolutePath());
+            getLog().debug("Js linter execution exiting with " + exit + " status");
+        } catch (MojoExecutionException e) {
+            throw new WatchingException("Error during the linter process of " + input.getName(), e);
+        }  
+        
     }
 
     private boolean isSkipped() {

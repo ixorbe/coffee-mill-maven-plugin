@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import org.apache.commons.logging.Log;
+import org.apache.maven.plugin.MojoExecutionException;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -75,7 +76,7 @@ public class NPM {
      * @return the execution exit status
      * @throws MojoExecutionException if the execution failed
      */
-    public int execute(String binary, String... args)  {
+    public int execute(String binary, String... args) throws MojoExecutionException  {
         File destination = getNPMDirectory();
         if (! destination.isDirectory()) {
             throw new IllegalStateException("NPM " + this.npmName + " not installed");
@@ -112,8 +113,9 @@ public class NPM {
             log.info(bos.toString());
             return res;
         } catch (IOException e) {
-            log.error("NPM::execute::execute ", e);
-            return -1;
+            //log.error("NPM::execute::execute ", e);
+            throw new MojoExecutionException("NPM::execute::execute ", e);
+            //return -1;
         }
 
     }

@@ -93,14 +93,26 @@ public abstract class AbstractCoffeeScriptCompilerMojo extends AbstractCoffeeMil
     
     
     protected void invokeCoffeeScriptCompiler(File input, File out) throws MojoExecutionException {
-        int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(), input.getAbsolutePath());
-        getLog().debug("CoffeeScript compilation exits with " + exit + " status");
+        
+        try {
+            int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", out.getAbsolutePath(), input.getAbsolutePath());
+            getLog().debug("CoffeeScript compilation exits with " + exit + " status");
+        } catch (MojoExecutionException e) { //NOSONAR
+            throw new MojoExecutionException("Error during the compilation of " + input.getName() + " : " + e.getMessage());
+        }
     }
     
     protected void invokeCoffeeScriptCompilerForDirectory(File dirInput, File dirOut) throws MojoExecutionException {
         if(dirInput.isDirectory() && dirOut.isDirectory()) {
-            int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", dirOut.getAbsolutePath(), dirInput.getAbsolutePath());
-            getLog().debug("CoffeeScript compilation exits with " + exit + " status");
+            
+            
+            try {
+                int exit = coffee.execute(COFFEE_SCRIPT_COMMAND, "--compile",/* "--map",*/ "--output", dirOut.getAbsolutePath(), dirInput.getAbsolutePath());
+                getLog().debug("CoffeeScript compilation exits with " + exit + " status");
+            } catch (MojoExecutionException e) { //NOSONAR
+                throw new MojoExecutionException("Error during the compilation of " + dirInput.getName() + " : " + e.getMessage());
+            }
+            
         }
     }
     

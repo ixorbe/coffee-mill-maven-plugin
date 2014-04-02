@@ -72,9 +72,13 @@ public class JsDocMojo extends AbstractCoffeeMillMojo {
     		FileUtils.deleteQuietly(output);
     	}
     	
-        getLog().info("Make Js Doc for " + input.getAbsolutePath() );
-        int exit = jsdoc.execute("jsdoc", input.getAbsolutePath(), "-d",  output.getAbsolutePath() );
-		getLog().debug("Js Doc generation execution exiting with " + exit + " status");
+        getLog().info("Make Js Doc for " + input.getAbsolutePath() );        
+        try {            
+            int exit = jsdoc.execute("jsdoc", input.getAbsolutePath(), "-d",  output.getAbsolutePath() );
+            getLog().debug("Js Doc generation execution exiting with " + exit + " status");
+        } catch (MojoExecutionException e) {
+            throw new WatchingException("Error during the compilation of " + input.getName(), e);
+        }  
     }
     
     private boolean isSkipped(){

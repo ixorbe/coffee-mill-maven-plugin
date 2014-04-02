@@ -85,8 +85,13 @@ public class SassCompilerMojo extends AbstractCoffeeMillWatcherMojo {
         File out = FSUtils.computeRelativeFile(file, this.getStylesheetsDir(), getWorkDirectory());
         String newName = out.getAbsolutePath().substring(0, out.getAbsolutePath().length() - ".scss".length()) + ".css";
         getLog().info("Compiling " + file.getAbsolutePath() + " to " + newName);
-        int exit = sass.execute("node-sass", file.getAbsolutePath(), newName);
-        getLog().debug("Sass execution exiting with " + exit + " status");
+        try {
+            int exit = sass.execute("node-sass", file.getAbsolutePath(), newName);
+            getLog().debug("Sass execution exiting with " + exit + " status");
+        } catch (MojoExecutionException e) {
+            throw new WatchingException("Error during the compilation of " + file.getName(), e);
+        }
+        
 
         if (!new File(newName).exists()) {
             throw new WatchingException("Error during the compilation of " + file.getAbsoluteFile() + " check log");

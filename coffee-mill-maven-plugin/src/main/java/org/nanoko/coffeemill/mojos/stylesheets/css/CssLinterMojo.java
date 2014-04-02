@@ -58,15 +58,20 @@ public class CssLinterMojo extends AbstractCoffeeMillMojo {
         }
     }
 
-    private void compile(File f) throws WatchingException {
-        String name = f.getName().substring(0, f.getName().lastIndexOf('.'))+".css";
+    private void compile(File file) throws WatchingException {
+        String name = file.getName().substring(0, file.getName().lastIndexOf('.'))+".css";
         File input = new File( this.getWorkDirectory(), name);
         if(!input.exists()) {
             return;
         }
 
         getLog().info("Linting " + input.getAbsolutePath());
-        lint.execute("csslint", "--format=compact", input.getAbsolutePath());
+        try {            
+            int exit = lint.execute("csslint", "--format=compact", input.getAbsolutePath());
+            getLog().debug("Js minification execution exiting with " + exit + " status");
+        } catch (MojoExecutionException e) {
+            throw new WatchingException("Error during the compilation of " + file.getName(), e);
+        }
     }
 
     private boolean isSkipped() {
