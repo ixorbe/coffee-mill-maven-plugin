@@ -424,7 +424,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
-			                <additionalparam>-Xdoclint:none</additionalparam>
+                            <additionalparam>${disableLint}</additionalparam>
 			            </configuration>
                     </execution>
                 </executions>
@@ -461,6 +461,18 @@
                 <site.path>maven/release</site.path>
             </properties>   
         </profile>
+        
+        <profile>
+            <!-- JDK 8 is a bit picky on the javadoc, this profile disable the linter -->
+            <id>jdk8</id>
+            <activation>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <disableLint>-Xdoclint:none</disableLint>
+            </properties>
+        </profile>
+        
     </profiles>
 
 </project>
