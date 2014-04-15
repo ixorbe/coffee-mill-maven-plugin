@@ -158,7 +158,8 @@ public class CssAggregatorMojo extends AbstractCoffeeMillWatcherMojo {
     }
 
     private void aggregateAppWithLibs(File in) throws WatchingException, IOException {
-        File output = new File(this.getBuildDirectory(),  this.getDefaultOutputFilename()+"-all.css");
+        //File output = new File(this.getBuildDirectory(),  this.getDefaultOutputFilename()+"-all.css");
+        File output = new File(this.getWorkDirectory(),  this.getDefaultOutputFilename()+"-all.css");
         if(output.exists()) {
             FileUtils.deleteQuietly(output);    
         }
