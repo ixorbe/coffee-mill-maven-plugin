@@ -113,12 +113,13 @@ public class JsMinifierMojo extends AbstractCoffeeMillWatcherMojo {
             /*if(projectHelper != null && !baseName.contains("all") ){
                 projectHelper.attachArtifact(project, "js", "min", output);
             }*/
-            if(project!=null){
+            if(projectHelper!=null && project!=null){
                 try {
                     File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + "-min.js");
                     getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
-                    FileUtils.copyFile(output, artifact, true);
-                    project.getArtifact().setFile(artifact);
+                    FileUtils.copyFile(output, artifact, true);                
+                    
+                    projectHelper.attachArtifact(project, artifact, "min");
                 } catch (IOException e) {
                     this.getLog().error("Error while attaching js to project",e);
                 }

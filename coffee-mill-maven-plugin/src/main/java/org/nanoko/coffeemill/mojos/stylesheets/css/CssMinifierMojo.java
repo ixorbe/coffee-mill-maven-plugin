@@ -109,12 +109,13 @@ public class CssMinifierMojo extends AbstractCoffeeMillWatcherMojo {
             /*if(projectHelper != null && !baseName.contains("all") ){
                 projectHelper.attachArtifact(project, "css", "min", output);
             }*/
-            if(project!=null){
+            if(projectHelper != null && project!=null){
                 try {
                     File artifact = new File(getTargetDirectory(), project.getBuild().getFinalName() + "-min.css");
                     getLog().info("Copying " + output.getAbsolutePath() + " to the " + artifact.getAbsolutePath());
                     FileUtils.copyFile(output, artifact, true);
-                    project.getArtifact().setFile(artifact);
+                    
+                    projectHelper.attachArtifact(project, artifact, "min");
                 } catch (IOException e) {
                     this.getLog().error("Error while attaching js to project",e);
                 }
