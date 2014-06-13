@@ -51,7 +51,7 @@
             <item name="Quickstart" href="quickstart.html"/>
         </menu>
         <menu name="References">
-            <item name="JavaScript &amp; CoffeeScript" href="javascript-and-coffeescript.html"/>
+            <item name="JavaScript, CoffeeScript &amp; TypeScript" href="javascript-coffeescript-and-typescript.html"/>
             <item name="Stylesheets" href="css-and-less.html"/>
             <item name="Assets Optimization" href="assets-optimization.html"/>
             <item name="Lifecycle" href="project-lifecycle.html"/>

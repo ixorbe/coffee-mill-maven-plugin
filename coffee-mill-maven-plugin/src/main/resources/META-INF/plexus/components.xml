@@ -39,6 +39,7 @@
                         
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-dust,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-coffeescript,
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-typescript,
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:compile-javascript,
                         
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:lint-javascript,
@@ -53,7 +54,8 @@
                     </process-test-resources>
                     <test-compile>
                         org.nanoko.coffee-mill:coffee-mill-maven-plugin:test-compile-javascript,
-                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:test-compile-coffeescript
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:test-compile-coffeescript,
+                        org.nanoko.coffee-mill:coffee-mill-maven-plugin:test-compile-typescript
                     </test-compile>
                     <test>
 						org.nanoko.coffee-mill:coffee-mill-maven-plugin:jasmine-test
