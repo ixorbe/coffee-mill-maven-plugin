@@ -1,5 +1,5 @@
-Working with JavaScript and CoffeeScript
-========================================
+Working with JavaScript, CoffeeScript and Typescript
+====================================================
 
 Validating JavaScript files
 ---------------------------
@@ -25,8 +25,22 @@ The plugin also support compile _test_ sources with:
 
     mvn coffeemill:test-compile-coffeescript
 
-Testing JavaScript and CoffeeScript code
----------------------------------------
+Compiling TypeScript
+--------------------
+
+The plugin is able to compile TypeScript also. Source need to be located in `src/main/typescript` directory. The output files are in
+the `target/www` directory.
+
+TypeScript compilation is part of the _js_ packaging lifecycle. However you can launch the compilation with:
+
+    mvn coffeemill:compile-typescript
+
+The plugin also support compile _test_ sources with:
+
+    mvn coffeemill:test-compile-typescript
+
+Testing JavaScript, CoffeeScript and TypeScript code
+----------------------------------------------------
 
 The plugin supports Jasmine tests. [Jasmine](http://pivotal.github.com/jasmine/) is a behavior-driven development
 framework for testing JavaScript code. It does not depend on any other JavaScript frameworks. It does not require a
@@ -39,14 +53,14 @@ DOM. And it has a clean, obvious syntax so that you can easily write tests:
     });
 
 Jasmine specs are placed in the `src/test/js` folder (they can also be in `src/test/coffee` if the tests are written
-using CoffeeScript).
+using CoffeeScript or in `src/test/typescript` for TypeScript).
 
-During the _test_ phase, all specs are executed againt your CoffeeScript and JavaScript code.
+During the _test_ phase, all specs are executed againt your CoffeeScript, JavaScript and TypeScript code.
 
 The JavaScript files are loaded in the following order:
 
 * Maven dependencies using the _js_ type are preloaded.
-* JavaScript / CoffeeScript files are loaded using the order defined in the `jsAggregationFiles` parameter (as below). If not defined, the sources are loaded in the alphabetical order.
+* JavaScript / CoffeeScript / TypeScript files are loaded using the order defined in the `jsAggregationFiles` parameter (as below). If not defined, the sources are loaded in the alphabetical order.
 * The specifications are loaded
 
 
@@ -70,7 +84,7 @@ Test can be run using `mvn test`.
 Aggregating JavaScript files
 ------------------------------------------------
 
-JavaScript and CoffeeScript files can be aggregated into one file. Dependencies can also be included too.
+JavaScript, CoffeeScript and Typescript files can be aggregated into one file. Dependencies can also be included too.
 Generally, the order is important, so has to be specified using the `jsAggregationFiles` parameter.
 
 Dependencies are included using their `artifactId`:
