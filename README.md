@@ -17,7 +17,7 @@ Features
 * Build aggregated and minified JavaScript components
 * Make your component more robust with unit and integration tests using Jasmine
 * Build modular JavaScript application by depending on your other components
-* Use CoffeeScript without thinking about compilation
+* Use [CoffeeScript](http://coffeescript.org "CoffeeScript") or [TypeScript](http://www.typescriptlang.org "TypeScript") without thinking about compilation
 * Compile Dust templates for you
 * Validate your CSS files, compile LESS files
 * Optimize your JPEG and PNG files using `jpegtran` and `OptiPNG`
